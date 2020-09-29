@@ -9,10 +9,11 @@
     <b-navbar-nav class="align-items-center ml-auto">
       <b-form class="navbar-search form-inline mr-sm-3"
             :class="{'navbar-search-dark': type === 'default', 'navbar-search-light': type === 'light'}"
-            id="navbar-search-main">
+            id="navbar-search-main"
+            @submit="onSubmit">
         <b-form-group class="mb-0">
           <b-input-group class="input-group-alternative input-group-merge">
-            <b-form-input placeholder="Search by keyword or author" type="text"> </b-form-input>
+            <b-form-input id="search" v-model="searchQuery" required placeholder="Search by keyword or author" type="text"> </b-form-input>
             <div class="input-group-append">
               <span class="input-group-text"><i class="fas fa-search"></i></span>
             </div>
@@ -107,7 +108,9 @@
 <script>
 import { CollapseTransition } from 'vue2-transitions';
 import { BaseNav, Modal } from '@/components';
-
+import { Client } from 'elasticsearch';
+// CHANGE EVENTUALLY
+const client = new Client({ node: 'http://localhost:9200/' })
 export default {
   components: {
     CollapseTransition,
@@ -136,6 +139,25 @@ export default {
     };
   },
   methods: {
+    async search() {
+      return await client.search({
+        index: 'amr',
+        // type: 'test_data', // uncomment this line if you are using Elasticsearch ≤ 6
+        body: {
+          query: {
+            match: { "author": 'Syed AbuTalib' }
+          }
+        }
+      }).then(async function(resp) {
+        console.log(resp.hits.hits);
+        return await resp.hits.hits;
+      }, function(err) {
+        console.log("I errored");
+      }).then((r) => r);
+    },
+    async onSubmit(evt) {
+      alert(await JSON.stringify(await this.search()));
+    },
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
