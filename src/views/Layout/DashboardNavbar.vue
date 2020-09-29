@@ -142,21 +142,19 @@ export default {
     async search() {
       return await client.search({
         index: 'amr',
-        // type: 'test_data', // uncomment this line if you are using Elasticsearch ≤ 6
         body: {
           query: {
             match: { "author": 'Syed AbuTalib' }
           }
         }
-      }).then(async function(resp) {
-        console.log(resp.hits.hits);
-        return await resp.hits.hits;
+      }).then(function(res) {
+        return res.hits.hits;
       }, function(err) {
-        console.log("I errored");
-      }).then((r) => r);
+        console.err(err);
+      });
     },
     async onSubmit(evt) {
-      alert(await JSON.stringify(await this.search()));
+      alert(JSON.stringify(await this.search()));
     },
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
