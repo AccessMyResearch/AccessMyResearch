@@ -144,7 +144,10 @@ export default {
         index: 'amr',
         body: {
           query: {
-            match: { "author": 'Syed AbuTalib' }
+            query_string: {
+              fields: ["title", "author", "message"],
+              query: this.searchQuery
+            }
           }
         }
       }).then(function(res) {
