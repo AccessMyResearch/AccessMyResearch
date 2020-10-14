@@ -29,14 +29,14 @@
                 </template>
             </el-table-column>
             <el-table-column label="Title"
-                             prop="title">
+                             prop="name">
                 <template v-slot="{row}">
                     <b-media no-body class="align-items-center">
                         <a href="#" class="mr-3">
                             <b-img class="avatar" rounded="circle" alt="Image placeholder" :src="row.img" />
                         </a>
                         <b-media-body>
-                            <span style="font-family:Verdana" class="font-weight-800 name mb-0 text-sm">{{row.title}}</span>
+                            <span style="font-family:Verdana" class="font-weight-800 name mb-0 text-sm">{{row.name}}</span>
                         </b-media-body>
                     </b-media>
                 </template>
