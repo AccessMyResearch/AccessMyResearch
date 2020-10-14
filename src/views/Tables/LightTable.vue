@@ -23,8 +23,14 @@
                     </p>
                     <button class="far fa-eye btn btn-success text-white"></button>
                     <button class="fas fa-file-download btn btn-primary"></button>
-                    <button class="fas fa-comment btn btn-info"></button>
-                    <button class="fas fa-glasses btn btn-light"></button>
+                    <button class="fas fa-comment btn btn-light"></button>
+                    <button v-b-modal.modal class="fas fa-plus btn btn-info"></button>
+                    <b-modal id="modal" title="Add article to Collection"> <!--TODO: Move this modal to separate function-->
+                        <button class="btn btn-primary">Artificial Intelligence Collection</button>
+                        <button class="btn btn-primary">Articles about electricity</button>
+                        <button class="btn btn-primary">My favorites</button>
+                        <button class="btn btn-light">Create new Collection</button>
+                    </b-modal>
                     <!--<button class="fas fa-expand btn btn-primary"></button>-->
                 </template>
             </el-table-column>
@@ -44,7 +50,7 @@
                             <span class="font-weight-700 name mb-0 text-blue">{{row.author}}</span>
                         </p>
                         <span class="font-weight-400 name mb-0 text-black right"> Rating
-                                <base-progress :type="row.statusType" :value="row.rating"/>
+                            <base-progress :type="row.statusType" :value="row.rating"/>
                         </span>
                     </b-media>
                 </template>
