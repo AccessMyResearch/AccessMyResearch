@@ -12,67 +12,72 @@ const routes = [
       {
         path: '/home',
         name: 'Home',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Home.vue')
+        component: () => import('../views/Home.vue')
       },
       {
         path: '/upload',
         name: 'upload an article',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Upload.vue')
+        component: () => import('../views/Upload.vue')
       },
       {
         path: '/ask',
         name: 'ask an expert',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Ask.vue')
+        component: () => import('../views/Ask.vue')
       },
       {
         path: '/collections',
         name: 'my collections',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Collections.vue')
+        component: () => import('../views/Collections.vue')
+      },
+      {
+        path: '/projects',
+        name: 'my projects',
+        component: () => import('../views/Projects.vue')
       },
       {
         path: '/messages',
         name: 'messages',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Messages.vue')
+        component: () => import('../views/Messages.vue')
       },
       {
         path: '/profile',
         name: 'profile',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/UserProfile.vue')
+        component: () => import('../views/Pages/UserProfile.vue')
       },
       {
         path: '/notifications',
         name: 'notifications',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Notifications.vue')
+        component: () => import('../views/Notifications.vue')
       },
       {
         path: '/activity',
         name: 'activity',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Activity.vue')
+        component: () => import('../views/Activity.vue')
       },
       {
         path: '/settings',
         name: 'settings',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Settings.vue')
+        component: () => import('../views/Settings.vue')
       },
       {
         path: '/donate',
         name: 'donate',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Donate.vue')
+        component: () => import('../views/Donate.vue')
       },
       {
         path: '/contact',
         name: 'contact us',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Contact.vue')
+        component: () => import('../views/Contact.vue')
       },
       {
         path: '/help',
         name: 'help',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Help.vue')
+        component: () => import('../views/Help.vue')
       },
       {
         path: '/about',
         name: 'about',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/About.vue')
+        component: () => import('../views/About.vue')
       },
       {
         path: '/interests',
@@ -82,7 +87,7 @@ const routes = [
       {
         path: '/results',
         name: 'results',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/SearchResults.vue')
+        component: () => import('../views/SearchResults.vue')
       }
     ]
   },
@@ -94,22 +99,22 @@ const routes = [
       {
         path: '/login',
         name: 'login',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/Login.vue')
+        component: () => import('../views/Pages/Login.vue')
       },
       {
         path: '/register',
         name: 'register',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/Register.vue')
+        component: () => import('../views/Pages/Register.vue')
       },
       {
         path: '/forgotpassword',
         name: 'forgotpassword',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/ForgotPassword.vue')
+        component: () => import('../views/Pages/ForgotPassword.vue')
       },
       {
         path: '/codeverification',
         name: 'codeverification',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/CodeVerification.vue')
+        component: () => import('../views/Pages/CodeVerification.vue')
       },
       { path: '*', component: NotFound }
     ]

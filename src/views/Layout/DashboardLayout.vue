@@ -32,10 +32,19 @@
             :link="{
               name: 'Ask an Expert',
               path: '/ask',
-              icon: 'fas fa-glasses text-purple'
+              icon: 'fas fa-glasses text-red'
               }"
             >
           </sidebar-item>
+      </div>
+      <div @click="redirect">
+        <sidebar-item
+              :link="{
+                name: 'My Projects',
+                path: '/projects',
+                icon: 'fas fa-project-diagram text-green'
+                }">
+        </sidebar-item>
       </div>
       <div @click="redirect">
         <sidebar-item
