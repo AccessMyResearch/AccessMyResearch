@@ -26,10 +26,12 @@
                     <button class="fas fa-comment btn btn-light"></button>
                     <button v-b-modal.modal class="fas fa-plus btn btn-info"></button>
                     <b-modal id="modal" title="Add article to Collection"> <!--TODO: Move this modal to separate function-->
-                        <button class="btn btn-primary">Artificial Intelligence Collection</button>
-                        <button class="btn btn-primary">Articles about electricity</button>
-                        <button class="btn btn-primary">My favorites</button>
-                        <button class="btn btn-light">Create new Collection</button>
+                        <b-list-group>
+                            <button class="btn btn-primary">Artificial Intelligence Collection</button>
+                            <button class="btn btn-primary">Articles about electricity</button>
+                            <button class="btn btn-primary">My favorites</button>
+                            <button class="btn btn-light">Create new Collection</button>
+                        </b-list-group>
                     </b-modal>
                     <!--<button class="fas fa-expand btn btn-primary"></button>-->
                 </template>
