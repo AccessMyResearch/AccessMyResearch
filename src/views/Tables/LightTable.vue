@@ -46,7 +46,7 @@
                     </b-media>
                     <b-media no-body class="align-items-center">
                         <a href="#" class="mr-3">
-                            <b-img class="avatar" rounded="circle" alt="Image placeholder" :src="row.img" />
+                            <b-img class="avatar" rounded="circle" alt="Article Image" :src="row.img" />
                         </a>
                         <p class="font-weight-400 name mb-0 text-black"> Author(s): 
                             <span class="font-weight-700 name mb-0 text-blue">{{row.author}}</span>
