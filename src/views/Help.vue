@@ -13,7 +13,6 @@
                             <div class="col-lg-4">
                                 <i class="fas fa-user-circle fa-5x" ></i>
                                 <h2>Account</h2>
-
                                 <p><a class="btn btn-secondary" href="#" role="button">Password Reset &raquo;</a></p>
                                 <p><a class="btn btn-secondary" href="#" role="button">Account settings &raquo;</a></p>
                                 <p><a class="btn btn-secondary" href="#" role="button">Updating your account name &raquo;</a></p>
@@ -39,7 +38,6 @@
                                 <p><a class="btn btn-secondary" href="#" role="button">Q &amp; A Guidelines &raquo;</a></p>
                                 <p><a class="btn btn-secondary" href="#" role="button">Managing connections &raquo;</a></p>
                                 <p><a class="btn btn-secondary" href="#" role="button">Authorship &raquo;</a></p>
-
                                 <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
                             </div><!-- /.col-lg-4 -->
                         </div><!-- /.row -->
