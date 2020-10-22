@@ -4,14 +4,20 @@
     class="navbar-top navbar-expand"
     :class="{ 'navbar-dark': type === 'default' }"
   >
-    <a href="#" aria-current="page" class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block active router-link-active"> {{$route.name}} </a>
+    <a
+      href="#"
+      aria-current="page"
+      class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block active router-link-active"
+    >
+      {{ $route.name }}
+    </a>
     <!-- Navbar links -->
     <b-navbar-nav class="align-items-center ml-auto">
       <b-form
         class="navbar-search form-inline mr-sm-3"
         :class="{
           'navbar-search-dark': type === 'default',
-          'navbar-search-light': type === 'light'
+          'navbar-search-light': type === 'light',
         }"
         id="navbar-search-main"
         @submit="onSubmit"
@@ -28,20 +34,26 @@
               v-model="search.text"
               @input="filterRecentSearches"
               @focus="modal = false"
+              @click="openAutoComplete"
               autocomplete="off"
               type="text"
-              placeholder="Search by Keyword or Author">
+              placeholder="Search by Keyword or Author"
+            >
             </b-form-input>
             <!-- autocomplete start -->
-            <div v-if="filteredRecentSearches && !modal" class="AutoCompleteDropDown">
-              <ul class="list">
-                <li
+            <div
+              v-if="filteredRecentSearches && modal"
+              class="AutoCompleteDropDown"
+            >
+              <ul>
+                <b-dropdown-item
                   v-for="filteredRecentSearch in filteredRecentSearches"
-                  :key="filteredRecentSearch.id"
+                  :key="filteredRecentSearch"
                   @click="setSearch(filteredRecentSearch)"
+
                 >
                   {{ filteredRecentSearch }}
-                </li>
+                </b-dropdown-item>
               </ul>
             </div>
             <!-- autocomplete start -->
@@ -51,7 +63,12 @@
                 <div class="accordion" role="tablist">
                   <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                      <b-button block v-b-toggle.SortByAccordion variant="primary">Sort By</b-button>
+                      <b-button
+                        block
+                        v-b-toggle.SortByAccordion
+                        variant="primary"
+                        >Sort By</b-button
+                      >
                     </b-card-header>
                     <b-collapse
                       id="SortByAccordion"
@@ -62,10 +79,10 @@
                         <b-dropdown-group class="small">
                           <b-form-select
                             id="sortByFilter"
-                            @input="sort()"
+                            @input="sort"
                             v-model="selectedSortBy"
-                            :options="sortBy">
-                          </b-form-select>
+                            :options="sortBy"
+                          ></b-form-select>
                         </b-dropdown-group>
                       </b-card-body>
                     </b-collapse>
@@ -75,7 +92,9 @@
                 <div class="accordion" role="tablist">
                   <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                      <b-button block v-b-toggle.areaAccordion variant="primary">Area</b-button>
+                      <b-button block v-b-toggle.areaAccordion variant="primary"
+                        >Area</b-button
+                      >
                     </b-card-header>
                     <b-collapse
                       id="areaAccordion"
@@ -87,6 +106,7 @@
                           <b-form-checkbox-group
                             id="areaFilter"
                             v-model="selectedFilters"
+                            @input="sort"
                             :options="areas"
                             name="area"
                           ></b-form-checkbox-group>
@@ -99,7 +119,12 @@
                 <div class="accordion" role="tablist">
                   <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                      <b-button block v-b-toggle.expertiseAccordion variant="primary">Expertise</b-button>
+                      <b-button
+                        block
+                        v-b-toggle.expertiseAccordion
+                        variant="primary"
+                        >Expertise</b-button
+                      >
                     </b-card-header>
                     <b-collapse
                       id="expertiseAccordion"
@@ -123,7 +148,9 @@
                 <div class="accordion" role="tablist">
                   <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                      <b-button block v-b-toggle.yearAccordion variant="primary">Year</b-button>
+                      <b-button block v-b-toggle.yearAccordion variant="primary"
+                        >Year</b-button
+                      >
                     </b-card-header>
                     <b-collapse
                       id="yearAccordion"
@@ -132,52 +159,28 @@
                     >
                       <b-card-body>
                         <b-dropdown-group class="small">
-                          <br />
+                          <br>
                           <vue-slider
-                            v-model="value"
-                            :min="1950"
-                            :max="2020"
-                            :enable-cross="false"
-                            :tooltip="'always'"
+                          v-model="yearRange"
+                          :min="1950"
+                          :max="2020"
+                          :enable-cross="false"
+                          :tooltip="'always'"
                           ></vue-slider>
-                          <br />
-                          <div>Years Selected: {{ value }}</div>
+                          <br>
+                          <div>Years Selected: {{ yearRange }}</div>
                         </b-dropdown-group>
                       </b-card-body>
                     </b-collapse>
                   </b-card>
                 </div>
 
-                <!-- <div class="accordion" role="tablist">
-                  <b-card no-body class="mb-1">
-                    <b-card-header header-tag="header" class="p-1" role="tab">
-                      <b-button block v-b-toggle.viewAccordion variant="primary"
-                        >View Count</b-button
-                      >
-                    </b-card-header>
-                    <b-collapse
-                      id="viewAccordion"
-                      accordion="my-accordion"
-                      role="tabpanel"
-                    >
-                      <b-card-body>
-                        <b-dropdown-group class="small">
-                          <b-form-checkbox-group
-                            id="viewCountFilter"
-                            v-model="selectedViewCount"
-                            :options="views"
-                            name="viewcount"
-                          ></b-form-checkbox-group>
-                        </b-dropdown-group>
-                      </b-card-body>
-                    </b-collapse>
-                  </b-card>
-                </div> -->
-
                 <div class="accordion" role="tablist">
                   <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                      <b-button block v-b-toggle.typeAccordion variant="primary">Type</b-button>
+                      <b-button block v-b-toggle.typeAccordion variant="primary"
+                        >Type</b-button
+                      >
                     </b-card-header>
                     <b-collapse
                       id="typeAccordion"
@@ -201,7 +204,12 @@
                 <div class="accordion" role="tablist">
                   <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                      <b-button block v-b-toggle.databaseAccordion variant="primary">Database</b-button>
+                      <b-button
+                        block
+                        v-b-toggle.databaseAccordion
+                        variant="primary"
+                        >Database</b-button
+                      >
                     </b-card-header>
                     <b-collapse
                       id="databaseAccordion"
@@ -221,68 +229,136 @@
                     </b-collapse>
                   </b-card>
                 </div>
-                <div>
-                  <!-- need to arrange correctly  -->
-                  <b-form-checkbox-group
-                    v-model="selectedFilters"
-                    :options="defaultFilter"
-                  ></b-form-checkbox-group>
-                  <b-button class="btn float-right" variant="primary">Search</b-button>
+
+                 <div class="accordion" role="tablist">
+                  <b-card no-body class="mb-1">
+                    <b-card-header header-tag="header" class="p-1" role="tab">
+                      <b-button
+                        block
+                        v-b-toggle.defaultAccordion
+                        variant="primary"
+                        >Default</b-button
+                      >
+                    </b-card-header>
+                    <b-collapse
+                      id="defaultAccordion"
+                      accordion="my-accordion"
+                      role="tabpanel"
+                    >
+                      <b-card-body v-if="defaultFilterCheckbox">
+                        <b-dropdown-group class="small">
+                          <div>{{ selectedFilters }}</div>
+                        </b-dropdown-group>
+                      </b-card-body>
+                    </b-collapse>
+                  </b-card>
                 </div>
+
+                <!-- Need to figure out why click isn't working first 3 times -->
+                <input type="checkbox" v-model="defaultFilterCheckbox" @click="defaultFilterCheckboxChecked()">
+                Save current filters as default
+                <b-button class="btn float-right" variant="primary">Search</b-button>
               </b-dropdown>
             </div>
-            <!-- end here -->
+
           </b-input-group>
         </b-form-group>
       </b-form>
-
+<!-- start message and notification -->
       <base-dropdown class="nav-item" menu-on-right tag="li" title-tag="a">
-        <a slot="title-container" class="nav-link nav-link-icon" href="#" role="button"
-            aria-haspopup="true" aria-expanded="false" @click="redirect">
-            <i class="fas fa-bell"></i>
+        <a
+          slot="title-container"
+          class="nav-link nav-link-icon"
+          href="#"
+          role="button"
+          aria-haspopup="true"
+          aria-expanded="false"
+          @click="toggleNotificationDropDown"
+        >
+          <i class="fas fa-bell"></i>
         </a>
-        <a class="dropdown-item" to="/notifications"> <!-- TODO: Link to Notification-->
+        <a class="dropdown-item" to="/notifications" v-if="signedIn"> <!-- TODO: Link to Notification-->
+          <!-- TODO: Link to Notification-->
           <i class="fas fa-book-open"></i>
           New Article by: Mehmet Günal
           <small class="form-text text-muted">Yesterday</small>
         </a>
-        <a class="dropdown-item" to="/notifications">
+        <a class="dropdown-item" to="/notifications" v-if="signedIn">
           <i class="fas fa-user-friends"></i>
           New friend: Mehmet Günal
           <small class="form-text text-muted">1 week ago</small>
         </a>
+        <span v-for="(key, val) in this.reminders" v-bind:key="val">
+          <a class="dropdown-item" to="/notifications">
+            <i class="fas fa-search"></i>
+              Search for: {{val}}
+            <small class="form-text text-muted">{{key}}</small>
+          </a>
+        </span>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" to="/notifications">
+        <a class="dropdown-item" to="/notifications" v-if="signedIn">
           <i class="fas fa-clock"></i>
           All Notifications
         </a>
+        <b-alert show variant="light" class="text-dark" v-if="!signedIn">
+          <i class="fas fa-exclamation-circle fa-lg"></i>
+            In order to access this feature, you must login.
+            You can login <router-link class="font-weight-bolder text-dark" to="/login">here.</router-link>
+         </b-alert>
       </base-dropdown>
+
       <base-dropdown class="nav-item" menu-on-right tag="li" title-tag="a">
-        <a slot="title-container" class="nav-link nav-link-icon" href="#" role="button"
-            aria-haspopup="true" aria-expanded="false" @click="redirect">
-            <i class="fas fa-comment"></i>
+        <a
+          slot="title-container"
+          class="nav-link nav-link-icon"
+          href="#"
+          role="button"
+          aria-haspopup="true"
+          aria-expanded="false"
+          @click="redirect">
+          <i class="fas fa-comment"></i>
         </a>
-        <a class="dropdown-item" to="/messages"> <!-- TODO: Link to Messages-->
+        <a class="dropdown-item" to="/messages" v-if="signedIn"> <!-- TODO: Link to Messages-->
+          <!-- TODO: Link to Messages-->
           <i class="fas fa-comment"></i>
           Mehmet Günal: Check out my research!
           <small class="form-text text-muted">Yesterday</small>
         </a>
-        <a class="dropdown-item" to="/messages">
+        <a class="dropdown-item" to="/messages" v-if="signedIn">
           <i class="far fa-comment"></i>
           Greg Kitchen: Check out his research!
           <small class="form-text text-muted">1 week ago</small>
+          </a>
+          <div class="dropdown-divider"></div>
+          <router-link to="/notifications" class="dropdown-item">
+              <span>All Requests </span>
+          </router-link>
+
+        <!-- </template> -->
+      </base-dropdown>
+
+      <base-dropdown class="nav-item" menu-on-right tag="li" title-tag="a">
+        <a slot="title-container" class="nav-link nav-link-icon" href="#" role="button"
+            aria-haspopup="true" aria-expanded="false" @click="redirect">
+            <i class="fas fa-envelope"></i>
         </a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" to="/messages">
+        <a class="dropdown-item" to="/messages" v-if="signedIn"> <!-- TODO: Link to Messages-->
           <i class="fas fa-clock"></i>
           All Messages
         </a>
+         <b-alert show variant="light" class="text-dark" v-if="!signedIn">
+          <i class="fas fa-exclamation-circle fa-lg"></i>
+            In order to access this feature, you must login.
+            You can login <router-link class="font-weight-bolder text-black" to="/login">here.</router-link>
+         </b-alert>
       </base-dropdown>
-      <base-dropdown menu-on-right
-                     class="nav-item"
-                     tag="li"
-                     title-tag="a"
-                     title-classes="nav-link pr-0">
+      <base-dropdown
+        menu-on-right
+        class="nav-item"
+        tag="li"
+        title-tag="a"
+        title-classes="nav-link pr-0">
         <a href="#" class="nav-link pr-0" @click.prevent slot="title-container">
           <b-media no-body class="align-items-center">
                   <span class="avatar avatar-sm rounded-circle">
@@ -305,6 +381,12 @@
             <span>Activity</span>
           </b-dropdown-item>
           <div class="dropdown-divider" v-if="signedIn"></div>
+          <b-dropdown-item to="/search-history">
+            <i class="fas fa-user"></i>
+            <span>Search History</span>
+          </b-dropdown-item>
+          <div class="dropdown-divider" v-if="signedIn"></div>
+
           <b-dropdown-item to="/settings" v-if="signedIn">
             <i class="fas fa-cog"></i>
             <span>Settings</span>
@@ -327,74 +409,76 @@
   </base-nav>
 </template>
 <script>
-import { CollapseTransition } from 'vue2-transitions';
-import { BaseNav, Modal } from '@/components';
-import { Auth } from 'aws-amplify';
-import axios from 'axios';
+import { CollapseTransition } from "vue2-transitions";
+import { BaseNav, Modal } from "@/components";
+import VueSlider from "vue-slider-component";
+import "vue-slider-component/theme/default.css";
+import { Auth } from "aws-amplify";
+import axios from "axios";
 
 export default {
   components: {
     //CollapseTransition,
     BaseNav,
     //Modal,
+    VueSlider,
   },
   props: {
     type: {
       type: String,
-      default: 'default', // default|light
-      description: 'Look of the dashboard navbar. Default (Green) or light (gray)'
-    }
+      default: "default", // default|light
+      description:
+        "Look of the dashboard navbar. Default (Green) or light (gray)",
+    },
   },
   computed: {
     routeName() {
       const { name } = this.$route;
       return this.capitalizeFirstLetter(name);
-    }
+    },
   },
   mounted() {
+    if (localStorage.selectedFilters){
+      this.selectedFilters = localStorage.selectedFilters.split(",");
+    }
+
+    if (localStorage.yearRange){
+      this.yearRange = localStorage.yearRange.split(",");
+    }
+
+    if (localStorage.defaultFilterCheckbox){
+      this.defaultFilterCheckbox = localStorage.defaultFilterCheckbox;
+    }
+
     this.hover_flag = false;
     var inside = this;
-    axios
-      .get("https://www.mocky.io/v2/5c7b98562f0000c013e59f07")
-      .then(function (response) {
-        //console.log(response);
-        inside.results_data_actual = response.data.data;
-        response.data.data.map(function (results) {
-          inside.likes.count += results.likes;
-        });
-        inside.results_data_actual = inside.results_data_actual.map(function (
-          results
-        ) {
-          results.active_like = false;
-          return results;
-        });
-        inside.results_data = response.data.data;
-      })
-      .catch(function (error) {
-        // console.log(error);
-      });
+    this.getSearchHistory();
+    this.getReminders();
   },
   created() {
-      if(this.$store.state.signedIn === true)
-      {
-        this.signedIn = true;
-      }
+    if (this.$store.state.signedIn === true) {
+      this.signedIn = true;
+    }
   },
   data() {
     return {
       activeNotifications: false,
       showMenu: false,
       searchModalVisible: false,
-      searchQuery: '',
+      searchQuery: "",
       signedIn: false,
       timeTotal: 0,
+      reminders: [],
       //autocomplete start
-      modal: false, 
+      modal: false,
       recentSearches: [],
       filteredRecentSearches: [],
-      //autocomplete end
+      defaultFilterCheckbox: false,
+      // autocomplete end
       /*results_data_actual: [],
       results_data: [],*/
+      yearRange: [1950, 2020],
+      selectedFilters: [],
       search: { filter: null, text: "" },
       selectedSortBy: "most-recent",
       sortBy: [
@@ -427,7 +511,6 @@ export default {
           value: "expertise",
         },
       ],
-      selectedAreas: [],
       areas: [
         {
           text: "Computer Science",
@@ -442,7 +525,6 @@ export default {
           value: "ns",
         },
       ],
-      selectedExpertise: [],
       expertise: [
         {
           text: "Anyone",
@@ -465,18 +547,6 @@ export default {
           value: "100+",
         },
       ],
-      selectedViewCount: [],
-      views: [
-        {
-          text: "Ascending",
-          value: "ascend",
-        },
-        {
-          text: "Descending",
-          value: "descend",
-        },
-      ],
-      selectedType: [],
       types: [
         {
           text: "Peer Review",
@@ -527,78 +597,37 @@ export default {
           value: "courses",
         },
       ],
-      selectedDatabase: [],
       databases: [
-        {
-          text: "Academic Search",
-          value: "academic-search",
-        },
         {
           text: "arXiv",
           value: "arxiv",
         },
         {
-          text: "Association for Computing Machinery Digital Library",
-          value: "association-for-computing-machinery-digital-library",
+          text: "CORE",
+          value: "core",
         },
         {
           text: "DBLP",
           value: "dblp",
         },
         {
-          text: "GENESIS",
-          value: "genesis",
-        },
-        {
-          text: "Global Health",
-          value: "global-health",
-        },
-        {
-          text: "Google Scholar",
-          value: "google-scholar",
-        },
-        {
-          text: "HubMed",
-          value: "hubmed",
-        },
-        {
-          text: "IEEE Xplore",
-          value: "ieee-xplore",
-        },
-        {
-          text: "MEDLINE",
-          value: "medline",
-        },
-        {
-          text: "MyScienceWork",
-          value: "MyScienceWork",
-        },
-        {
-          text: "PubChem",
-          value: "pubchem",
-        },
-        {
           text: "PubMed",
           value: "pubmed",
         },
         {
-          text: "PubPsych",
-          value: "pubpsych",
+          text: "Unpaywall",
+          value: "unpaywall",
         },
-        {
-          text: "ScienceOpen",
-          value: "scienceopen",
-        },
-      ]
+      ],
     };
   },
   methods: {
     async onSubmit(evt) {
       this.timeTotal = 0;
-      let duplication = false; 
+      let duplication = false;
       for (let i = 0; i < this.recentSearches.length; i++){ //check for recent searches
         if (this.recentSearches[i] == this.search.text){
-          duplication = true; 
+          duplication = true;
         }
       }
       if (!duplication){ //No duplication for recent searches allowed
@@ -606,6 +635,10 @@ export default {
       }
       this.$router.push({ path: 'results', query: {text: this.search.text, filter: this.search.filter} }).catch(()=>{});
     },
+    async getSearchHistory() {
+      let history = await axios.get("http://localhost:3000/search");
+      this.recentSearches = Object.entries(history.data).reverse().slice(0,5);
+  },
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
@@ -616,19 +649,24 @@ export default {
       this.activeNotifications = false;
     },
     signOut() {
-      Auth.signOut().then(data => {
-        this.$store.state.signedIn = !!data;
-        this.$router.push('login');
-      })
-      .catch(err => console.log(err));
+      Auth.signOut()
+        .then((data) => {
+          this.$store.state.signedIn = !!data;
+          this.$router.push("login");
+        })
+        .catch((err) => console.log(err));
     },
     redirect() {
-      if(this.$store.state.signedIn === false)
-      {
-        this.$router.push('login');
+      if (this.$store.state.signedIn === false) {
+        this.$router.push("login");
       }
     },
     sort() {
+      if (this.search.text)
+      {
+        this.onSubmit();
+      }
+
       /*make a if-statement for the Sort By filter.
       console.log(this.search.filter);
       this.search.filter == "b"
@@ -639,7 +677,8 @@ export default {
             return b.ratings - a.ratings;
           });*/
     },
-    search_text() { //FOR DATABASE IN FUTURE
+    search_text() {
+      //FOR DATABASE IN FUTURE
       /*console.log(this.search.text);
       var inside = this;
       this.results_data = this.results_data_actual.filter(function (results) {
@@ -653,16 +692,50 @@ export default {
       });*/
     },
     //autocomplete start
-    filterRecentSearches () {
-      this.filteredRecentSearches = this.recentSearches.filter(recentSearch => {
-        return recentSearch.toLowerCase().startsWith(this.search.text.toLowerCase())
-      })
-    },
+     filterRecentSearches() {
+      this.getSearchHistory();
+      this.filteredRecentSearches = this.recentSearches.filter(
+        (s) => {
+          return this.search.text && s[1]
+            .toLowerCase()
+            .startsWith(this.search.text.toLowerCase());
+        }
+      );
+      this.filteredRecentSearches = this.filteredRecentSearches.map(item => item[1]).filter((val, index, self) => self.indexOf(val) == index)
+},
     setSearch (recentSearch) {
-      this.search.text = recentSearch
-      this.modal = false
+      this.search.text = recentSearch;
+      this.modal = false;
     },
+    openAutoComplete () {
+      this.modal = true;
+},
     //autocomplete end
+
+    //default filter start
+    defaultFilterCheckboxChecked () {
+      localStorage.selectedFilters = this.selectedFilters
+      localStorage.yearRange = this.yearRange
+      localStorage.defaultFilterCheckbox = this.defaultFilterCheckbox
+
+      if(localStorage.defaultFilterCheckbox == "true"){
+        localStorage.clear()
+        return
+      }
+
+    },
+    getReminders() {
+      this.reminders = JSON.parse(localStorage.reminders);
+    }
   },
 };
 </script>
+<style>
+.AutoCompleteDropDown {
+  position: absolute;
+background: white;
+border-radius: 4px;
+top: 45px;
+width: 350px;
+}
+</style>

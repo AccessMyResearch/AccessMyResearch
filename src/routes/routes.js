@@ -16,7 +16,7 @@ const routes = [
       },
       {
         path: '/upload',
-        name: 'upload an article',
+        name: 'Add Research Material',
         component: () => import('../views/Upload.vue')
       },
       {
@@ -88,6 +88,21 @@ const routes = [
         path: '/results',
         name: 'results',
         component: () => import('../views/SearchResults.vue')
+      },
+      {
+        path: '/suggestedpeople',
+        name: 'suggestions for you',
+        component: () => import('../views/Pages/SuggestedPeople.vue')
+      },
+      {
+        path: '/add',
+        name: 'Add Users',
+        component: () => import('../views/Pages/AddRemoveUsers.vue')
+      },
+      {
+        path: '/search-history',
+        name: 'search history',
+        component: () => import('../views/SearchHistory.vue')
       }
     ]
   },

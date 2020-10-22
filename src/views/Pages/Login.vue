@@ -35,6 +35,14 @@
                   <span class="btn-inner--icon"><img src="img/SSO/google.svg"></span>
                   <span class="btn-inner--text">Google</span>
                 </a>
+                <a href="#" class="btn btn-neutral btn-icon">
+                  <span class="btn-inner--icon"><img src="img/SSO/facebook.svg"></span>
+                  <span class="btn-inner--text">Facebook</span>
+                </a>
+                <a href="#" class="btn btn-neutral btn-icon">
+                  <span class="btn-inner--icon"><img src="img/SSO/orcid.svg"></span>
+                  <span class="btn-inner--text">ORCID</span>
+                </a>
               </div>
             </b-card-header>
             <b-card-body class="px-lg-5 py-lg-5">

@@ -147,16 +147,25 @@
     <hr class="my-4">
     <!-- Description -->
     <h6 class="heading-small text-muted mb-4">Publication</h6>
-    <div class="pl-lg-4">
-      <b-form-group label-class="form-control-label" class="mb-0" label-for="about-form-textaria">
-        <!--  <label class="form-control-label">About Me</label> -->
-        <b-form-textarea rows="4" value="What you have published so far." id="about-form-textaria" placeholder="A few words about you"></b-form-textarea>
-      </b-form-group>
+    <div>
+      <b-table 
+        hover
+        responsive
+        :items="publications.data"
+        :fields="publications.fields"
+        sticky-header
+        head-variant="light"
+      >
+      <template v-slot:cell(doi)="data">
+        <a :href="`http://${data.value}`">{{ data.value }}</a>
+      </template>
+      </b-table>
     </div>
 
   </b-form>
 </card>
 </template>
+
 <script>
 export default {
   data() {
@@ -172,6 +181,27 @@ export default {
         country: 'United States',
         postalCode: '',
         aboutMe: ``
+      },
+      publications: {
+        fields: [
+          {
+            key: 'title',
+            sortable: true,
+            label: 'Title'
+          },
+          {
+            key: 'date',
+            sortable: true,
+            label: 'Date Published',
+            formatter: (dateObj) => `${(dateObj.month + 1)}/${dateObj.day}/${dateObj.year}`
+          },
+          {
+            key: 'doi',
+            sortable: false,
+            label: 'DOI Link'
+          }
+        ],
+        data: []
       }
     };
   },
@@ -179,6 +209,31 @@ export default {
     updateProfile() {
       alert('Your data: ' + JSON.stringify(this.user)); //TODO: Remove test alert
     }
+  },
+  mounted: function(){
+    var self = this;
+
+    // 1. Create a new XMLHttpRequest object
+    let xhr = new XMLHttpRequest();
+
+    // 2. Configure it: GET-request for the URL /article/.../load
+    xhr.open('GET', 'https://localhost:5001/api/publications');
+
+    // 3. Send the request over the network
+    xhr.send();
+
+    // 4. This will be called after the response is received
+    xhr.onload = function() {
+      if (xhr.status === 200) { // analyze HTTP status of the response
+        var response = xhr.response;
+        var json = JSON.parse(response);
+        self.publications.data = json;
+      }
+    };
+
+    xhr.onerror = function() {
+      console.error("Request failed.");
+    };
   }
 };
 </script>

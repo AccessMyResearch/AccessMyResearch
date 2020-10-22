@@ -13,7 +13,9 @@
     },
     "categories": {
       "auth": {
-        "amrsocialnetwork671a0811": {}
+        "amrsocialnetwork671a0811": {
+          "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"849810262225621\",\"client_secret\":\"7e2f6ef6c3a1879bb8ba225d6f440292\"},{\"ProviderName\":\"Google\",\"client_id\":\"79701390415-0fod8orjr8u7p43vtov16baqfb992g6m.apps.googleusercontent.com\",\"client_secret\":\"E7qMpPth4Y9zHuXISMmmzD8T\"}]"
+        }
       }
     }
   }

@@ -40,7 +40,8 @@
             <el-table-column
               label="View Count"
               prop="_source.count"
-              min-width="150px"
+              min-width="200px"
+              sortable
             >
             </el-table-column>
           </el-table>
@@ -53,6 +54,7 @@
 import LightTable from "./Tables/LightTable";
 import { Client } from "elasticsearch";
 import { Table, TableColumn } from "element-ui";
+import axios from 'axios';
 
 const client = new Client({ node: "http://localhost:9600/" });
 
@@ -66,10 +68,20 @@ export default {
     return {
       results: [],
       timeTotal: 0,
+      blacklistText:"",
     };
   },
   computed: {
     text() {
+      this.blacklistText = " ";
+      //this.rawText = this.$route.query.text;
+      //alert(this.rawText)
+      var re = /(?:^|\s)(-[a-z0-9]\w*)/gi; // finding words starting with -
+      var match;
+      while ((match = re.exec(this.$route.query.text)) != null){
+        this.blacklistText = this.blacklistText + " " + match[0].substring(2); //extracting filtered words 
+      }
+      //alert(this.blacklistText)
       return this.$route.query.text || 1;
     },
   },
@@ -88,14 +100,36 @@ export default {
       this.results = [];
 
       startTime = new Date();
+      const searchQuery = {};
+      searchQuery[startTime] = this.$route.query.text;
+
+      axios
+      .post('http://localhost:3000/search', searchQuery)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+         console.log(error);
+      });
+
       let searchResults = await client
         .search({
           index: "amr",
           body: {
             query: {
-              query_string: {
-                fields: ["title", "author", "message", "count"],
-                query: this.$route.query.text,
+              bool: {
+                must_not:{
+                  query_string: {
+                    fields: [ "title", "author", "message", "count"],
+                    query: this.blacklistText,
+                  }
+                },
+                should:{
+                  query_string: {
+                    fields: [ "title", "author", "message", "count"],
+                    query: this.$route.query.text,
+                  }
+                },
               },
             },
           },

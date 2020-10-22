@@ -26,7 +26,7 @@
 }
 
 .SearchDropDown .dropdown-menu {
-    min-width: 360px;
+    min-width: 400px;
     padding: 1rem;
 
     .dropdown-item {
@@ -55,7 +55,12 @@
             vertical-align: -17%;
         }
     }
+    ul{
+        //list-style-image: ;
+        list-style-type: none;
+    }
 }
+
 
 .dropdown-header {
     padding-left: 1rem;

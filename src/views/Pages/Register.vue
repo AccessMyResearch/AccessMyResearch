@@ -32,9 +32,17 @@
                   <span class="btn-inner--icon"><img src="img/SSO/linkedin.svg"></span>
                   <span class="btn-inner--text">LinkedIn</span>
                 </a>
-                <a href="#" class="btn btn-neutral btn-icon">
+                <a href="#" class="btn btn-neutral btn-icon mr-4">
                   <span class="btn-inner--icon"><img src="img/SSO/google.svg"></span>
                   <span class="btn-inner--text">Google</span>
+                </a>
+                <a href="#" class="btn btn-neutral btn-icon">
+                  <span class="btn-inner--icon"><img src="img/SSO/facebook.svg"></span>
+                  <span class="btn-inner--text">Facebook</span>
+                </a>
+                <a href="#" class="btn btn-neutral btn-icon">
+                  <span class="btn-inner--icon"><img src="img/SSO/orcid.svg"></span>
+                  <span class="btn-inner--text">ORCID</span>
                 </a>
               </div>
             </b-card-header>
