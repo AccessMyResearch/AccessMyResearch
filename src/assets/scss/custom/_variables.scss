@@ -198,7 +198,7 @@ $love-color: $red !default;
 // Body
 
 
-$body-bg: #E9ECEF !default;
+$body-bg: #F8F9FE !default;
 $body-color: $gray-700 !default;
 
 
@@ -943,7 +943,7 @@ $footer-padding-x:              0;
 
 
 $footer-link-font-size: .85rem !default;
-$footer-bg: #E9ECEF;//theme-color("secondary") !default;
+$footer-bg: theme-color("secondary") !default;
 $footer-color: $gray-600 !default;
 $footer-link-color: $gray-600 !default;
 $footer-link-hover-color: $gray-700 !default;

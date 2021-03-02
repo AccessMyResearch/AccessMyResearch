@@ -2,13 +2,12 @@
 <div class="SearchDropDown">
     <div class="accordion" role="tablist">
         <b-card no-body class="mb-1">
-        <b-card-header header-tag="header" class="p-1 firstFilter" role="tab">
+        <b-card-header header-tag="header" class="p-1" role="tab">
             <b-button
             block
             v-b-toggle.SortByAccordion
-            squared variant="#4577B8"
-            class = "dropdownButton"
-            ><div>Publications<span><i class="fas fa-list-ul downArrow"></i></span></div></b-button
+            variant="primary"
+            >Sort By</b-button
             >
         </b-card-header>
         <b-collapse
@@ -16,196 +15,53 @@
             accordion="my-accordion"
             role="tabpanel"
         >
-            <b-card-body style="max-width:220px">
-            </b-card-body>
-        </b-collapse>
-        </b-card>
-    
-        <b-card no-body class="mb-1" style = "box-shadow: 0 2px 3px #9b9d9e; max-height:70px;">
-            <b-card-body style="max-width:220px">
-            <b-form-group class="small slider">
-                <br/>
-                <vue-slider
-                v-model="yearRange"
-                :min="1950"
-                :max="2021"
-                :enable-cross="false"
-                :tooltip="'always'"
-                stacked
-                ></vue-slider>
-            </b-form-group>
-            </b-card-body>
-        </b-card>
-    
-        <b-card no-body class="mb-1" style = "box-shadow: 0 2px 3px #9b9d9e;">
-        <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-button block v-b-toggle.typeAccordion squared variant="outline-primary"
-            class = "dropdownButton toggleBg"><div>Type<span><i class="fas fa-chevron-down downArrow"></i></span></div>
-            </b-button>
-        </b-card-header>
-        <b-collapse
-            id="typeAccordion"
-            accordion="my-accordion"
-            role="tabpanel"
-        >
-            <b-card-body style="max-width:220px">
-            <b-form-group class="small">
-                <b-form-checkbox-group
-                class="collapseAccordion"
-                id="typeFilter"
-                v-model="selectedFilters"
-                :options="types"
-                name="type"
-                disabled-field="notEnabled"
-                stacked
-                ></b-form-checkbox-group>
-            </b-form-group>
-            </b-card-body>
-        </b-collapse>
-        </b-card>
-    
-
-        <b-card no-body class="mb-1" style = "box-shadow: 0 2px 3px #9b9d9e;">
-        <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-button
-            block
-            v-b-toggle.accessibilityAccordion
-            squared variant="outline-primary"
-            class = "dropdownButton toggleBg"
-            >
-            <div>Accessibility<span><i class="fas fa-chevron-down downArrow"></i></span></div>
-            </b-button
-            >
-        </b-card-header>
-        <b-collapse
-            id="accessibilityAccordion"
-            accordion="my-accordion"
-            role="tabpanel"
-        >
-            <b-card-body style="max-width:220px">
-            <b-form-group class="small">
-                <b-form-group>
-                <b-form-checkbox-group 
-                class="collapseAccordion"
-                id="accessibilityFilter"
-                v-model="selectedFilters"
-                :options="accessibilityOptions"
-                name="acccessibility"
-                disabled-field="notEnabled"
-                stacked
-                ></b-form-checkbox-group>
-                </b-form-group>
-            </b-form-group>
-            </b-card-body>
-        </b-collapse>
-        </b-card>
-        
-        <b-card no-body class="mb-1" style = "box-shadow: 0 2px 3px #9b9d9e;">
-        <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-button
-            block
-            v-b-toggle.databaseAccordion
-            squared variant="outline-primary"
-            class = "dropdownButton toggleBg"
-            ><div>Database<span><i class="fas fa-chevron-down downArrow"></i></span></div>
-            </b-button
-            >
-        </b-card-header>
-        <b-collapse
-            id="databaseAccordion"
-            accordion="my-accordion"
-            role="tabpanel"
-        >
-            <b-card-body style="max-width:220px">
-            <b-form-group class="small">
-                <b-form-checkbox-group
-                class="collapseAccordion"
-                id="databaseFilter"
-                v-model="selectedFilters"
-                :options="databases"
-                name="database"
-                disabled-field="notEnabled"
-                stacked
-                ></b-form-checkbox-group>
-            </b-form-group>
-            </b-card-body>
-        </b-collapse>
-        </b-card>
-
-        <b-card no-body class="mb-1" style = "box-shadow: 0 2px 3px #9b9d9e;">
-        <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-button
-            block
-            v-b-toggle.journalAccordion
-            squared variant="outline-primary"
-            class = "dropdownButton toggleBg"
-            ><div>Journals<span><i class="fas fa-chevron-down downArrow"></i></span></div>
-            </b-button
-            >
-        </b-card-header>
-        <b-collapse
-            id="journalAccordion"
-            accordion="my-accordion"
-            role="tabpanel"
-        >
-            <b-card-body style="max-width:220px">
-            <b-form-group class="small">
-                <b-form-checkbox-group
-                id="journalFilter"
-                class="collapseAccordion"
-                v-model="selectedFilters"
+            <b-card-body>
+            <b-dropdown-group class="small">
+                <b-form-select
+                id="sortByFilter"
                 @input="sort"
-                :options="journals"
-                name="journals"
-                disabled-field="notEnabled"
-                stacked
-                ></b-form-checkbox-group>
-            </b-form-group>
+                v-model="selectedSortBy"
+                :options="sortBy"
+                ></b-form-select>
+            </b-dropdown-group>
             </b-card-body>
         </b-collapse>
         </b-card>
+    </div>
 
-        <b-card no-body class="mb-1" style = "box-shadow: 0 2px 3px #9b9d9e;">
+    <div class="accordion" role="tablist">
+        <b-card no-body class="mb-1">
         <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-button block v-b-toggle.areaAccordion squared variant="outline-primary"
-            class = "dropdownButton toggleBg">
-            <div>Area<span><i class="fas fa-chevron-down downArrow"></i></span></div>
-            </b-button>
+            <b-button block v-b-toggle.areaAccordion variant="primary">Area</b-button>
         </b-card-header>
         <b-collapse
             id="areaAccordion"
             accordion="my-accordion"
             role="tabpanel"
         >
-            <b-card-body style="max-width:220px">
-            <b-form-group class="small" style="max-width: 5rem;">
+            <b-card-body>
+            <b-dropdown-group class="small">
                 <b-form-checkbox-group
                 id="areaFilter"
-                class="collapseAccordion"
                 v-model="selectedFilters"
                 @input="sort"
                 :options="areas"
                 name="area"
-                disabled-field="notEnabled"
-                stacked
                 ></b-form-checkbox-group>
-            </b-form-group>
+            </b-dropdown-group>
             </b-card-body>
         </b-collapse>
         </b-card>
-    
+    </div>
 
-    
-        <b-card no-body class="mb-1" style = "box-shadow: 0 2px 3px #9b9d9e;">
+    <div class="accordion" role="tablist">
+        <b-card no-body class="mb-1">
         <b-card-header header-tag="header" class="p-1" role="tab">
             <b-button
             block
             v-b-toggle.expertiseAccordion
-            squared variant="outline-primary"
-            class = "dropdownButton toggleBg"
-            >
-            <div>Expertise<span><i class="fas fa-chevron-down downArrow"></i></span></div>
-            </b-button
+            variant="primary"
+            >Expertise</b-button
             >
         </b-card-header>
         <b-collapse
@@ -213,24 +69,164 @@
             accordion="my-accordion"
             role="tabpanel"
         >
-            <b-card-body style="max-width:220px">
-            <b-form-group class="small">
+            <b-card-body>
+            <b-dropdown-group class="small">
                 <b-form-checkbox-group
                 id="expertiseFilter"
-                class="collapseAccordion"
                 v-model="selectedFilters"
                 :options="expertise"
                 name="expertise"
-                disabled-field="notEnabled"
-                stacked
                 ></b-form-checkbox-group>
-            </b-form-group>
+            </b-dropdown-group>
             </b-card-body>
         </b-collapse>
         </b-card>
+    </div>
 
-    
-        
+    <div class="accordion" role="tablist">
+        <b-card no-body class="mb-1">
+        <b-card-header header-tag="header" class="p-1" role="tab">
+            <b-button
+            block
+            v-b-toggle.accessibilityAccordion
+            variant="primary"
+            >Accessibility</b-button
+            >
+        </b-card-header>
+        <b-collapse
+            id="accessibilityAccordion"
+            accordion="my-accordion"
+            role="tabpanel"
+        >
+            <b-card-body>
+            <b-dropdown-group class="small">
+                <b-form-group>
+                <b-form-checkbox-group 
+                style="column-count: 2;"
+                id="accessibilityFilter"
+                v-model="selectedFilters"
+                :options="accessibilityOptions"
+                name="acccessibility"
+                ></b-form-checkbox-group>
+                </b-form-group>
+            </b-dropdown-group>
+            </b-card-body>
+        </b-collapse>
+        </b-card>
+    </div>
+
+    <div class="accordion" role="tablist">
+        <b-card no-body class="mb-1">
+        <b-card-header header-tag="header" class="p-1" role="tab">
+            <b-button block v-b-toggle.yearAccordion variant="primary">Year</b-button>
+        </b-card-header>
+        <b-collapse
+            id="yearAccordion"
+            accordion="my-accordion"
+            role="tabpanel"
+        >
+            <b-card-body>
+            <b-dropdown-group class="small">
+                <br/>
+                <vue-slider
+                v-model="yearRange"
+                :min="1950"
+                :max="2020"
+                :enable-cross="false"
+                :tooltip="'always'"
+                ></vue-slider>
+                <br/>
+                <div>Years Selected: {{ yearRange }}</div>
+            </b-dropdown-group>
+            </b-card-body>
+        </b-collapse>
+        </b-card>
+    </div>
+
+    <div class="accordion" role="tablist">
+        <b-card no-body class="mb-1">
+        <b-card-header header-tag="header" class="p-1" role="tab">
+            <b-button block v-b-toggle.typeAccordion variant="primary">Type</b-button>
+        </b-card-header>
+        <b-collapse
+            id="typeAccordion"
+            accordion="my-accordion"
+            role="tabpanel"
+        >
+            <b-card-body>
+            <b-dropdown-group class="small">
+                <b-form-checkbox-group
+                style="column-count: 2;"
+                id="typeFilter"
+                v-model="selectedFilters"
+                :options="types"
+                name="type"
+                ></b-form-checkbox-group>
+            </b-dropdown-group>
+            </b-card-body>
+        </b-collapse>
+        </b-card>
+    </div>
+
+    <div class="accordion" role="tablist">
+        <b-card no-body class="mb-1">
+        <b-card-header header-tag="header" class="p-1" role="tab">
+            <b-button
+            block
+            v-b-toggle.databaseAccordion
+            variant="primary"
+            >Database</b-button
+            >
+        </b-card-header>
+        <b-collapse
+            id="databaseAccordion"
+            accordion="my-accordion"
+            role="tabpanel"
+        >
+            <b-card-body>
+            <b-dropdown-group class="small">
+                <b-form-checkbox-group
+                style="column-count: 2;"
+                id="databaseFilter"
+                v-model="selectedFilters"
+                :options="databases"
+                name="database"
+                ></b-form-checkbox-group>
+            </b-dropdown-group>
+            </b-card-body>
+        </b-collapse>
+        </b-card>
+    </div>
+
+    <div class="accordion" role="tablist">
+
+        <b-card no-body class="mb-1">
+        <b-card-header header-tag="header" class="p-1" role="tab">
+            <b-button
+            block
+            v-b-toggle.journalAccordion
+            variant="primary"
+            >Journals</b-button
+            >
+        </b-card-header>
+        <b-collapse
+            id="journalAccordion"
+            accordion="my-accordion"
+            role="tabpanel"
+        >
+            <b-card-body>
+            <b-dropdown-group class="small">
+                <b-form-checkbox-group
+                id="journalFilter"
+                v-model="selectedFilters"
+                @input="sort"
+                :options="journals"
+                name="journals"
+                ></b-form-checkbox-group>
+            </b-dropdown-group>
+            </b-card-body>
+        </b-collapse>
+        </b-card>
     </div>
 </div>
 </template>
@@ -260,10 +256,40 @@ export default {
             // autocomplete end
             /*results_data_actual: [],
             results_data: [],*/
-            yearRange: [1950, 2021],
+            yearRange: [1950, 2020],
             selectedFilters: [],
             search: { filter: null, text: "" },
             selectedSortBy: "most-recent",
+            sortBy: [
+                {
+                text: "Most Recent",
+                value: "most-recent",
+                },
+                {
+                text: "Most Cited",
+                value: "most-cited",
+                },
+                {
+                text: "Most Discussed",
+                value: "most-discussed",
+                },
+                {
+                text: "Most Rated",
+                value: "most-rated",
+                },
+                {
+                text: "Highest Rated",
+                value: "highest-rated",
+                },
+                {
+                text: "Trending",
+                value: "trending",
+                },
+                {
+                text: "Expertise",
+                value: "expertise",
+                },
+            ],
             areas: [
                 {
                 text: "Computer Science",
@@ -308,17 +334,14 @@ export default {
                 {
                 text: "With Permission",
                 value: "with-permission",
-                notEnabled: true,
                 },
                 {
                 text: "Embargoed",
                 value: "embargoed",
-                notEnabled: true,
                 },
                 {
                 text: "Restricted",
                 value: "restricted",
-                notEnabled: true,
                 },
             ],
             types: [
@@ -333,51 +356,48 @@ export default {
                 {
                 text: "Book Chapter",
                 value: "book-chapter",
-                notEnabled: true,
                 },
                 {
                 text: "Poster",
                 value: "poster",
-                notEnabled: true,
                 },
                 {
                 text: "Presentation",
                 value: "presentation",
-                notEnabled: true,
+                },
+                {
+                text: "Results",
+                value: "results",
+                },
+                {
+                text: "Figures",
+                value: "figures",
                 },
                 {
                 text: "Video",
                 value: "video",
-                notEnabled: true,
                 },
                 {
                 text: "Stream",
                 value: "stream",
-                notEnabled: true,
-                },
-                {
-                text: "Course",
-                value: "course",
-                notEnabled: true,
                 },
                 {
                 text: "Blog",
                 value: "blog",
-                notEnabled: true,
-                }
+                },
+                {
+                text: "Vlog",
+                value: "vlog",
+                },
+                {
+                text: "Courses",
+                value: "courses",
+                },
             ],
             databases: [
                 {
-                text: "AGRIS",
-                value: "agris"
-                },
-                {
                 text: "arXiv",
                 value: "arxiv",
-                },
-                {
-                text:"BASE",
-                value: "base",
                 },
                 {
                 text: "CORE",
@@ -388,34 +408,13 @@ export default {
                 value: "dblp",
                 },
                 {
-                text: "DOAJ",
-                value: "doaj",
-                },
-                {
-                text:"IEEE Xplore",
-                value: "ieee",
-                notEnabled: true,
-                },
-                {
-                text:"JSTOR",
-                value: "jstor",
-                },
-                {
                 text: "PubMed",
                 value: "pubmed",
                 },
                 {
-                text:"PubPsych",
-                value:"pubpsych"
+                text: "Unpaywall",
+                value: "unpaywall",
                 },
-                {
-                text:"SSRN",
-                value: "ssrn",
-                },
-                {
-                text:"Unpaywall",
-                value:"unpaywall"
-                }
             ],
             journals: [
                 {
@@ -452,35 +451,3 @@ export default {
     }
 }
 </script>
-<style scoped>
-.dropdownButton {
-    text-align: left;
-    border: 0px;
-    font-size: 16px;
-    width: 220px;
-    
-     
-}
-
-.toggleBg.not-collapsed {
-  background-color: #4577B8;
-  color: white;
-}
-
-.downArrow{
-    float:right;
-    padding-top: 3px;
-}
-
-.collapseAccordion{
-    column-count: 1;
-}
-
-.firstFilter{
-    background-color: #F78626;
-}
-
-.slider .vue-slider .tooltip{
-    background-color: #4577B8;
-}
-</style>

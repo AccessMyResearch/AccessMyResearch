@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-header
-      class="pb-6 pt-md-3 bg-gradient-primary"
+      class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-primary"
     ></base-header>
 
     <b-container fluid class="pb-4" id="suggested-people-container">

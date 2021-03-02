@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-header
-      class="pb-6 pt-md-3 bg-gradient-primary"
+      class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-primary"
     ></base-header>
     <Email ref="doiEmailModal" :emails="emailModal.emailOpts"></Email>
     <b-card-header class="border-0">
@@ -214,7 +214,7 @@ export default {
       searchQuery[startTime] =  JSON.stringify({ time: queryTime, total: totalResults, query: queryText });
       //searchQuery[queryTime] =  queryText;
       axios
-      .post('http://localhost:3001/search', searchQuery)
+      .post('http://localhost:3000/search', searchQuery)
       .then(function (response) {
          console.log(response);
       })
@@ -270,7 +270,7 @@ export default {
       // searchQuery[startTime] = this.$route.query.text;
 
       // axios
-      //   .post("http://localhost:3001/search", searchQuery)
+      //   .post("http://localhost:3000/search", searchQuery)
       //   .then(function (response) {
       //     console.log(response);
       //   })

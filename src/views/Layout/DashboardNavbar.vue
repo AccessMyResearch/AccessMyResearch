@@ -5,7 +5,7 @@
     :class="{ 'navbar-dark': type === 'default' }"
   >
     <router-link class="navbar-brand" to="/">
-      <img :src="logo" width="70%" class="navbar-brand-img" alt="AccessMyResearch">
+      <img :src="logo" width="80%" class="navbar-brand-img" alt="AccessMyResearch">
     </router-link>
     <!-- Navbar links -->
     <b-form
@@ -16,30 +16,25 @@
       }"
       id="navbar-search-main"
       @submit.prevent="onSubmit"
-      
     >
-      
-        <b-input-group class="input-group-alternative input-group-merge bg-white border-0 rounded-0 w-75" style="height:40px; position: relative; left: -62px;" >
-          
+      <b-form-group class="mb-0">
+        <b-input-group class="input-group-alternative input-group-merge">
+          <div class="input-group-append">
+            <span class="input-group-text">
+              <i class="fas fa-search"/>
+            </span>
+          </div>
           <b-form-input
             id="search"
             v-model="search.text"
             @input="filterRecentSearches"
             @focus="modal = false"
             @click="openAutoComplete"
-            v-click-outside="closeModal"
             autocomplete="off"
             type="text"
             placeholder="Search by keyword"
-            class="text-primary"
-            
           >
           </b-form-input>
-          <b-input-group-append style="height:40px">
-            
-              <button class="bg-orange border-0" type="submit"><i class="fas fa-search text-white lrgIcon p-1 " /></button>
-            
-          </b-input-group-append>
           <!-- autocomplete start -->
           <div
             v-if="filteredRecentSearches && modal"
@@ -58,7 +53,7 @@
           <!-- autocomplete start -->
           <!-- start here  -->
           <div class="SearchDropDown">
-            <!-- <b-dropdown variant="transparent" style="width:0%" right text="">
+            <b-dropdown variant="transparent" style="width:0%" right text="">
               <div class="accordion" role="tablist">
                 <b-card no-body class="mb-1">
                   <b-card-header header-tag="header" class="p-1" role="tab">
@@ -312,7 +307,7 @@
                 </b-card>
               </div>
 
-              TODO: figure out why click isn't working first 3 times 
+              <!--TODO: figure out why click isn't working first 3 times -->
               <input
                 type="checkbox"
                 v-model="defaultFilterCheckbox"
@@ -320,10 +315,10 @@
               />
               Save current filters as default
               <b-button class="btn float-right" variant="primary">Search</b-button>
-            </b-dropdown> -->
+            </b-dropdown>
           </div>
         </b-input-group>
-      
+      </b-form-group>
     </b-form>
     <b-navbar-nav class="align-items-center ml-auto">
       <a
@@ -335,7 +330,7 @@
           aria-expanded="false"
           v-if="signedIn"
         >
-          <i class="fas fa-plus fa-lg TopIcon"/>
+          <i class="fas fa-plus TopIcon"/>
       </a>
 
       <a
@@ -347,7 +342,7 @@
           aria-expanded="false"
           v-if="signedIn"
         >
-          <i class="fas fa-donate fa-lg TopIcon"/>
+          <i class="fas fa-donate TopIcon"/>
       </a>
 
       <a
@@ -359,7 +354,7 @@
           aria-expanded="false"
           v-if="signedIn"
         >
-          <i class="fas fa-layer-group fa-lg TopIcon"/>
+          <i class="fas fa-layer-group TopIcon"/>
       </a>
 
       <a
@@ -371,7 +366,7 @@
           aria-expanded="false"
           v-if="signedIn"
         >
-          <i class="fas fa-user-friends fa-lg TopIcon"/>
+          <i class="fas fa-user-friends TopIcon"/>
       </a>
 
       <base-dropdown class="nav-item" menu-on-right tag="li" title-tag="a">
@@ -384,7 +379,7 @@
           aria-expanded="false"
           @click="toggleNotificationDropDown"
         >
-          <i class="fas fa-bell fa-lg TopIcon"/>
+          <i class="fas fa-bell TopIcon"/>
         </a>
         <div v-for="user in users" :key="user.id">
           <a class="dropdown-item" @click="reroute(user)" v-if="signedIn">
@@ -410,7 +405,7 @@
           <span>All Notifications </span>
         </router-link>
         <b-alert show variant="light" class="text-dark" v-if="!signedIn">
-          <i class="fas fa-exclamation-circle"/>
+          <i class="fas fa-exclamation-circle fa-lg"/>
           In order to access this feature, you must login. You can login
           <router-link class="font-weight-bolder text-dark" to="/login">here.</router-link>
         </b-alert>
@@ -426,7 +421,7 @@
           aria-expanded="false"
           @click="redirect"
         >
-          <i class="fas fa-comment fa-lg TopIcon"/>
+          <i class="fas fa-comment TopIcon"/>
         </a>
         <a class="dropdown-item" to="/messages" v-if="signedIn">
           <!-- TODO: Link to Messages-->
@@ -512,9 +507,9 @@ import { listFollows, listRequestss } from '../../graphql/queries.js';
 export default {
   components: {
     //CollapseTransition,
-    BaseNav
+    BaseNav,
     //Modal,
-    //VueSlider
+    VueSlider
   },
   props: {
     logo: {
@@ -780,7 +775,7 @@ export default {
         .catch(() => {});
     },
     async getSearchHistory() {
-      let history = await axios.get("http://localhost:3001/search");
+      let history = await axios.get("http://localhost:3000/search");
       this.recentSearches = Object.entries(history.data).reverse().slice(0, 5);
     },
     capitalizeFirstLetter(string) {
@@ -900,9 +895,6 @@ export default {
     openAutoComplete() {
       this.modal = true;
     },
-    closeModal(){
-      this.modal = false;
-    },
     //autocomplete end
 
     //default filter start
@@ -954,13 +946,8 @@ export default {
   top: 45px;
   width: 350px;
 }
-
-b-form-input::placeholder{
-  color:#F78626
-}
 .TopIcon {
   color: white;
-  
 } /*TODO: Get variables from assets/custom/_variables.scss instead*/
 .TopIcon:hover {
   color: #F78626;

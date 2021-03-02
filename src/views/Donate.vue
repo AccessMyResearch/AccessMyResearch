@@ -1,6 +1,6 @@
 <template>
     <div>
-        <base-header class="pb-6 pt-md-3 bg-gradient-primary"></base-header>
+        <base-header class="pb-8 pt-md-8 bg-gradient-primary"></base-header>
         <card class="min-vh-100 main_body center">
             <div class="row card text-black">
                 <div class="col-lg mx-auto form p-4">

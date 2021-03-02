@@ -1,30 +1,23 @@
 <template>
   <div>
-    <base-header class="pb-6 pt-md-3 bg-gradient-primary"></base-header>
-    <b-container fluid class="pt-4">
-      <!-- <b-row>
-        <b-col sm="6">
+    <base-header class="pb-8 pt-md-8 bg-gradient-primary"></base-header>
+    <b-container fluid class="mt--9">
+      <b-row>
+        <!-- <b-col sm="auto">
           <filter-panel/>
-        </b-col>
+        </b-col> -->
         <b-col>
             <light-table/>
         </b-col>
-      </b-row> -->
-
-      <b-card-group deck>
-        <filter-panel/>
-        <light-table/>
-      </b-card-group>  
+      </b-row>
     </b-container>
   </div>
 </template>
 <script>
-  import FilterPanel from '@/components/FilterPanel.vue'; //TODO: Add filter panel
+  //import FilterPanel from '@/components/FilterPanel.vue'; //TODO: Add filter panel
   import LightTable from './Tables/LightTable';
   import { Auth } from 'aws-amplify';
   import { AmplifyEventBus } from 'aws-amplify-vue';
-
-  
 
   export default {
     created() {
@@ -41,8 +34,7 @@
     },
     components: {
       LightTable,
-      FilterPanel
-
+      //FilterPanel //TODO: Add filter panel
     },
     methods: {
       async findUser() 
