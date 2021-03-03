@@ -134,11 +134,11 @@ def doaj(elasticsearch, search_terms):
 
     cleaned_data = api.clean(result)
     # Following code is to temporarily save the output
-    f = open("python-scraper/output/DOAJ-cleaned-data.json", "w")
+    f = open("output/DOAJ-cleaned-data.json", "w")
     f.write(json.dumps(cleaned_data))
     f.close()
 
-    f = open("python-scraper/output/DOAJ-raw-data.json", "w")
+    f = open("output/DOAJ-raw-data.json", "w")
     f.write(json.dumps(result))
     f.close()
 

@@ -120,11 +120,11 @@ def unpaywall(elasticsearch, search_terms):
 
     cleaned_data = api.clean(result)
 
-    f = open("python-scraper/output/UnPaywall-cleaned-data.json", "w")
+    f = open("output/UnPaywall-cleaned-data.json", "w")
     f.write(json.dumps(cleaned_data))
     f.close()
 
-    f = open("python-scraper/output/UnPaywall-raw-data.json", "w")
+    f = open("output/UnPaywall-raw-data.json", "w")
     f.write(json.dumps(result))
     f.close()
 

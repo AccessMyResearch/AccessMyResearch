@@ -139,11 +139,11 @@ def core(elasticsearch, search_terms):
 
     # Following code is to temporarily save the output
     cleaned_data = api.clean(result)
-    f = open("python-scraper/output/CORE-cleaned-data.json", "w")
+    f = open("output/CORE-cleaned-data.json", "w")
     f.write(json.dumps(cleaned_data))
     f.close()
 
-    f = open("python-scraper/output/CORE-raw-data.json", "w")
+    f = open("output/CORE-raw-data.json", "w")
     f.write(json.dumps(result))
     f.close()
 
