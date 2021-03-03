@@ -89,7 +89,7 @@ class CoreApiRequestor:
                     'journal', 'doi', 'database', 'publisher',
                     'subjects', 'year', 'aoi', 'downloadUrl']
         regexp = re.compile(
-            r'^[0-9]+-[0-9]+-[0-9]+T[0-9]+[0-9]+:[0-9]+[0-9]+:[0-9]+[0-9]+$')
+            r'^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]$')
         
         # Go through all pages in result
         for page in result:
@@ -105,7 +105,7 @@ class CoreApiRequestor:
                             cleanedArticle[item] = article[item]
 
                     if 'datePublished' in cleanedArticle and not regexp.search(cleanedArticle['datePublished']):
-                            cleanedArticle['datePublished'] = "2100-01-12T00:00:00"
+                            cleanedArticle['datePublished'] = ""
                         
 
                     # Specify which database the article was taken from: 
