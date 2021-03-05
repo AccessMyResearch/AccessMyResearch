@@ -121,7 +121,7 @@ class DOAJApiRequestor:
 
 
 
-def doaj(elasticsearch, search_terms):
+def doaj(elasticsearch, index_name, search_terms):
     logger.info("Indexing the DOAJ database...")
     endpoint = 'https://doaj.org/api/v2/'
     method = 'search/articles'
@@ -144,7 +144,7 @@ def doaj(elasticsearch, search_terms):
 
 
     for article in cleaned_data:
-        res = elasticsearch.index(index="amr", id=id_generator(article['title']), body=article)
+        res = elasticsearch.index(index=index_name, id=id_generator(article['title']), body=article)
 
 
     logger.info('Total documents in DOAJ: %s' % len(cleaned_data))

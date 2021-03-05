@@ -7,5 +7,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# CMD [ "python", "./indexer.py" , "-m", "1", "search.json"]
-CMD [ "python", "./estest.py"]
+CMD [ "python", "./indexer.py" , "-m", "5", "search.json"]
+# CMD [ "python", "./estest.py"]

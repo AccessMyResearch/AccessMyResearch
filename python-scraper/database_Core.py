@@ -105,7 +105,8 @@ class CoreApiRequestor:
                             cleanedArticle[item] = article[item]
 
                     if 'datePublished' in cleanedArticle and not regexp.search(cleanedArticle['datePublished']):
-                            cleanedArticle['datePublished'] = ""
+                        del cleanedArticle['datePublished']
+                        
                         
 
                     # Specify which database the article was taken from: 
@@ -122,7 +123,7 @@ class CoreApiRequestor:
         return cleanedResult
 
 
-def core(elasticsearch, search_terms):
+def core(elasticsearch, index_name, search_terms):
     logger.info("Indexing the CORE database...")
     # Notify console that the CORE thread has started
 
@@ -148,6 +149,7 @@ def core(elasticsearch, search_terms):
     f.close()
 
     for article in cleaned_data:
-        res = elasticsearch.index(index="amr", id=id_generator(article['title']), body=article)
+        res = elasticsearch.index(
+            index=index_name, id=id_generator(article['title']), body=article)
 
     logger.info('Total documents in CORE: %s' % len(cleaned_data))

@@ -16,12 +16,12 @@ class UnpaywallApiRequestor:
         self.logger = logger
 
 
-    def getRequestURL(self, method, query):
-        return self.endpoint + method + '/?query=' + urllib.parse.quote(query) + '&email=your_email&is_oa=true'
+    def getRequestURL(self, method, email, query):
+        return self.endpoint + method + '/?query=' + urllib.parse.quote(query) + '&email=' + email +'&is_oa=true'
 
 
-    def get_query(self, method, query):
-        url = self.getRequestURL(method, query)
+    def get_query(self, method, email, query):
+        url = self.getRequestURL(method, email, query)
         all_articles = []
         resp = requestURL(url)
         result = json.loads(resp.decode('utf-8'))
@@ -105,18 +105,19 @@ class UnpaywallApiRequestor:
         return list(set(url))
         
 
-def unpaywall(elasticsearch, search_terms):
+def unpaywall(elasticsearch, index_name, search_terms):
     logger.info("Indexing the Unpaywall database...")
 
     # set endpoint as beginning of api call for unpaywall
     endpoint = "https://api.unpaywall.org/v2/"
     method = "search"
+    email = "ztiffutxjhppurcmyc@miucce.com"
 
     api = UnpaywallApiRequestor(endpoint)
 
     result = []
     for term in search_terms:
-        result += api.get_query(method, term)
+        result += api.get_query(method, email, term)
 
     cleaned_data = api.clean(result)
 
@@ -129,6 +130,6 @@ def unpaywall(elasticsearch, search_terms):
     f.close()
 
     for article in cleaned_data:
-        res = elasticsearch.index(index="amr", id=id_generator(article['title']), body=article)
+        res = elasticsearch.index(index=index_name, id=id_generator(article['title']), body=article)
 
     logger.info('Total documents in Unpaywall: %s' % len(cleaned_data))

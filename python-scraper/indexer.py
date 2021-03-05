@@ -13,6 +13,7 @@ from Logger import getLogger
 from database_Core import core
 from database_DOAJ import doaj
 from database_Unpaywall import unpaywall
+from HttpUtils import *
 
 # Fix SSL issues if they are present: 
 if (not os.environ.get('PYTHONHTTPSVERIFY', '') and
@@ -21,14 +22,19 @@ if (not os.environ.get('PYTHONHTTPSVERIFY', '') and
 
 # Get logger in context of main indexer class: 
 logger = getLogger("mainIndexer")
-es = Elasticsearch()
+es = Elasticsearch(['https://search-accessmyresearch-rxbdfxn7frebom3di4du5ld464.us-east-2.es.amazonaws.com/'], http_auth=('amr', 'Amr123!!'))
+index_name = "articles"
+
+# Define the threads that need to be run:
+threadCallBacks = [doaj, core, unpaywall]
+threadObjects = []  # NOTE: this will be modified by reference inside runThreads()
 
 # will run after every schedule call
-def runThreads(threadCallBacks, threadObjects):
+def runThreads():
     # Track runtime
     start_time = time.time()
 
-    params = (es, getSearchKeywords(),)
+    params = (es, index_name, getSearchKeywords(),)
     logger.debug("params passed in: %s" % str(params))
 
     # This block will only run once to initialize the threadObjects array
@@ -66,8 +72,8 @@ def runThreads(threadCallBacks, threadObjects):
 
 #Logs the result of the complete indexing process on screen: 
 def displayElasticSearchIndexCount():
-    es.indices.refresh("amr")
-    elasticSearchTotal = es.cat.count("amr")
+    es.indices.refresh(index_name)
+    elasticSearchTotal = es.cat.count(index_name)
     logger.info("Total documents indexed (epoch|timestamp|count): " + elasticSearchTotal)
 
 
@@ -90,6 +96,11 @@ def getSearchKeywords():
 
 #Main method: 
 if __name__ == '__main__':
+    # test = {1: 'one', 2: 'two', 3: 'three'}
+    # print(test)
+    # es.index(index="articles", id=id_generator("Hello"), body=test)
+    # es.indices.refresh("articles")
+    # exit()
 
     #Check for correct command line arguments: 
     if len(sys.argv) != 4:
@@ -105,10 +116,7 @@ if __name__ == '__main__':
         exit()
 
 
-    # Define the threads that need to be run:
-    threadCallBacks = [doaj, core, unpaywall]
-    threadObjects = [] #NOTE: this will be modified by reference inside runThreads()
-    job = lambda: runThreads(threadCallBacks, threadObjects)
+    job = lambda: runThreads()
 
     logger.info("Running indexing: (Scheduled every %s %s)" % (scheduledTime, sys.argv[1]))
 
