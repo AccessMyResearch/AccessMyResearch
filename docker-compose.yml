@@ -1,17 +1,5 @@
 version: '2.2'
 services:
-  python-scraper:
-    container_name: python-scraper-container
-    build:
-      context: ./python-scraper
-      dockerfile: dockerfile
-    volumes:
-      - '.:/python-scraper'
-    # ports:
-    #   - 80:80
-    #   - 8080:8080
-    #   - 443:443
-
   node-frontend:
     container_name: amr
     build:
@@ -67,7 +55,7 @@ services:
       - 9200:9200
     networks:
       - elk
-#####################################
+
   # logstash:
   #   image: docker.elastic.co/logstash/logstash:7.9.2
   #   container_name: logstash
@@ -87,7 +75,7 @@ services:
   #   volumes:
   #     - ./config/logstash.conf:/usr/share/logstash/config/logstash-sample.conf:ro
   #     - ./config/logstash.conf:/usr/share/logstash/config/logstash.conf:ro
-##########################
+
   redis:
     container_name: cache
     image: "redis:alpine"
