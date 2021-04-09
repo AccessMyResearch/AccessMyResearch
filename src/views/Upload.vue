@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
 
     <div class="research-modal" > 
         
@@ -11,6 +12,15 @@
                     <b-icon-x icon = "type-bold" style="float:right; cursor: pointer; height:1.5rem; width:1.5rem; " @click="toggleResearchWindow"> </b-icon-x>
                     <div id="mainUpload">
                         <div class="h2" style="text-align: center"> Add Research Material </div>
+=======
+    <div> 
+        <base-header class="pb-5 pt-md-3 bg-gradient-primary"></base-header>
+        <b-container fluid class="mt-4">
+            <div class="card text-black" >
+                <div class="col-lg mx-auto form p-2" style="border-radius: 4px; -webkit-box-shadow: 0 0 15px #9b9d9e;">
+                    <div id="mainUpload">
+                        <div class="h1"> Add Research Material </div>
+>>>>>>> Add research box UI changes
                         
                         <div class="form-group">
                             <label class="h2" for="title_of_publication">Title</label>
@@ -19,7 +29,11 @@
 
                         <div class="form-group">
                             <label class="h2" for="Abstract">Abstract (Optional) </label>
+<<<<<<< HEAD
                             <textarea type="text" class="form-control" placeholder="Add Abstract" rows="1" v-model="abstract" style="background-color: #fafafa"></textarea>
+=======
+                            <textarea type="text" class="form-control" placeholder="Add Abstract" rows="4" v-model="abstract" style="background-color: #fafafa"></textarea>
+>>>>>>> Add research box UI changes
                         </div>
 
                         <div class="form-group" v-if="doiVisible">
@@ -70,8 +84,16 @@
                             <div id="inner-drop-area">
                                 <div class="my-form">
                                     <p style="text-align: center">Drag and drop your file here</p>
+<<<<<<< HEAD
                                     </div>
                                 <small id="fileWarning" class="form-text text-muted" style="text-align: center">PDF Upload Progress</small>
+=======
+                                    <!-- <input type="file" id="fileElem" accept="application/pdf" @change="handleFiles"> -->
+                                    <!-- <label class="btn btn-secondary" for="fileElem">Choose File(s)</label> -->
+                                    <!-- <button class="float-right btn btn-primary" @click="submitForm">Upload Publication</button> -->
+                                </div>
+                                <small id="fileWarning" class="form-text text-muted">PDF</small>
+>>>>>>> Add research box UI changes
                                 <progress id="progress-bar" max=100 value=0></progress>
                                 <div id="gallery">
                                     <b-button
@@ -86,8 +108,13 @@
 
                         <div class="upload-button">
                             <input type="file" id="fileElem" accept="application/pdf" @change="handleFiles">
+<<<<<<< HEAD
                             <label class="btn btn-sm btn-primary" for="fileElem" style="width:12%">Select File</label>
                             <button class="float-right btn btn-sm btn-primary mb1 bg-orange" @click="submitForm">Upload Publication</button>
+=======
+                            <label class="btn btn-primary" for="fileElem" style="width:12%">Select File</label>
+                            <button class="float-right btn btn-primary mb1 bg-orange" @click="submitForm">Upload Publication</button>
+>>>>>>> Add research box UI changes
                         </div>
 
                     </div>
@@ -175,7 +202,10 @@ export default {
     mounted: function(){
         var uploadElement = document.getElementById('drop-area');
         upload.init(uploadElement, this.files);
+<<<<<<< HEAD
         this.getUserData();
+=======
+>>>>>>> Add research box UI changes
     },
     methods:{
         handleFiles: function(event){
@@ -217,6 +247,7 @@ export default {
                 this.files,
                 document.getElementById('progress-bar')
             );
+<<<<<<< HEAD
             */
 
            //ADDED BY:JPB170330
@@ -352,15 +383,23 @@ export default {
 
             });
         }
+=======
+        },
+>>>>>>> Add research box UI changes
     },
 }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
+<<<<<<< HEAD
+=======
+
+>>>>>>> Add research box UI changes
 .h1{
     text-align: center;
     color:#0b599b;
 }
+<<<<<<< HEAD
 .h2{
     color: #0b599b;
     font-size: 100%;
@@ -392,6 +431,42 @@ export default {
     linear-gradient(to top, #7f7f7f 4px, transparent 4px) 100% 100%;
   background-repeat: no-repeat;
   background-size: 20px 20px;
+=======
+
+.h2{
+    color: #0b599b;
+    font-size: 100%;
+}
+
+#mainUpload{
+    margin: 2%;
+}
+
+#drop-area {
+    border: 1px solid #e8e8e8;
+    width: 100%;
+    margin: auto;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    padding: 20px;
+>>>>>>> Add research box UI changes
+}
+#inner-drop-area{
+    width: 95%;
+    margin: auto;
+    padding: inherit;
+    background:
+    linear-gradient(to right,#7f7f7f 4px, transparent 4px) 0 0,
+    linear-gradient(to right, #7f7f7f 4px, transparent 4px) 0 100%,
+    linear-gradient(to left, #7f7f7f 4px, transparent 4px) 100% 0,
+    linear-gradient(to left, #7f7f7f 4px, transparent 4px) 100% 100%,
+    linear-gradient(to bottom, #7f7f7f 4px, transparent 4px) 0 0,
+    linear-gradient(to bottom, #7f7f7f 4px, transparent 4px) 100% 0,
+    linear-gradient(to top, #7f7f7f 4px, transparent 4px) 0 100%,
+    linear-gradient(to top, #7f7f7f 4px, transparent 4px) 100% 100%;
+
+  background-repeat: no-repeat;
+  background-size: 30px 30px;
 }
 #progress-bar {
     width: 100%;
@@ -429,6 +504,10 @@ export default {
 #fileElem {
     display: none;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> Add research box UI changes
 .publication-type {
     display: inline-block;
     width: 49%;
@@ -437,9 +516,12 @@ export default {
 .publication-access {
     display: inline-block;
     width: 49%;
+<<<<<<< HEAD
 }
 
 .form-group{
     margin-bottom: 3px;
+=======
+>>>>>>> Add research box UI changes
 }
 </style>
