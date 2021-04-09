@@ -1,34 +1,27 @@
 <template>
-    <div>
-        <base-header class="pb-8 pt-md-8 bg-gradient-primary"></base-header>
-        <b-container fluid class="mt--9">
-            <div class="row card text-black">
-                <div class="col-lg mx-auto form p-4">
+    <div> 
+        <base-header class="pb-5 pt-md-3 bg-gradient-primary"></base-header>
+        <b-container fluid class="mt-4">
+            <div class="card text-black" >
+                <div class="col-lg mx-auto form p-2" style="border-radius: 4px; -webkit-box-shadow: 0 0 15px #9b9d9e;">
                     <div id="mainUpload">
-                        <div class="form-group">
-                            <label class="h2" for="pub-type">Publication Type</label>
-                            <multiselect
-                                v-model="pubType.value"
-                                :options="pubType.options"
-                                :allowEmpty="false"
-                                :showLabels="false"
-                            >
-                            </multiselect>
-                        </div>
-                        <div class="form-group">
-                            <label for="access-level">Publication Visibility</label>
-                            <multiselect
-                                v-model="visibility.value"
-                                :options="visibility.options"
-                                :allowEmpty="false"
-                                :showLabels="false"
-                            >
-                            </multiselect>
-                        </div>
+                        <div class="h1"> Add Research Material </div>
+                        
                         <div class="form-group">
                             <label class="h2" for="title_of_publication">Title</label>
-                            <input type="text" class="form-control" placeholder="Title" v-model="title">
+                            <input type="text" class="form-control" placeholder="Enter the title of your research material" rows="2" v-model="title" style="background-color: #fafafa">
                         </div>
+
+                        <div class="form-group">
+                            <label class="h2" for="Abstract">Abstract (Optional) </label>
+                            <textarea type="text" class="form-control" placeholder="Add Abstract" rows="4" v-model="abstract" style="background-color: #fafafa"></textarea>
+                        </div>
+
+                        <div class="form-group" v-if="doiVisible">
+                            <label class="h2" for="doi">DOI (Optional)</label>
+                            <input type="text" class="form-control" placeholder="DOI" v-model="doi" style="background-color: #fafafa">
+                        </div>
+
                         <div class="form-group">
                             <label class="h2" for="Authors">Author(s)</label>
                             <multiselect 
@@ -36,75 +29,65 @@
                                 :options="authors.options"
                                 label="name"
                                 track-by="code"
+                                placeholder="Add Authors"
                                 :multiple="true"
                                 :taggable="true"
                                 @tag="addTag"
+                                class="dropdown-select"
                             >
                             </multiselect>
                         </div>
 
-                        <div>
-                            <label class="h2">Date</label>
-                            <div>
-                                <multiselect 
-                                    class="dateSelect"
-                                    v-model="date.selected.day"
-                                    :options="date.options.days"
-                                    :allowEmpty="false"
-                                    :showLabels="false"
-                                >
-                                </multiselect>
+                        <div class="publication-type">
+                            <label class="h2" for="pub-type">Type</label>
+                            <multiselect
+                                v-model="pubType.value"
+                                :options="pubType.options"
+                                :allowEmpty="false"
+                                :showLabels="false"
+                                class="dropdown-select"
+                            >
+                            </multiselect>
+                        </div>
+                        <div class="publication-access">
+                            <label class="h2" for="access-level">Access</label>
+                            <multiselect
+                                v-model="visibility.value"
+                                :options="visibility.options"
+                                :allowEmpty="false"
+                                :showLabels="false"
+                                class="dropdown-select"
+                            >
+                            </multiselect>
+                        </div>
 
-                                <multiselect 
-                                    class="dateSelect"
-                                    v-model="date.selected.month"
-                                    :options="date.options.months"
-                                    label="name"
-                                    track-by="index"
-                                    :allowEmpty="false"
-                                    :showLabels="false"
-                                    @input="updateDayOptions"
-                                >
-                                </multiselect>
-
-                                <multiselect 
-                                    class="dateSelect"
-                                    v-model="date.selected.year"
-                                    :options="date.options.years"
-                                    :allowEmpty="false"
-                                    :showLabels="false"
-                                    @input="updateIsLeapYear"
-                                >
-                                </multiselect>
+                        <div id="drop-area" style="background-color: #fafafa">
+                            <div id="inner-drop-area">
+                                <div class="my-form">
+                                    <p style="text-align: center">Drag and drop your file here</p>
+                                    <!-- <input type="file" id="fileElem" accept="application/pdf" @change="handleFiles"> -->
+                                    <!-- <label class="btn btn-secondary" for="fileElem">Choose File(s)</label> -->
+                                    <!-- <button class="float-right btn btn-primary" @click="submitForm">Upload Publication</button> -->
+                                </div>
+                                <small id="fileWarning" class="form-text text-muted">PDF</small>
+                                <progress id="progress-bar" max=100 value=0></progress>
+                                <div id="gallery">
+                                    <b-button
+                                        v-for="file in files" :key="file.name"
+                                        disabled
+                                    >
+                                        {{ file.name }}
+                                    </b-button>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="h2" for="Abstract">Abstract</label>
-                            <textarea type="text" class="form-control" placeholder="Abstract" rows="5" v-model="abstract"></textarea>
+                        <div class="upload-button">
+                            <input type="file" id="fileElem" accept="application/pdf" @change="handleFiles">
+                            <label class="btn btn-primary" for="fileElem" style="width:12%">Select File</label>
+                            <button class="float-right btn btn-primary mb1 bg-orange" @click="submitForm">Upload Publication</button>
                         </div>
-                        <div class="form-group" v-if="doiVisible">
-                            <label class="h2" for="doi">DOI (Optional)</label>
-                            <input type="text" class="form-control" placeholder="DOI" v-model="doi">
-                        </div>
-                        <div id="drop-area">
-                            <div class="my-form">
-                                <p>Upload a PDF version of the article</p>
-                                <input type="file" id="fileElem" accept="application/pdf" @change="handleFiles">
-                                <label class="btn btn-secondary" for="fileElem">Choose File(s)</label>
-                                <button class="float-right btn btn-primary" @click="submitForm">Upload Publication</button>
-                            </div>
-                            <small id="fileWarning" class="form-text text-muted">PDF</small>
-                            <progress id="progress-bar" max=100 value=0></progress>
-                            <div id="gallery">
-                                <b-button
-                                    v-for="file in files" :key="file.name"
-                                    disabled
-                                >
-                                    {{ file.name }}
-                                </b-button>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -169,17 +152,6 @@ export default {
     mounted: function(){
         var uploadElement = document.getElementById('drop-area');
         upload.init(uploadElement, this.files);
-
-        var now = new Date();
-        for(var i=now.getFullYear() + 2; i > 1940; i--)
-            this.date.options.years.push(i);
-
-        var selected = this.date.selected;
-        selected.year = now.getFullYear();
-        selected.month = this.date.options.months[now.getMonth()];
-        selected.day = now.getDate();
-
-        this.updateDayOptions();
     },
     methods:{
         handleFiles: function(event){
@@ -222,39 +194,50 @@ export default {
                 document.getElementById('progress-bar')
             );
         },
-        //Update the days options for the multiselect to reflect the number of days of the selected month.
-        updateDayOptions: function(){
-            let selected = this.date.selected;
-
-            let numDays = calendar.getNumDays(selected.month.index, selected.year);
-            let days = this.date.options.days;
-            if(days.length === numDays)
-                return;
-
-            days.length = 0;
-            for(let i=1; i <= numDays; i++)
-                days.push(i);
-
-            if(selected.day > numDays)
-                selected.day = numDays;
-        },
-        //Make sure that the days dropdown has 28/29 days in the month of February depending on if it's a leap year.
-        updateIsLeapYear: function(){
-            if(this.date.selected.month.index === 1){
-                this.updateDayOptions();
-            }
-        }
     },
 }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
+
+.h1{
+    text-align: center;
+    color:#0b599b;
+}
+
+.h2{
+    color: #0b599b;
+    font-size: 100%;
+}
+
+#mainUpload{
+    margin: 2%;
+}
+
 #drop-area {
-    border: 3px dashed #CCCCCC;
-    border-radius: 20px;
-    width: 60%;
+    border: 1px solid #e8e8e8;
+    width: 100%;
     margin: auto;
+    margin-top: 1%;
+    margin-bottom: 1%;
     padding: 20px;
+}
+#inner-drop-area{
+    width: 95%;
+    margin: auto;
+    padding: inherit;
+    background:
+    linear-gradient(to right,#7f7f7f 4px, transparent 4px) 0 0,
+    linear-gradient(to right, #7f7f7f 4px, transparent 4px) 0 100%,
+    linear-gradient(to left, #7f7f7f 4px, transparent 4px) 100% 0,
+    linear-gradient(to left, #7f7f7f 4px, transparent 4px) 100% 100%,
+    linear-gradient(to bottom, #7f7f7f 4px, transparent 4px) 0 0,
+    linear-gradient(to bottom, #7f7f7f 4px, transparent 4px) 100% 0,
+    linear-gradient(to top, #7f7f7f 4px, transparent 4px) 0 100%,
+    linear-gradient(to top, #7f7f7f 4px, transparent 4px) 100% 100%;
+
+  background-repeat: no-repeat;
+  background-size: 30px 30px;
 }
 #progress-bar {
     width: 100%;
@@ -278,8 +261,13 @@ export default {
     display: none;
 }
 
-.dateSelect {
+.publication-type {
     display: inline-block;
-    width: 25%;
+    width: 49%;
+    margin-right: 2%;
+}
+.publication-access {
+    display: inline-block;
+    width: 49%;
 }
 </style>
