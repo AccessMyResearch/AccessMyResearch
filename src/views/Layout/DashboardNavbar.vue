@@ -82,7 +82,6 @@
       <div id="outer-overlay" class="overlay" @click="overlay" v-if="researchWindowIsOpen" >
           <Upload :researchWindowIsOpen="researchWindowIsOpen" v-on:update="researchWindowToggle($event)" class="research-window"/>
       </div>
-
       <a
           slot="title-container"
           class="nav-link nav-link-icon nav-item"
@@ -92,7 +91,7 @@
           aria-expanded="false"
           v-if="signedIn"
         >
-          <i  v-bind:class="{iconColor: this.$route.path == '/donate' }" class="fas fa-donate fa-lg TopIcon"/>
+          <i  v-bind:class="{iconColor: this.$route.path == '/donate' }" class="fas fa-dollar-sign fa-lg TopIcon"/>
       </a>
 
       <a
@@ -186,7 +185,7 @@
           aria-expanded="false"
           @click="toggleMessageDropDown"
         >
-          <i v-bind:class="{iconColor: (this.$route.path == '/messages')}" class="fas fa-comment-dots fa-lg TopIcon"/>
+          <i v-bind:class="{iconColor: (this.$route.path == '/messages')}" class="fas fa-envelope fa-lg TopIcon"/>
         </a>
         
 <!-- Div for the dropdown menu, sets the vertical scroll and height -->
@@ -600,6 +599,9 @@ export default {
         this.$store.state.search.totalResults = searchResults.totalResults;
         this.$store.state.search.timeElapsed = searchResults.timeElapsed;
       }).bind(this));
+    },
+    showModal: function(){
+      this.show = true;
     },
     async getSearchHistory() {
       let history = await axios.get("http://localhost:3001/search");
