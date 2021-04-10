@@ -1,11 +1,14 @@
 <template>
+<!-- <div style="overflow-y:scroll; height: 60rem;"> -->
 <div class="SearchDropDown">
+ 
     <div class="accordion" role="tablist">
+        <!-- <div style="overflow-y:auto; height: 20rem;"> -->
         <b-card no-body class="filterPanelCard" style="max-height:70px;">
         <b-card-header header-tag="header" class="p-1 firstFilter" role="tab">
             <b-button
             block v-b-toggle.SortByAccordion squared variant="#4577B8"
-            class = "dropdownButton"><div>Research<span><i class="fas fa-plus fa-sm addItem"></i></span></div>
+            class = "dropdownButton"><div>Research<span> <i class="fas fa-list-ul fa-lg downArrow"></i><i class="fas fa-plus fa-lg addItem"></i></span></div>
             </b-button>
         </b-card-header>
         <b-collapse
@@ -22,14 +25,16 @@
             <b-card-body style="max-width:220px">
             <b-form-group class="small slider">
                 <br/>
-                 <vue-range-slider 
-                 :bg-style="bgStyle" 
-                 :tooltip-style="tooltipStyle" 
-                 :process-style="processStyle" 
-                 v-model="yearRange"
-                 :min="1950"
-                 :max="2021"
-                 ></vue-range-slider>
+                <div style="position: relative; z-index: 0;"> <!-- forces slider to gray out when any modal opens (upload research modal) -->
+                    <vue-range-slider 
+                    :bg-style="bgStyle" 
+                    :tooltip-style="tooltipStyle" 
+                    :process-style="processStyle" 
+                    v-model="yearRange"
+                    :min="1950"
+                    :max="2021"
+                    ></vue-range-slider>
+                 </div>
             </b-form-group>
             </b-card-body>
         </b-card>
@@ -37,7 +42,7 @@
         <b-card no-body class="filterPanelCard">
         <b-card-header header-tag="header" class="p-1" role="tab">
             <b-button block v-b-toggle.typeAccordion squared variant="outline-primary"
-            class = "dropdownButton toggleBg" 
+             class = "dropdownButton toggleBg" 
             ><div>Type<span><i class="fas fa-chevron-down downArrow"></i></span></div>
             </b-button>
         </b-card-header>
@@ -248,9 +253,11 @@
         </b-collapse>
         </b-card>
     
-        
+    <!-- </div>     -->
     </div>
+<!-- </div> -->
 </div>
+
 </template>
 <script>
 import 'vue-range-component/dist/vue-range-slider.css'
@@ -491,15 +498,9 @@ export default {
   color: white;
 }
 
-.accordion{
-    overflow-y: auto;
-    max-height: 50rem;
-}
-
 .addItem{
-    float: right;
-    padding: 3px 0px 0px 4px;
-    
+    float: right; 
+    padding: 3px 4px 0px 0px;
 }
 
 .downArrow{
@@ -507,8 +508,17 @@ export default {
     padding: 3px 0px 0px 4px;
 }
 
+.accordion{
+    overflow-y: auto;
+    max-height: 50rem;
+}
+
 .collapseAccordion{
     column-count: 1;
+}
+
+.firstFilter{
+    background-color: #F78626;
 }
 
 .filterPanelCard{
@@ -517,9 +527,6 @@ export default {
     box-shadow: 0 2px 3px #9b9d9e;
 }
 
-.firstFilter{
-    background-color: #F78626;
-}
 
 .slider .vue-slider .tooltip{
     background-color: #4577B8;

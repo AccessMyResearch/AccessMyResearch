@@ -1,9 +1,14 @@
 <template>
-    <div> 
-        <base-header class="pb-5 pt-md-3 bg-gradient-primary"></base-header>
-        <b-container fluid class="mt-4">
-            <div class="card text-black" >
+
+    <div class="research-modal" > 
+        
+        <!-- <base-header class="pb-5 pt-md-3 bg-gradient-primary"></base-header> -->
+        <!-- <b-container fluid class="mt-4"> -->
+            
+            <div class="card text-black">
+                
                 <div class="col-lg mx-auto form p-2" style="border-radius: 4px; -webkit-box-shadow: 0 0 15px #9b9d9e;">
+                    <b-icon-x icon = "type-bold" style="float:right; cursor: pointer; height:1.5rem; width:1.5rem; " @click="toggleResearchWindow"> </b-icon-x>
                     <div id="mainUpload">
                         <div class="h1"> Add Research Material </div>
                         
@@ -91,7 +96,8 @@
                     </div>
                 </div>
             </div>
-        </b-container>
+        <!-- </b-container> -->
+        
     </div>
 </template>
 
@@ -99,9 +105,16 @@
 import Multiselect from 'vue-multiselect';
 import upload from '@/util/upload';
 import calendar from '@/util/calendar';
-
 export default {
     components: { Multiselect },
+
+    props: {
+    researchWindowIsOpen: {
+      type: Boolean,
+      default: false,
+      description: 'Whether the research window is open or not'
+    }},
+
     data: function(){
         return {
             pubType: {
@@ -168,7 +181,6 @@ export default {
                 //"But random isn't unique!" - tell it to the docs: https://vue-multiselect.js.org/#sub-tagging
                 code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
             }
-
             var authors = this.authors;
             authors.options.push(tag);
             authors.value.push(tag);
@@ -194,26 +206,28 @@ export default {
                 document.getElementById('progress-bar')
             );
         },
+
+        toggleResearchWindow(){
+            // this.researchWindowIsOpen = !this.researchWindowIsOpen;
+            this.$emit('update', !this.researchWindowIsOpen);
+             console.log(this.researchWindowIsOpen);
+        }
     },
 }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
-
 .h1{
     text-align: center;
     color:#0b599b;
 }
-
 .h2{
     color: #0b599b;
     font-size: 100%;
 }
-
 #mainUpload{
     margin: 2%;
 }
-
 #drop-area {
     border: 1px solid #e8e8e8;
     width: 100%;
@@ -235,7 +249,6 @@ export default {
     linear-gradient(to bottom, #7f7f7f 4px, transparent 4px) 100% 0,
     linear-gradient(to top, #7f7f7f 4px, transparent 4px) 0 100%,
     linear-gradient(to top, #7f7f7f 4px, transparent 4px) 100% 100%;
-
   background-repeat: no-repeat;
   background-size: 30px 30px;
 }
@@ -247,7 +260,22 @@ export default {
 }
 .my-form {
     margin-bottom: 10px;
+    /* width:300px; */
 }
+.container-fluid{
+    padding:0 !important;
+}
+.research-modal {
+    width:800px;
+    height:600px;
+    overflow-y: scroll;
+}
+ @media screen and (min-width: 600px) and (max-width: 800px) {
+  .research-modal{
+    width: 600px;
+    /* height:600px; */
+ }
+} 
 #gallery {
     margin-top: 10px;
 }
@@ -260,7 +288,6 @@ export default {
 #fileElem {
     display: none;
 }
-
 .publication-type {
     display: inline-block;
     width: 49%;

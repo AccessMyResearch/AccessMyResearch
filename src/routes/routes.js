@@ -49,6 +49,11 @@ const routes = [
         name: 'about',
         component: () => import('../views/About.vue')
       },
+      {
+        path: 'upload',
+        name: 'Upload Research Window',
+        component: () => import('../views/Upload.vue')
+      },
     ]
   },
 
@@ -175,6 +180,11 @@ const routes = [
         path: 'add',
         name: 'Add Users',
         component: () => import('../views/Pages/AddRemoveUsers.vue')
+      },
+      {
+        path: '/upload',
+        name: 'Upload',
+        component: () => import('../views/Upload.vue')
       },
     ]
   },

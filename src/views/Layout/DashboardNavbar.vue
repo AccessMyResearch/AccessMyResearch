@@ -3,6 +3,7 @@
     container-classes="container-fluid"
     class="navbar-top navbar-expand"
     :class="{ 'navbar-dark': type === 'default' }"
+    
   >
     <router-link class="navbar-brand" to="/">
       <img :src="logo" width="70%" class="navbar-brand-img" alt="AccessMyResearch">
@@ -327,22 +328,24 @@
       
     </b-form>
     
-    <b-navbar-nav class="align-items-center ml-auto">
-      <!-- <div v-bind:style="{color: iconColor}"> </div> -->
-
+    <b-navbar-nav class="align-items-center ml-auto" >
       <a
           slot="title-container"
           class="nav-link nav-link-icon nav-item"
           href="#"
           role="button"
-          @click="toUpload"
+          @click="toggleResearchWindow"
           aria-expanded="false"
           v-if="signedIn"
+          id = "uploadButton"
         >
         <!-- v-bind binds a style element based on a condition, so here we use the iconColor styling only if the website reroutes to the Uploads page -->
-          <i v-bind:class="{iconColor: this.$route.path == '/upload'}" class="fas fa-plus fa-lg TopIcon"/>
+          <i v-bind:class="{iconColor: researchWindowIsOpen == true}" class="fas fa-plus fa-lg TopIcon"/>     
       </a>
-
+      <div id="outer-overlay" class="overlay" @click="overlay" v-if="researchWindowIsOpen" >
+          <Upload :researchWindowIsOpen="researchWindowIsOpen" v-on:update="researchWindowToggle($event)" class="research-window"/>
+      </div>
+     
       <a
           slot="title-container"
           class="nav-link nav-link-icon nav-item"
@@ -352,7 +355,7 @@
           aria-expanded="false"
           v-if="signedIn"
         >
-          <i  v-bind:class="{iconColor: this.$route.path == '/donate' }" class="fas fa-donate fa-lg TopIcon"/>
+          <i  v-bind:class="{iconColor: this.$route.path == '/donate' }" class="fas fa-dollar-sign fa-lg TopIcon"/>
       </a>
 
       <a
@@ -399,9 +402,10 @@
           role="button"
           aria-haspopup="true"
           aria-expanded="false"
-          @click="toggleNotificationDropDown('notifications')"
+          @click="toggleNotificationDropDown"
         >
-          <i v-bind:class="{iconColor: (this.$route.path == '/notifications') || (this.setActiveIcon == 'notifications') }" class="fas fa-bell fa-lg TopIcon"/>
+          <!-- <i v-bind:class="{iconColor: (this.$route.path == '/notifications') || (@click="toggleNotificationDropDown") }" class="fas fa-bell fa-lg TopIcon"/> -->
+          <i v-bind:class="{iconColor: (this.$route.path == '/notifications')}" class="fas fa-bell fa-lg TopIcon"/>
         </a>
         <div v-for="user in users" :key="user.id">
           <a class="dropdown-item" @click="reroute(user)" v-if="signedIn">
@@ -443,7 +447,7 @@
           aria-expanded="false"
           @click="redirect"
         >
-          <i v-bind:class="{iconColor: (this.$route.path == '/messages')}" class="fas fa-comment-dots fa-lg TopIcon"/>
+          <i v-bind:class="{iconColor: (this.$route.path == '/messages')}" class="fas fa-envelope fa-lg TopIcon"/>
         </a>
         
 <!-- Div for the dropdown menu, sets the vertical scroll and height -->
@@ -467,7 +471,6 @@
               </div>
             </div>
           
-          <!-- same as above but currently set to router-link for testing purposes, returns to the main messages page -->
           <div class="chat_people dropdown-item" to="/notifications" @click="togglePopupChat">
             <div class="chat_img"> <img src="img/theme/team-4.jpg" alt="sunil"> </div>
             <div class="chat_ib">
@@ -547,11 +550,13 @@ import axios from "axios";
 import { API, graphqlOperation } from 'aws-amplify';
 import * as queries from '../../graphql/queries.js';
 import { listFollows, listRequestss } from '../../graphql/queries.js';
+import Upload from "./../Upload.vue";
 
 export default {
   components: {
     //CollapseTransition,
-    BaseNav
+    BaseNav,
+    Upload
     //Modal,
     //VueSlider
   },
@@ -573,7 +578,9 @@ export default {
       default: false,
       description:
         "Whether the popup chatboxes are open or closed",
-    }
+    }, 
+
+   
   },
   computed: {
 
@@ -616,7 +623,7 @@ export default {
   },
   data() {
     return {
-      activeNotifications: false,
+      //activeNotifications: false;
       users: [],
       showMenu: false,
       searchModalVisible: false,
@@ -629,10 +636,12 @@ export default {
       recentSearches: [],
       filteredRecentSearches: [],
       defaultFilterCheckbox: false,
-      activeIcon: "",
+      //activeIcon: "",
       // autocomplete end
       /*results_data_actual: [],
       results_data: [],*/
+      researchWindowIsOpen: false,
+      // chatIsMinimized: false
       yearRange: [1950, 2020],
       selectedFilters: [],
       search: { filter: null, text: "" },
@@ -834,6 +843,9 @@ export default {
         })
         .catch(() => {});
     },
+    showModal: function(){
+      this.show = true;
+    },
     async getSearchHistory() {
       let history = await axios.get("http://localhost:3001/search");
       this.recentSearches = Object.entries(history.data).reverse().slice(0, 5);
@@ -841,17 +853,33 @@ export default {
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },   
-    toggleNotificationDropDown(string) {
-      console.log('Reaches toggle method');
+    // toggleNotificationDropDown(string) {
+      toggleNotificationDropDown(){
+      //console.log('Reaches toggle method');
       this.activeNotifications = !this.activeNotifications;
+      
       // this.setActiveIcon('notifications');
-      this.setActiveIcon = 'notifications';
-      console.log(this.setActiveIcon);
+      //this.setActiveIcon = 'notifications';
+      //console.log(this.setActiveIcon);
     },
      togglePopupChat() {
-       console.log(this.chatIsOpen);
+      //  console.log(this.chatIsOpen);
       this.$emit('update', !this.chatIsOpen); // $emit notifies the parent component that a variable's value changed
     },
+    toggleResearchWindow(){
+      this.researchWindowIsOpen = !this.researchWindowIsOpen;
+    },
+
+    overlay: function(event) {
+    	if(event.target == event.currentTarget)
+        this.toggleResearchWindow();
+    },    
+  
+    researchWindowToggle(event){
+      console.log("Navbar" + event);
+        this.researchWindowIsOpen = event;    // updates the event variable each time chat is opened or closed
+      },
+      
     closeDropDown() {
       this.activeNotifications = false;
     },
@@ -1060,7 +1088,26 @@ img{ max-width:100%;}
 
 .chat_people{ overflow:hidden; clear:both;}
 
+.overlay {
+  position:fixed;
+  top:0;
+  bottom:0;
+  right:0;
+  left:0;
+  display:flex;
+  align-items: center;
+  /* height:100vh; */
+  /* width:100%; */
+  background-color:rgba(128, 128, 128, 0.5);
+}
+
+.research-window {
+    margin:auto;
+    /* position: absolute;
+    z-index:999; */
+  }
+  
 .iconColor{
-  color: #F78626;
+  color: #f78626;
 }
 </style>
