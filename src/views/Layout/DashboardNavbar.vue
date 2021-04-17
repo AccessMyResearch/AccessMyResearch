@@ -91,7 +91,7 @@
           aria-expanded="false"
           v-if="signedIn"
         >
-          <i  v-bind:class="{iconColor: this.$route.path == '/donate' }" class="fas fa-dollar-sign fa-lg TopIcon"/>
+          <i  v-bind:class="{iconColor: this.$route.path == '/donate' }" class="fas fa-donate fa-lg TopIcon"/>
       </a>
 
       <a
@@ -185,7 +185,7 @@
           aria-expanded="false"
           @click="toggleMessageDropDown"
         >
-          <i v-bind:class="{iconColor: (this.$route.path == '/messages')}" class="fas fa-envelope fa-lg TopIcon"/>
+          <i v-bind:class="{iconColor: (this.$route.path == '/messages')}" class="fas fa-comment-dots fa-lg TopIcon"/>
         </a>
         
 <!-- Div for the dropdown menu, sets the vertical scroll and height -->
@@ -681,7 +681,6 @@ export default {
     closeMessageDropDown(){
       this.activeMessages = false;
     },
-
 
     signOut() {
       /*If the user is signed in, the Auth.signOut 

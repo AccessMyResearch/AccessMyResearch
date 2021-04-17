@@ -6,7 +6,7 @@
         <b-card-header header-tag="header" class="p-1 firstFilter" role="tab">
             <b-button
             block v-b-toggle.SortByAccordion squared variant="#4577B8"
-            class = "dropdownButton"><div>Research<span> <i class="fas fa-list-ul fa-lg downArrow"></i><i class="fas fa-plus fa-lg addItem"></i></span></div>
+            class = "dropdownButton"><div>Research<span><i class="fas fa-plus fa-sm addItem"></i></span></div>
             </b-button>
         </b-card-header>
         <b-collapse
@@ -571,7 +571,7 @@ export default {
 
 .addItem{
     float: right; 
-    padding: 3px 4px 0px 0px;
+    padding: 3px 0px 0px 4px;
 }
 
 .downArrow{

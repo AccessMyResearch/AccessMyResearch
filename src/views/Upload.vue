@@ -8,15 +8,14 @@
             
             <div class="card text-black">
                 
-                <div class="col-lg mx-auto form p-0" style="border-radius: 4px; -webkit-box-shadow: 0 0 15px #9b9d9e;">
+                <div class="col-lg mx-auto form p-0" style="border-radius: 4px; -webkit-box-shadow: 0 0 15px #9b9d9e;"> 
                     <b-icon-x icon = "type-bold" style="float:right; cursor: pointer; height:1.5rem; width:1.5rem; " @click="toggleResearchWindow"> </b-icon-x>
                     <div id="mainUpload">
                         <div class="h2" style="text-align: center"> Add Research Material </div>
                 <div class="col-lg mx-auto form p-2" style="border-radius: 4px; -webkit-box-shadow: 0 0 15px #9b9d9e;">
                     <b-icon-x icon = "type-bold" style="float:right; cursor: pointer; height:1.5rem; width:1.5rem; " @click="toggleResearchWindow"> </b-icon-x>
                     <div id="mainUpload">
-                        <div class="h1"> Add Research Material </div>
->>>>>>> Add research box UI changes
+                        <div class="h1"> Add Research Material </div> 
                         
                         <div class="form-group">
                             <label class="h2" for="title_of_publication">Title</label>
@@ -404,9 +403,10 @@ export default {
 .h2{
     color: #0b599b;
     font-size: 100%;
+    margin-bottom: 0%;
 }
 #mainUpload{
-    margin: 2%;
+    margin: 1%;
 }
 #drop-area {
     border: 1px solid #e8e8e8;
@@ -430,7 +430,7 @@ export default {
     linear-gradient(to top, #7f7f7f 4px, transparent 4px) 0 100%,
     linear-gradient(to top, #7f7f7f 4px, transparent 4px) 100% 100%;
   background-repeat: no-repeat;
-  background-size: 30px 30px;
+  background-size: 20px 20px;
 }
 #progress-bar {
     width: 100%;
