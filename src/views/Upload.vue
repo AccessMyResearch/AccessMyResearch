@@ -7,10 +7,10 @@
             
             <div class="card text-black">
                 
-                <div class="col-lg mx-auto form p-2" style="border-radius: 4px; -webkit-box-shadow: 0 0 15px #9b9d9e;">
+                <div class="col-lg mx-auto form p-0" style="border-radius: 4px; -webkit-box-shadow: 0 0 15px #9b9d9e;">
                     <b-icon-x icon = "type-bold" style="float:right; cursor: pointer; height:1.5rem; width:1.5rem; " @click="toggleResearchWindow"> </b-icon-x>
                     <div id="mainUpload">
-                        <div class="h1"> Add Research Material </div>
+                        <div class="h2" style="text-align: center"> Add Research Material </div>
                         
                         <div class="form-group">
                             <label class="h2" for="title_of_publication">Title</label>
@@ -19,7 +19,7 @@
 
                         <div class="form-group">
                             <label class="h2" for="Abstract">Abstract (Optional) </label>
-                            <textarea type="text" class="form-control" placeholder="Add Abstract" rows="4" v-model="abstract" style="background-color: #fafafa"></textarea>
+                            <textarea type="text" class="form-control" placeholder="Add Abstract" rows="1" v-model="abstract" style="background-color: #fafafa"></textarea>
                         </div>
 
                         <div class="form-group" v-if="doiVisible">
@@ -70,11 +70,8 @@
                             <div id="inner-drop-area">
                                 <div class="my-form">
                                     <p style="text-align: center">Drag and drop your file here</p>
-                                    <!-- <input type="file" id="fileElem" accept="application/pdf" @change="handleFiles"> -->
-                                    <!-- <label class="btn btn-secondary" for="fileElem">Choose File(s)</label> -->
-                                    <!-- <button class="float-right btn btn-primary" @click="submitForm">Upload Publication</button> -->
-                                </div>
-                                <small id="fileWarning" class="form-text text-muted">PDF</small>
+                                    </div>
+                                <small id="fileWarning" class="form-text text-muted" style="text-align: center">PDF Upload Progress</small>
                                 <progress id="progress-bar" max=100 value=0></progress>
                                 <div id="gallery">
                                     <b-button
@@ -89,8 +86,8 @@
 
                         <div class="upload-button">
                             <input type="file" id="fileElem" accept="application/pdf" @change="handleFiles">
-                            <label class="btn btn-primary" for="fileElem" style="width:12%">Select File</label>
-                            <button class="float-right btn btn-primary mb1 bg-orange" @click="submitForm">Upload Publication</button>
+                            <label class="btn btn-sm btn-primary" for="fileElem" style="width:12%">Select File</label>
+                            <button class="float-right btn btn-sm btn-primary mb1 bg-orange" @click="submitForm">Upload Publication</button>
                         </div>
 
                     </div>
@@ -224,9 +221,10 @@ export default {
 .h2{
     color: #0b599b;
     font-size: 100%;
+    margin-bottom: 0%;
 }
 #mainUpload{
-    margin: 2%;
+    margin: 1%;
 }
 #drop-area {
     border: 1px solid #e8e8e8;
@@ -234,7 +232,7 @@ export default {
     margin: auto;
     margin-top: 1%;
     margin-bottom: 1%;
-    padding: 20px;
+    padding: 10px;
 }
 #inner-drop-area{
     width: 95%;
@@ -250,7 +248,7 @@ export default {
     linear-gradient(to top, #7f7f7f 4px, transparent 4px) 0 100%,
     linear-gradient(to top, #7f7f7f 4px, transparent 4px) 100% 100%;
   background-repeat: no-repeat;
-  background-size: 30px 30px;
+  background-size: 20px 20px;
 }
 #progress-bar {
     width: 100%;
@@ -268,7 +266,7 @@ export default {
 .research-modal {
     width:800px;
     height:600px;
-    overflow-y: scroll;
+    overflow-y: hidden;
 }
  @media screen and (min-width: 600px) and (max-width: 800px) {
   .research-modal{
@@ -296,5 +294,9 @@ export default {
 .publication-access {
     display: inline-block;
     width: 49%;
+}
+
+.form-group{
+    margin-bottom: 3px;
 }
 </style>

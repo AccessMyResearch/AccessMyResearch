@@ -355,7 +355,7 @@
           aria-expanded="false"
           v-if="signedIn"
         >
-          <i  v-bind:class="{iconColor: this.$route.path == '/donate' }" class="fas fa-dollar-sign fa-lg TopIcon"/>
+          <i  v-bind:class="{iconColor: this.$route.path == '/donate' }" class="fas fa-donate fa-lg TopIcon"/>
       </a>
 
       <a
@@ -445,9 +445,9 @@
           role="button"
           aria-haspopup="true"
           aria-expanded="false"
-          @click="redirect"
+          @click="toggleMessageDropDown"
         >
-          <i v-bind:class="{iconColor: (this.$route.path == '/messages')}" class="fas fa-envelope fa-lg TopIcon"/>
+          <i v-bind:class="{iconColor: (this.$route.path == '/messages')}" class="fas fa-comment-dots fa-lg TopIcon"/>
         </a>
         
 <!-- Div for the dropdown menu, sets the vertical scroll and height -->
@@ -481,7 +481,7 @@
         </div>       
 
         <div class="dropdown-divider"/>
-        <router-link to="/notifications" class="dropdown-item">
+        <router-link to="/notifications" class="dropdown-item" v-if="signedIn">
           <i class="fas fa-clock"/>
           <span>All Messages </span>
         </router-link>
@@ -857,11 +857,16 @@ export default {
       toggleNotificationDropDown(){
       //console.log('Reaches toggle method');
       this.activeNotifications = !this.activeNotifications;
+      },
+
+      toggleMessageDropDown(){
+        this.activeMessages = !this.activeMessages;
+      },
       
       // this.setActiveIcon('notifications');
       //this.setActiveIcon = 'notifications';
       //console.log(this.setActiveIcon);
-    },
+
      togglePopupChat() {
       //  console.log(this.chatIsOpen);
       this.$emit('update', !this.chatIsOpen); // $emit notifies the parent component that a variable's value changed
@@ -883,6 +888,11 @@ export default {
     closeDropDown() {
       this.activeNotifications = false;
     },
+
+    closeMessageDropDown(){
+      this.activeMessages = false;
+    },
+
     signOut() {
       /*If the user is signed in, the Auth.signOut 
       function will sign the user out of the account and redirect to the login page. 
