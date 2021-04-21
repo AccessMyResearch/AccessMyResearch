@@ -325,6 +325,7 @@
         </b-input-group>
       
     </b-form>
+    
     <b-navbar-nav class="align-items-center ml-auto">
       <a
           slot="title-container"
@@ -440,17 +441,38 @@
         >
           <i class="fas fa-comment fa-lg TopIcon"/>
         </a>
-        <a class="dropdown-item" to="/messages" v-if="signedIn">
-          <!-- TODO: Link to Messages-->
-          <i class="fas fa-comment"/>
-          Mehmet Günal: Check out my research!
-          <small class="form-text text-muted">Yesterday</small>
-        </a>
-        <a class="dropdown-item" to="/messages" v-if="signedIn">
-          <i class="far fa-comment"/>
-          Greg Kitchen: Check out his research!
-          <small class="form-text text-muted">1 week ago</small>
-        </a>
+        
+<!-- Div for the dropdown menu, sets the vertical scroll and height -->
+        <div style="overflow-y:scroll; height: 20rem;"> 
+            <div 
+              class="chat_people dropdown-item" 
+              @click="togglePopupChat">               <!--sets the click for the popup chat -->
+              
+              <!-- copied over the images and text from the main messages page and resized -->
+              <div class="chat_img"> <img src="img/theme/team-4.jpg" alt="sunil"> </div>
+              <div class="chat_ib">
+                <h5>Frank <span class="chat_date">Apr 10</span></h5>
+                <p>Can I be your friend? I will have you know that I graduated top of my class.</p>
+              </div>
+            </div>
+            <div class="chat_people dropdown-item" to="/notifications" @click="togglePopupChat">
+              <div class="chat_img"> <img src="img/theme/team-4.jpg" alt="sunil"> </div>
+              <div class="chat_ib">
+                <h5>Geralt <span class="chat_date">Oct 14</span></h5>
+                <p>Sure we can meet at 10 tomorrow. Please bring a laptop with you.</p>
+              </div>
+            </div>
+          
+          <!-- same as above but currently set to router-link for testing purposes, returns to the main messages page -->
+          <div class="chat_people dropdown-item" to="/notifications" @click="togglePopupChat">
+            <div class="chat_img"> <img src="img/theme/team-4.jpg" alt="sunil"> </div>
+            <div class="chat_ib">
+              <h5>Jennifer <span class="chat_date">Oct 14</span></h5>
+              <p>How's your day going?</p>
+            </div>
+          </div>      
+        </div>       
+
         <div class="dropdown-divider"/>
         <router-link to="/notifications" class="dropdown-item">
           <i class="fas fa-clock"/>
@@ -540,6 +562,13 @@ export default {
       description:
         "Look of the dashboard navbar",
     },
+
+    chatIsOpen: {
+      type: Boolean,
+      default: false,
+      description:
+        "Whether the popup chatboxes are open or closed",
+    }
   },
   computed: {
     routeName() {
@@ -797,9 +826,13 @@ export default {
     },
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
-    },
+    },   
     toggleNotificationDropDown() {
       this.activeNotifications = !this.activeNotifications;
+    },
+     togglePopupChat() {
+       console.log(this.chatIsOpen);
+      this.$emit('update', !this.chatIsOpen); // $emit notifies the parent component that a variable's value changed
     },
     closeDropDown() {
       this.activeNotifications = false;
@@ -980,4 +1013,23 @@ b-form-input::placeholder{
 .TopIcon:hover {
   color: #F78626;
 }
+
+img{ max-width:100%;}
+
+.chat_ib h5{ font-size:15px; color:#464646; margin:0 0 8px 0;}
+.chat_ib h5 span{ font-size:13px; float:right;}
+.chat_ib p{ font-size:14px; color:#989898; margin:auto}
+.chat_img {
+  float: left;
+  width: 11%;
+}
+
+.chat_ib {
+  float: left;
+  padding: 0 0 0 15px;
+  width: 88%;
+}
+
+.chat_people{ overflow:hidden; clear:both;}
+
 </style>

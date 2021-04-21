@@ -21,20 +21,32 @@
         </b-collapse>
         </b-card>
     
-        <b-card no-body class="mb-1" style = "box-shadow: 0 2px 3px #9b9d9e; max-height:70px;">
-            <b-card-body style="max-width:220px">
-            <b-form-group class="small slider">
+        <b-card no-body class="mb-1" style = "box-shadow: 0 2px 3px #9b9d9e; max-height:80px;">
+            <b-form-group class="histSlider">
                 <br/>
-                 <vue-range-slider 
-                 :bg-style="bgStyle" 
-                 :tooltip-style="tooltipStyle" 
-                 :process-style="processStyle" 
-                 v-model="yearRange"
-                 :min="1950"
-                 :max="2021"
-                 ></vue-range-slider>
+                <HistogramSlider
+                ref="hist"
+                :min="Math.min.apply(Math, data)"
+                :max="Math.max.apply(Math, data)"
+                :data="data"
+                :barHeight="50"
+                :barRadius="2"
+                :barWidth="2"
+                :barGap="1"
+                :gridNum="1"
+                :histSliderGap="5"
+                :grid="true"
+                :handleSize="13"
+                :lineHeight="5"
+                :width="190"
+                :clip="true"
+                :force-edges="false"
+                :handleColor="['#f78626']"
+                :gridTextColor="['white']"
+                :prettify="prettify"
+                :dragInterval="true"
+                ></HistogramSlider>
             </b-form-group>
-            </b-card-body>
         </b-card>
     
         <b-card no-body class="mb-1" style = "box-shadow: 0 2px 3px #9b9d9e;">
@@ -256,9 +268,11 @@
 </div>
 </template>
 <script>
-import 'vue-range-component/dist/vue-range-slider.css'
-import VueRangeSlider from 'vue-range-component'
-import { VBPopoverPlugin } from 'bootstrap-vue'
+import data from '../views/Tables/yearPub.json'
+import HistogramSlider from 'vue-histogram-slider'
+import 'vue-histogram-slider/dist/histogram-slider.css'
+
+//import { VBPopoverPlugin } from 'bootstrap-vue'
 export default {
     name: 'filter-panel',
     mounted() {
@@ -275,12 +289,18 @@ export default {
         }
     },
     components: {
-        VueRangeSlider,
+        HistogramSlider,
     },
     data() {
         return {
             //autocomplete start
             modal: false,
+            data: data.map(d => new Date(d)),
+            prettify: function(ts) {
+            return new Date(ts).toLocaleDateString("en", {
+                    year: "numeric"
+                });
+            },
             recentSearches: [],
             filteredRecentSearches: [],
             defaultFilterCheckbox: false,
@@ -475,7 +495,7 @@ export default {
                 localStorage.clear();
                 return;
             }
-        }, 
+        },
     }
 }
 </script>
@@ -485,7 +505,6 @@ export default {
     border: 0px;
     font-size: 16px;
     width: 220px;
-    
      
 }
 
@@ -504,10 +523,12 @@ export default {
 }
 
 .firstFilter{
-    background-color: #F78626;
+    background-color: #f78626;
 }
 
-.slider .vue-slider .tooltip{
-    background-color: #4577B8;
+.histSlider{
+    left: 18px;
+    bottom: 15px;
+    position:relative;
 }
 </style>
