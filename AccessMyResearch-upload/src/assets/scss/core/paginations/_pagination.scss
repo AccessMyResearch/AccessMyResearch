@@ -1,0 +1,50 @@
+//
+//Pagination
+//
+
+.page-item {
+    &.active .page-link {
+        box-shadow: $pagination-active-box-shadow;
+    }
+
+    .page-link,
+    span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0 3px;
+        border-radius: 15% !important;
+        width: 36px;
+		height: 36px;
+		font-size: $font-size-sm;
+    }
+}
+
+//Size variations
+.pagination-lg {
+    .page-item {
+        .page-link,
+        span {
+            width: 46px;
+            height: 46px;
+            line-height: 46px;
+        }
+    }
+}
+
+.pagination-sm {
+    .page-item {
+        .page-link,
+        span {
+            display: flex;
+            line-height: 25px;
+            min-width: 40px;
+            max-width: 55px;
+            max-height: 26px;
+            font-weight: 600;
+            position: relative;
+            z-index: 0;
+        }
+    }
+}

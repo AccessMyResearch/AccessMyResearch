@@ -1,0 +1,22 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-accessmyresearch-dev-160046-authRole",
+      "UnauthRoleArn": "arn:aws:iam::140939755593:role/amplify-accessmyresearch-dev-160046-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::140939755593:role/amplify-accessmyresearch-dev-160046-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-accessmyresearch-dev-160046-deployment",
+      "UnauthRoleName": "amplify-accessmyresearch-dev-160046-unauthRole",
+      "StackName": "amplify-accessmyresearch-dev-160046",
+      "StackId": "arn:aws:cloudformation:us-east-2:140939755593:stack/amplify-accessmyresearch-dev-160046/d28672e0-1a29-11eb-ac19-065c36e2dd4e",
+      "AmplifyAppId": "d29rb70d30v39b"
+    },
+    "categories": {
+      "auth": {
+        "accessmyresearche8852005": {
+          "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"849810262225621\",\"client_secret\":\"7e2f6ef6c3a1879bb8ba225d6f440292\"},{\"ProviderName\":\"Google\",\"client_id\":\"79701390415-0fod8orjr8u7p43vtov16baqfb992g6m.apps.googleusercontent.com\",\"client_secret\":\"E7qMpPth4Y9zHuXISMmmzD8T\"}]"
+        }
+      }
+    }
+  }
+}

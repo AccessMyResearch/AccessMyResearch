@@ -1,0 +1,105 @@
+version: '2.2'
+services:
+  node-frontend:
+    container_name: amr
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - 8080:8080
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    stdin_open: true
+    tty: true
+
+  node-backend:
+    container_name: amr-backend
+    build:
+      context: ./server
+      dockerfile: dockerfile-server
+    ports:
+      - 3000:3000
+    volumes:
+      - '.:/server'
+      - '/server/node_modules'
+    stdin_open: true
+    tty: true
+    networks:
+      - node_net
+    links:
+      - redis
+    environment:
+      - REDIS_URL=redis://cache
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+    container_name: elasticsearch
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
+      - http.cors.allow-methods=OPTIONS, HEAD, GET, POST, PUT, DELETE
+      - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length
+      - http.cors.allow-credentials=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    ports:
+      - 9300:9300
+      - 9200:9200
+    networks:
+      - elk
+
+  # logstash:
+  #   image: docker.elastic.co/logstash/logstash:7.9.2
+  #   container_name: logstash
+  #   configs:
+  #     - source: ./config/logstash.conf
+  #       target: /etc/logstash/conf.d/logstash.conf
+  #   environment:
+  #     - bootstrap.memory_lock=true
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #     - xpack.monitoring.enabled=true     
+  #   ports:
+  #     - 9600:9600
+  #   networks:
+  #     - elk
+  #   depends_on:
+  #     - elasticsearch
+  #   volumes:
+  #     - ./config/logstash.conf:/usr/share/logstash/config/logstash-sample.conf:ro
+  #     - ./config/logstash.conf:/usr/share/logstash/config/logstash.conf:ro
+
+  redis:
+    container_name: cache
+    image: "redis:alpine"
+    command: redis-server
+    ports:
+     - 6379:6379
+    volumes:
+      - $PWD/redis-data:/var/lib/redis
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+     - REDIS_REPLICATION_MODE=master
+    networks:
+      node_net:
+        ipv4_address: 172.28.1.4
+
+networks:
+  elk:
+    driver: bridge
+  node_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  esdata1:
+    driver: local

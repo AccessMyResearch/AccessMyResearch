@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "accessmyresearch",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authaccessmyresearche8852005",
+            "Outputs.UserPoolId"
+        ]
+    }
+}
