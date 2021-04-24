@@ -45,6 +45,8 @@ app.listen(port, () => {
 const express = require("express");
 const mime = require("mime");
 const app = express();
+require("dotenv").config();
+
 const port = 3000;
 
 const { v4: uuidv4 } = require('uuid');
@@ -67,9 +69,10 @@ const AWS = require("aws-sdk");
 const { default: axios } = require("axios");
 const s3 = new AWS.S3({
   signatureVersion: 'v4',
+  region: "us-east-2",
   //accessKeyId: "<aws_access_key_id>", // aws access id here
-  accessKeyId: "",
-  secretAccessKey: "", 
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY, 
   //secretAccessKey: "<aws_secret_access_key>", // aws secret access key here
   useAccelerateEndpoint: true
 });
@@ -109,7 +112,7 @@ app.get("/get-signed-url", async (req, res) => {
   const md = `${title}`
 
   const params = {
-    Bucket: "amrtestdocs",
+    Bucket: process.env.AWS_S3_BUCKET || "amrtestdocs",
     // expiry time
     Expires: 60*60, // 60 minutes
     ACL: "public-read",
