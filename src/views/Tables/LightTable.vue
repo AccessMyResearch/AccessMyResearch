@@ -1,5 +1,5 @@
 <template>
-    <b-card no-body style="box-shadow: 0 3px 5px #8898AA;">
+    <b-card no-body class="lightTable-card">
         <b-card-header class="border-1" style = "height: 80px;">
             <span>
                 <!-- <dropdown title="Most Recent" items="options1" style="text-align:left; float:left;"/> -->
@@ -32,7 +32,7 @@
                     class="select my-select-2 size-sm"
                     style="text-align:right; float:right; "
                     @input="alert(displayToKey($event))"/>
-                <b-pagination v-model="currentPage" :per-page="10" :total-rows="100" first-text="First" prev-text="Prev" next-text="Next" last-text="Last" size="sm" style="position:relative; top: -25px;float:left; padding-left:360px;"></b-pagination>
+                <b-pagination v-model="currentPage" :per-page="10" :total-rows="100" first-text="First" prev-text="Prev" next-text="Next" last-text="Last" size="sm" style="float:left; position:relative; top: -25px; padding-left:360px;"></b-pagination>
             </span>
         </b-card-header>
         <div style="height: 77vh">
@@ -70,20 +70,20 @@
                 <template v-slot="{row}">
                     <b-media no-body class="align-items-center" style="padding-top: 8px">
                         <b-media-body>
-                                <span style="font-family:Roboto; font-size: 18px;" class="font-weight-400 name mb-0"><v-clamp autoresize :max-lines="1">{{row.name}}</v-clamp></span>
+                            <span style="font-family:Roboto; font-size: 18px; position:relative;" class="font-weight-400 name mb-0"><v-clamp autoresize :max-lines="1">{{row.name}}</v-clamp></span>
                         </b-media-body>
                     </b-media>
-                    <b-media no-body class="align-items-center" style="position: relative; top:-10px; margin-bottom: -10px;">
+                    <b-media no-body class="align-items-center" style="position: relative; top:-10px; margin-bottom: -10px; white-space: nowrap;">
                         <!--<a href="#" class="mr-3">
                             <b-img class="avatar" rounded="circle" alt="Article Image" :src="row.img" />
-                            </a>-->
-                            <span class="font-weight-400 name mb-0 text-blue" style="font-family:Roboto; font-size: 16px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{row.author}}</span>
-                            <pre> </pre>
-                            <span class="font-weight-200 name mb-0" style="font-family:Roboto; font-size: 16px;text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{row.journal}}</span>
-                            <pre> </pre>
-                            <span class="font-weight-200 name mb-0" style="font-family:Roboto; font-size: 16px;text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{row.year}}</span>
-                            <!--TODO: Add ratings <span class="font-weight-400 name mb-0 text-black right"> Rating
-                                <base-progress :type="row.statusType" :value="row.rating"/>
+                        </a>-->
+                        <p class="font-weight-400 name mb-0 text-blue" style="font-family:Roboto; font-size: 16px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;position: relative">{{row.author}}</p>
+                        <pre> </pre>
+                        <p class="font-weight-200 name mb-0" style="font-family:Roboto; font-size: 16px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">&#8211; {{row.journal}}</p>
+                        <pre> </pre>
+                        <p class="font-weight-200 name mb-0" style="font-family:Roboto; font-size: 16px; white-space: nowrap;">&#8211; ({{row.year}})</p>
+                        <!--TODO: Add ratings <span class="font-weight-400 name mb-0 text-black right"> Rating
+                            <base-progress :type="row.statusType" :value="row.rating"/>
                         </span> -->
                     </b-media>
                     <span class="button-options border-0" style="padding-left: 10px; position: relative; top:-5px; margin-bottom: -20px;">
@@ -93,7 +93,6 @@
                         <button title="E-Mail" class="fas fa-envelope fa-lg button-options" ></button>
                         <button title="Collections" v-b-modal.modal class="fas fa-layer-group fa-lg button-options"></button>
                         <button title="Cite" class="fas fa-quote-left fa-lg button-options"></button>
-                        <button title="Show More" class="fas fa-info fa-lg button-options"></button>
                     </span>
                 </template>
             </el-table-column>
@@ -116,10 +115,9 @@ import Dropdown from '../../components/Dropdown.vue'
 import CustomSelect from "../../components/CustomSelect.vue";
 import CustomPDF from "../../components/CustomPDF.vue";
 import { Splitpanes, Pane } from 'splitpanes'
-import VClamp from "vue-clamp";
 import 'splitpanes/dist/splitpanes.css'
+import VClamp from 'vue-clamp';
 import pdf from 'vue-pdf'
-
 export default {
     name: 'light-table',
     components: {
@@ -131,6 +129,7 @@ export default {
         Splitpanes, 
         Pane,
         VClamp
+        
     },
     data() {
         return {
@@ -140,8 +139,6 @@ export default {
             count:0,
             url: 'https://bitcoin.org/bitcoin.pdf',
             hidePane2: false,
-            showTitle: false,
-            var1: "test",
             options1: [{
                 title:'Most Recent',
                 link: '#'
@@ -216,26 +213,24 @@ export default {
     border: 0px;
     width: 250px;
 }
-
 .my-select {
   max-width: 210px;
   height: 15px;
   }
-
 .my-select-2 {
     max-width: 210px;
 }
-
 .scroll{
     overflow-y: scroll;
 }
-
-
-
+.lightTable-card{
+    box-shadow: 0 3px 5px #8898AA; 
+    margin-left:15px;
+    display: flex;
+}
 .btn-group button:not(:last-child) {
   border-bottom: none; /* Prevent double borders */
 }
-
 .button-options{
     width: 20px;
     border: 0px;
@@ -243,11 +238,9 @@ export default {
     padding: 10px 45px 10px 0px;
     color:  #4577B8;
 }
-
 .button-options :hover{
     color: #F78626;
 }
-
 .button-options :focus{
     color: #F78626;
     border: 0px;
