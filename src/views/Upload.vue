@@ -245,6 +245,19 @@ export default {
                         });
                     });
                 };
+                //this function is to reset the page so that the files that have been uploaded are all good
+                const reset = () => {
+                    // reset form to initial state
+                    this.currentStatus = STATUS_INITIAL;
+                    this.files = [];
+                    this.uploadError = null;
+                    this.title = ""
+                    this.abstract = ""
+                    this.doi = ""
+                    this.authors = []
+                    this.type = ""
+                    this.access = ""
+                };
                 const uploadMediaToS3 = async () => {
                     const config = {
                         onUploadProgress: function(progressEvent) {
@@ -255,7 +268,7 @@ export default {
                         },
                         headers: {           
                             "Content-Type": "application/octet-stream",
-                            //"x-amz-meta-author": this.title,         
+                            // "x-amz-meta-author": this.title || "title",
                             },
                     };
                     const { data } = await getSignedURLS()
@@ -275,6 +288,7 @@ export default {
                             const file = this.files[index]
                             try {
                                 await axios.put(url.signedUrl, file, config)
+                                reset();
                             } catch (e) {
                                 this.currentStatus = STATUS_FAILED
                                 console.log(e)
@@ -283,7 +297,6 @@ export default {
                         if (this.currentStatus !== STATUS_FAILED) {
                             this.currentStatus = STATUS_SUCCESS
                         }
-                        this.files = null;
                         //FIX: what's typed in the title box doesn't reset after submitting
                     } else {
                         console.log("its broken")
@@ -292,18 +305,7 @@ export default {
 
             uploadMediaToS3();
 
-            /*
-            //this function is to reset the page so that the files that have been uploaded are all good
-            const reset = () => {
-                // reset form to initial state
-                this.currentStatus = STATUS_INITIAL;
-                this.files = [];
-                this.uploadError = null;
-            };
-
-            reset();
-            */
-           }  
+             }
         },
 
         toggleResearchWindow(){
