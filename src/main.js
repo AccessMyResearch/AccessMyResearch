@@ -24,12 +24,12 @@ import VueAnalytics from 'vue-analytics'
 
 Amplify.configure({
   ...aws_exports,
-  Analytics: { 
-      disabled: true
+  Analytics: {
+    disabled: true
   }
 });
 
-console.log(Auth.currentSession());
+// console.log(Auth.currentSession());
 
 const client = new AWSAppSyncClient({
   url: aws_exports.aws_appsync_graphqlEndpoint,
@@ -62,16 +62,26 @@ import firebase from 'firebase'
 // connection  to the firebase  start here
 require("firebase/firestore");
 
+// var config = {
+//   apiKey: "AIzaSyDACi1PfVrV1sMl_WAfeQ5FuMQm5fEl5jE",
+//   authDomain: "chatv-85249.firebaseapp.com",
+//   databaseURL: "https://chatv-85249.firebaseio.com",
+//   projectId: "chatv-85249",
+//   storageBucket: "chatv-85249.appspot.com",
+//   messagingSenderId: "1071441139587",
+//   appId: "1:1071441139587:web:9d2cfb4b4409fc58c108b6",
+//   measurementId: "G-DTXHZ2CSJR"
+// };
 var config = {
-  apiKey: "AIzaSyDACi1PfVrV1sMl_WAfeQ5FuMQm5fEl5jE",
-  authDomain: "chatv-85249.firebaseapp.com",
-  databaseURL: "https://chatv-85249.firebaseio.com",
-  projectId: "chatv-85249",
-  storageBucket: "chatv-85249.appspot.com",
-  messagingSenderId: "1071441139587",
-  appId: "1:1071441139587:web:9d2cfb4b4409fc58c108b6",
-  measurementId: "G-DTXHZ2CSJR"
+  apiKey: "AIzaSyDzrcFIFGgGGJemzkA89g7vjVqkUgVTHZs",
+  authDomain: "amr-new-tes.firebaseapp.com",
+  projectId: "amr-new-tes",
+  storageBucket: "amr-new-tes.appspot.com",
+  messagingSenderId: "283242133895",
+  appId: "1:283242133895:web:22164fedf9e95fcf31bb22",
+  measurementId: "G-76YMFZL98H"
 };
+
 firebase.initializeApp(config);
 
 var db = firebase.firestore();

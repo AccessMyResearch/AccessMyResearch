@@ -5,7 +5,12 @@
     :class="{ 'navbar-dark': type === 'default' }"
   >
     <router-link class="navbar-brand" to="/">
-      <img :src="logo" width="70%" class="navbar-brand-img" alt="AccessMyResearch">
+      <img
+        :src="logo"
+        width="70%"
+        class="navbar-brand-img"
+        alt="AccessMyResearch"
+      />
     </router-link>
     <!-- Navbar links -->
     <b-form
@@ -16,50 +21,53 @@
       }"
       id="navbar-search-main"
       @submit.prevent="onSubmit"
-      
     >
-      
-        <b-input-group class="input-group-alternative input-group-merge border-0 rounded-0 w-75" style="height:40px; position: relative; left: -62px; min-width: 15px">
-          
-          <b-form-input
-            id="search"
-            v-model="search.text"
-            @input="filterRecentSearches"
-            @focus="modal = false"
-            @click="openAutoComplete"
-            v-click-outside="closeModal"
-            autocomplete="off"
-            type="text"
-            placeholder="Search by keyword"
-            class="text-primary bg-white"
-            style="border-radius: .375rem"
-            
+      <b-input-group
+        class="input-group-alternative input-group-merge border-0 rounded-0 w-75"
+        style="height: 40px; position: relative; left: -62px; min-width: 15px"
+      >
+        <b-form-input
+          id="search"
+          v-model="search.text"
+          @input="filterRecentSearches"
+          @focus="modal = false"
+          @click="openAutoComplete"
+          v-click-outside="closeModal"
+          autocomplete="off"
+          type="text"
+          placeholder="Search by keyword"
+          class="text-primary bg-white"
+          style="border-radius: 0.375rem"
+        >
+        </b-form-input>
+        <b-input-group-append style="height: 40px">
+          <button
+            class="bg-orange border-0"
+            type="submit"
+            style="border-radius: 4px"
           >
-          </b-form-input>
-          <b-input-group-append style="height:40px">
-            
-              <button class="bg-orange border-0" type="submit" style="border-radius:4px"><i class="fas fa-search text-white lrgIcon p-1 " /></button>
-            
-          </b-input-group-append>
-          <!-- autocomplete start -->
-          <div
-            v-if="filteredRecentSearches && modal"
-            class="AutoCompleteDropDown"
-          >
-            <ul>
-              <b-dropdown-item
-                v-for="filteredRecentSearch in filteredRecentSearches"
-                :key="filteredRecentSearch"
-                @click="setSearch(filteredRecentSearch)"
-              >
-                {{ filteredRecentSearch }}
-              </b-dropdown-item>
-            </ul>
-          </div>
-          <!-- autocomplete start -->
-          <!-- start here  -->
-          <div class="SearchDropDown">
-            <!-- <b-dropdown variant="transparent" style="width:0%" right text="">
+            <i class="fas fa-search text-white lrgIcon p-1" />
+          </button>
+        </b-input-group-append>
+        <!-- autocomplete start -->
+        <div
+          v-if="filteredRecentSearches && modal"
+          class="AutoCompleteDropDown"
+        >
+          <ul>
+            <b-dropdown-item
+              v-for="filteredRecentSearch in filteredRecentSearches"
+              :key="filteredRecentSearch"
+              @click="setSearch(filteredRecentSearch)"
+            >
+              {{ filteredRecentSearch }}
+            </b-dropdown-item>
+          </ul>
+        </div>
+        <!-- autocomplete start -->
+        <!-- start here  -->
+        <div class="SearchDropDown">
+          <!-- <b-dropdown variant="transparent" style="width:0%" right text="">
               <div class="accordion" role="tablist">
                 <b-card no-body class="mb-1">
                   <b-card-header header-tag="header" class="p-1" role="tab">
@@ -322,73 +330,87 @@
               Save current filters as default
               <b-button class="btn float-right" variant="primary">Search</b-button>
             </b-dropdown> -->
-          </div>
-        </b-input-group>
-      
+        </div>
+      </b-input-group>
     </b-form>
-    
+
     <b-navbar-nav class="align-items-center ml-auto">
       <!-- <div v-bind:style="{color: iconColor}"> </div> -->
 
       <a
-          slot="title-container"
-          class="nav-link nav-link-icon nav-item"
-          href="#"
-          role="button"
-          @click="toUpload"
-          aria-expanded="false"
-          v-if="signedIn"
-        >
+        slot="title-container"
+        class="nav-link nav-link-icon nav-item"
+        href="#"
+        role="button"
+        @click="toUpload"
+        aria-expanded="false"
+        v-if="signedIn"
+      >
         <!-- v-bind binds a style element based on a condition, so here we use the iconColor styling only if the website reroutes to the Uploads page -->
-          <i v-bind:class="{iconColor: this.$route.path == '/upload'}" class="fas fa-plus fa-lg TopIcon"/>
+        <i
+          v-bind:class="{ iconColor: this.$route.path == '/upload' }"
+          class="fas fa-plus fa-lg TopIcon"
+        />
       </a>
 
       <a
-          slot="title-container"
-          class="nav-link nav-link-icon nav-item"
-          href="#"
-          role="button"
-          @click="toDonate"
-          aria-expanded="false"
-          v-if="signedIn"
-        >
-          <i  v-bind:class="{iconColor: this.$route.path == '/donate' }" class="fas fa-donate fa-lg TopIcon"/>
+        slot="title-container"
+        class="nav-link nav-link-icon nav-item"
+        href="#"
+        role="button"
+        @click="toDonate"
+        aria-expanded="false"
+        v-if="signedIn"
+      >
+        <i
+          v-bind:class="{ iconColor: this.$route.path == '/donate' }"
+          class="fas fa-donate fa-lg TopIcon"
+        />
       </a>
 
       <a
-          slot="title-container"
-          class="nav-link nav-link-icon nav-item"
-          href="#"
-          role="button"
-          @click="toProject"
-          aria-expanded="false"
-          v-if="signedIn"
-        >
-          <i v-bind:class="{iconColor: this.$route.path == '/project' }" class="fas fa-project-diagram fa-lg TopIcon"/>
+        slot="title-container"
+        class="nav-link nav-link-icon nav-item"
+        href="#"
+        role="button"
+        @click="toProject"
+        aria-expanded="false"
+        v-if="signedIn"
+      >
+        <i
+          v-bind:class="{ iconColor: this.$route.path == '/project' }"
+          class="fas fa-project-diagram fa-lg TopIcon"
+        />
       </a>
 
       <a
-          slot="title-container"
-          class="nav-link nav-link-icon nav-item"
-          href="#"
-          role="button"
-          @click="toCollections"
-          aria-expanded="false"
-          v-if="signedIn"
-        >
-          <i v-bind:class="{iconColor: this.$route.path == '/collections' }" class="fas fa-book-open fa-lg TopIcon"/>
+        slot="title-container"
+        class="nav-link nav-link-icon nav-item"
+        href="#"
+        role="button"
+        @click="toCollections"
+        aria-expanded="false"
+        v-if="signedIn"
+      >
+        <i
+          v-bind:class="{ iconColor: this.$route.path == '/collections' }"
+          class="fas fa-book-open fa-lg TopIcon"
+        />
       </a>
 
       <a
-          slot="title-container"
-          class="nav-link nav-link-icon nav-item"
-          href="#"
-          role="button"
-          @click="toNetwork"
-          aria-expanded="false"
-          v-if="signedIn"
-        >
-          <i v-bind:class="{iconColor: this.$route.path == '/network-list' }" class="fas fa-user-friends fa-lg TopIcon"/>
+        slot="title-container"
+        class="nav-link nav-link-icon nav-item"
+        href="#"
+        role="button"
+        @click="toNetwork"
+        aria-expanded="false"
+        v-if="signedIn"
+      >
+        <i
+          v-bind:class="{ iconColor: this.$route.path == '/network-list' }"
+          class="fas fa-user-friends fa-lg TopIcon"
+        />
       </a>
 
       <base-dropdown class="nav-item" menu-on-right tag="li" title-tag="a">
@@ -401,7 +423,14 @@
           aria-expanded="false"
           @click="toggleNotificationDropDown('notifications')"
         >
-          <i v-bind:class="{iconColor: (this.$route.path == '/notifications') || (this.setActiveIcon == 'notifications') }" class="fas fa-bell fa-lg TopIcon"/>
+          <i
+            v-bind:class="{
+              iconColor:
+                this.$route.path == '/notifications' ||
+                this.setActiveIcon == 'notifications',
+            }"
+            class="fas fa-bell fa-lg TopIcon"
+          />
         </a>
         <div v-for="user in users" :key="user.id">
           <a class="dropdown-item" @click="reroute(user)" v-if="signedIn">
@@ -412,24 +441,26 @@
         </div>
         <span v-for="(key, val) in this.reminders" v-bind:key="val">
           <a class="dropdown-item" to="/notifications">
-            <i class="fas fa-search"/>
+            <i class="fas fa-search" />
             Search for: {{ val }}
             <small class="form-text text-muted">{{ key }}</small>
           </a>
         </span>
-        <div class="dropdown-divider"/>
+        <div class="dropdown-divider" />
         <router-link to="/notifications" class="dropdown-item">
-          <i class="fas fa-clock"/>
+          <i class="fas fa-clock" />
           <span>All Requests </span>
         </router-link>
         <router-link to="/notifications" class="dropdown-item">
-          <i class="fas fa-clock"/>
+          <i class="fas fa-clock" />
           <span>All Notifications </span>
         </router-link>
         <b-alert show variant="light" class="text-dark" v-if="!signedIn">
-          <i class="fas fa-exclamation-circle"/>
+          <i class="fas fa-exclamation-circle" />
           In order to access this feature, you must login. You can login
-          <router-link class="font-weight-bolder text-dark" to="/login">here.</router-link>
+          <router-link class="font-weight-bolder text-dark" to="/login"
+            >here.</router-link
+          >
         </b-alert>
       </base-dropdown>
 
@@ -441,53 +472,50 @@
           role="button"
           aria-haspopup="true"
           aria-expanded="false"
-          @click="redirect"
         >
-          <i v-bind:class="{iconColor: (this.$route.path == '/messages')}" class="fas fa-comment-dots fa-lg TopIcon"/>
+          <i
+            v-bind:class="{ iconColor: this.$route.path == '/messages' }"
+            class="fas fa-comment-dots fa-lg TopIcon"
+          />
         </a>
-        
-<!-- Div for the dropdown menu, sets the vertical scroll and height -->
-        <div style="overflow-y:scroll; height: 20rem;"> 
-            <div 
-              class="chat_people dropdown-item" 
-              @click="togglePopupChat">               <!--sets the click for the popup chat -->
-              
-              <!-- copied over the images and text from the main messages page and resized -->
-              <div class="chat_img"> <img src="img/theme/team-4.jpg" alt="sunil"> </div>
-              <div class="chat_ib">
-                <h5>Frank <span class="chat_date">Apr 10</span></h5>
-                <p>Can I be your friend? I will have you know that I graduated top of my class.</p>
-              </div>
-            </div>
-            <div class="chat_people dropdown-item" to="/notifications" @click="togglePopupChat">
-              <div class="chat_img"> <img src="img/theme/team-4.jpg" alt="sunil"> </div>
-              <div class="chat_ib">
-                <h5>Geralt <span class="chat_date">Oct 14</span></h5>
-                <p>Sure we can meet at 10 tomorrow. Please bring a laptop with you.</p>
-              </div>
-            </div>
-          
-          <!-- same as above but currently set to router-link for testing purposes, returns to the main messages page -->
-          <div class="chat_people dropdown-item" to="/notifications" @click="togglePopupChat">
-            <div class="chat_img"> <img src="img/theme/team-4.jpg" alt="sunil"> </div>
-            <div class="chat_ib">
-              <h5>Jennifer <span class="chat_date">Oct 14</span></h5>
-              <p>How's your day going?</p>
-            </div>
-          </div>      
-        </div>       
 
-        <div class="dropdown-divider"/>
+        <!-- Div for the dropdown menu, sets the vertical scroll and height -->
+        <div style="overflow-y: scroll; height: 20rem">
+          <div v-for="popupUser in popupUsers" v-bind:key="popupUser.name">
+            <div class="chat_people dropdown-item" @click="togglePopupChat">
+              <!--sets the click for the popup chat -->
+
+              <!-- copied over the images and text from the main messages page and resized -->
+              <div class="chat_img">
+                <img src="img/theme/team-4.jpg" alt="sunil" />
+              </div>
+              <div class="chat_ib">
+                <h5>
+                  {{ popupUser.author }}
+                  <span class="chat_date">{{ popupUser.date }}</span>
+                </h5>
+                <p>
+                  {{ popupUser.message }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dropdown-divider" />
         <router-link to="/notifications" class="dropdown-item">
-          <i class="fas fa-clock"/>
+          <i class="fas fa-clock" />
           <span>All Messages </span>
         </router-link>
         <b-alert show variant="light" class="text-dark" v-if="!signedIn">
-          <i class="fas fa-exclamation-circle fa-lg"/>
+          <i class="fas fa-exclamation-circle fa-lg" />
           In order to access this feature, you must login. You can login
-          <router-link class="font-weight-bolder text-black" to="/login">here.</router-link>
+          <router-link class="font-weight-bolder text-black" to="/login"
+            >here.</router-link
+          >
         </b-alert>
       </base-dropdown>
+      -->
 
       <base-dropdown
         menu-on-right
@@ -511,24 +539,24 @@
             <h6 class="text-overflow m-0">Hi, Mehmet!</h6>
           </b-dropdown-header>
           <b-dropdown-item to="/profile" v-if="signedIn">
-            <i class="fas fa-user"/>
+            <i class="fas fa-user" />
             <span>My profile</span>
           </b-dropdown-item>
           <b-dropdown-item to="/search-history">
-            <i class="fas fa-history"/>
+            <i class="fas fa-history" />
             <span>Search History</span>
           </b-dropdown-item>
-          <div class="dropdown-divider" v-if="signedIn"/>
+          <div class="dropdown-divider" v-if="signedIn" />
           <b-dropdown-item to="/settings" v-if="signedIn">
-            <i class="fas fa-cog"/>
+            <i class="fas fa-cog" />
             <span>Settings</span>
           </b-dropdown-item>
           <b-dropdown-item to="/login" v-if="!signedIn">
-            <i class="fas fa-sign-in-alt"/>
+            <i class="fas fa-sign-in-alt" />
             <span>Login</span>
           </b-dropdown-item>
           <b-dropdown-item @click="signOut" v-if="signedIn">
-            <i class="fas fa-sign-out-alt"/>
+            <i class="fas fa-sign-out-alt" />
             <span>Logout</span>
           </b-dropdown-item>
         </template>
@@ -544,55 +572,52 @@ import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
 import { Auth } from "aws-amplify";
 import axios from "axios";
-import { API, graphqlOperation } from 'aws-amplify';
-import * as queries from '../../graphql/queries.js';
-import { listFollows, listRequestss } from '../../graphql/queries.js';
+import { API, graphqlOperation } from "aws-amplify";
+import * as queries from "../../graphql/queries.js";
+import { listFollows, listRequestss } from "../../graphql/queries.js";
 
 export default {
   components: {
     //CollapseTransition,
-    BaseNav
+    BaseNav,
     //Modal,
     //VueSlider
   },
   props: {
     logo: {
       type: String,
-      default: '/img/brand/orangeandwhite.png',
-      description: 'AccessMyResearch Logo'
+      default: "/img/brand/orangeandwhite.png",
+      description: "AccessMyResearch Logo",
     },
     type: {
       type: String,
       default: "default", // default|light
-      description:
-        "Look of the dashboard navbar",
+      description: "Look of the dashboard navbar",
     },
 
     chatIsOpen: {
       type: Boolean,
       default: false,
-      description:
-        "Whether the popup chatboxes are open or closed",
-    }
+      description: "Whether the popup chatboxes are open or closed",
+    },
   },
   computed: {
-
     // iconColor() {
     //      if (this.activeIcon === "donate") { // if it is a dark route
     //         return "#11bbfd"; // basically any light color you want
     //      }
     //      return "#800080"; // the dark color of your choice.
-    //   }, 
+    //   },
 
     routeName() {
       const { name } = this.$route;
       return this.capitalizeFirstLetter(name);
     },
-    signedIn(){
+    signedIn() {
       return this.$store.state.signedIn;
-    }
+    },
   },
-    mounted() {
+  mounted() {
     if (localStorage.selectedFilters) {
       this.selectedFilters = localStorage.selectedFilters.split(",");
     }
@@ -610,14 +635,17 @@ export default {
     this.getSearchHistory();
     this.getReminders();
   },
-  created()
-  {
-    this.listUsers();
+  created() {
+    //this.listUsers();
+    this.fetchRecentMessages();
+    // this.fetchMessages();
   },
   data() {
     return {
       activeNotifications: false,
       users: [],
+      specificUserName: "",
+      popupUsers: [],
       showMenu: false,
       searchModalVisible: false,
       searchQuery: "",
@@ -637,6 +665,11 @@ export default {
       selectedFilters: [],
       search: { filter: null, text: "" },
       selectedSortBy: "most-recent",
+      recentMessage: {
+        name: null,
+        message: null,
+        date: null,
+      },
       sortBy: [
         {
           text: "Most Recent",
@@ -795,22 +828,22 @@ export default {
       ],
       journals: [
         {
-          text: "PLOS ONE", 
-          value: "plos one"
+          text: "PLOS ONE",
+          value: "plos one",
         },
         {
           text: "Royal Society Open Science",
-          value: "royal society open science"
+          value: "royal society open science",
         },
         {
           text: "Nature",
-          value: "nature"
+          value: "nature",
         },
         {
           text: "Science",
-          value: "science"
+          value: "science",
         },
-      ]
+      ],
     };
   },
   methods: {
@@ -840,17 +873,17 @@ export default {
     },
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
-    },   
+    },
     toggleNotificationDropDown(string) {
-      console.log('Reaches toggle method');
+      console.log("Reaches toggle method");
       this.activeNotifications = !this.activeNotifications;
       // this.setActiveIcon('notifications');
-      this.setActiveIcon = 'notifications';
+      this.setActiveIcon = "notifications";
       console.log(this.setActiveIcon);
     },
-     togglePopupChat() {
-       console.log(this.chatIsOpen);
-      this.$emit('update', !this.chatIsOpen); // $emit notifies the parent component that a variable's value changed
+    togglePopupChat() {
+      console.log(this.chatIsOpen);
+      this.$emit("update", !this.chatIsOpen); // $emit notifies the parent component that a variable's value changed
     },
     closeDropDown() {
       this.activeNotifications = false;
@@ -871,21 +904,25 @@ export default {
         this.$router.push("/login");
       }
     },
-    async listUsers() 
-    {
+    async listUsers() {
       const listRequests = await API.graphql(graphqlOperation(listRequestss)); //returns a JSON of all the rows in the Requests table of DynamoDB
 
-      for(const [key, value] of Object.entries(listRequests.data.listRequestss.items)) //for all items in the rows
-      {
-        if(value.user != null && value.friend != null && value.user.id == this.$store.state.user.username) //if the user id equals the current user
-        {
+      for (const [key, value] of Object.entries(
+        listRequests.data.listRequestss.items
+      )) {
+        //for all items in the rows
+        if (
+          value.user != null &&
+          value.friend != null &&
+          value.user.id == this.$store.state.user.username
+        ) {
+          //if the user id equals the current user
           //push the request row to the store (to show in notifications)
-          this.$store.state.requests.push(
-            {
-              id: value.friend.id,
-              created: value.createdAt,
-              message: "wants to add you as a connection"
-            });
+          this.$store.state.requests.push({
+            id: value.friend.id,
+            created: value.createdAt,
+            message: "wants to add you as a connection",
+          });
         }
       }
 
@@ -893,24 +930,29 @@ export default {
 
       const followList = await API.graphql(graphqlOperation(listFollows)); //returns a JSON of all the rows in the Follows table of DynamoDB
 
-      for(const [key, value] of Object.entries(followList.data.listFollows.items)) //for all items in the rows
-      {
-        if(value.user != null && value.friend != null && value.friend.id == this.$store.state.user.username) //if the user id equals the current user
-        {
+      for (const [key, value] of Object.entries(
+        followList.data.listFollows.items
+      )) {
+        //for all items in the rows
+        if (
+          value.user != null &&
+          value.friend != null &&
+          value.friend.id == this.$store.state.user.username
+        ) {
+          //if the user id equals the current user
           //push the follow row to the store (to show in notifications)
-          this.$store.state.follows.push(
-            {
-              id: value.user.id,
-              created: value.createdAt,
-              message: "followed you!"
-            });
+          this.$store.state.follows.push({
+            id: value.user.id,
+            created: value.createdAt,
+            message: "followed you!",
+          });
 
           //push the current row to the user array (to show in notifications)
           this.users.push({
-              id: value.user.id,
-              created: value.createdAt,
-              message: "followed you!"
-            })
+            id: value.user.id,
+            created: value.createdAt,
+            message: "followed you!",
+          });
         }
       }
     },
@@ -947,23 +989,26 @@ export default {
     filterRecentSearches() {
       this.getSearchHistory();
 
-      this.filteredRecentSearches = this.recentSearches.filter(
-        (s) => {
-          return this.search.text && JSON.parse(s[1]).query
-            .toLowerCase()
-            .startsWith(this.search.text.toLowerCase());
-        }
-      );
-      this.filteredRecentSearches = this.filteredRecentSearches.map(item => JSON.parse(item[1]).query).filter((val, index, self) => self.indexOf(val) == index)
-},
-    setSearch (recentSearch) {
+      this.filteredRecentSearches = this.recentSearches.filter((s) => {
+        return (
+          this.search.text &&
+          JSON.parse(s[1])
+            .query.toLowerCase()
+            .startsWith(this.search.text.toLowerCase())
+        );
+      });
+      this.filteredRecentSearches = this.filteredRecentSearches
+        .map((item) => JSON.parse(item[1]).query)
+        .filter((val, index, self) => self.indexOf(val) == index);
+    },
+    setSearch(recentSearch) {
       this.search.text = recentSearch;
       this.modal = false;
     },
     openAutoComplete() {
       this.modal = true;
     },
-    closeModal(){
+    closeModal() {
       this.modal = false;
     },
     //autocomplete end
@@ -987,38 +1032,174 @@ export default {
     //   console.log(this.activeIcon);
     // },
     toUpload() {
-      this.$router.push('upload');
+      this.$router.push("upload");
       // this.setActiveIcon('upload');
     },
     toDonate() {
-      this.$router.push('donate');
-      // this.setActiveIcon('donate'); 
+      this.$router.push("donate");
+      // this.setActiveIcon('donate');
     },
     toProject() {
-      this.$router.push('project');
+      this.$router.push("project");
     },
     toCollections() {
-      this.$router.push('collections');
-      
+      this.$router.push("collections");
     },
     toNetwork() {
-      this.$router.push('network-list');
+      this.$router.push("network-list");
     },
     toMessages() {
-      this.$router.push('messages');
+      this.$router.push("messages");
     },
     reroute(user) {
       //on click of follow notification, redirects to follows page
-      if(user.message == "followed you!")
-      {
-        this.$router.push('follows');
-      }
-      else
-      {
+      if (user.message == "followed you!") {
+        this.$router.push("follows");
+      } else {
         //on click of wants to add you as a connection notification, redirects to requests page
-          this.$router.push('requests');
+        this.$router.push("requests");
       }
-    }
+    },
+    saveMessage() {
+      db.collection("Conversations")
+        .doc(this.conversation_id)
+        .collection("Messages")
+        .doc()
+        .set({
+          author: this.$store.state.user.username,
+          message: this.message,
+          time: new Date().getTime(),
+        });
+      this.message = null;
+    },
+    async fetchMessages() {
+      //Get User
+      let document = await db
+        .collection("Users")
+        .doc(this.$store.state.user.username)
+        .get();
+
+      // If User doesn't exist, create new user and its conversations
+      if (!document || !document.exists) {
+        // Create User
+        await db
+          .collection("Users")
+          .doc(this.$store.state.user.username)
+          .set({ UserID: this.$store.state.username }, { merge: true });
+
+        // Create conversations collection
+        await db
+          .collection("Users")
+          .doc(this.$store.state.user.username)
+          .collection("Conversations")
+          .doc()
+          .set({ created: firebase.firestore.FieldValue.serverTimestamp() });
+
+        //TODO: Delete Dummy Document
+      }
+
+      // Get latest conversation ID
+      const snapshot = await db
+        .collection("Users")
+        .doc(this.$store.state.user.username)
+        .collection("Conversations")
+        .orderBy("created", "desc")
+        .limit(1)
+        .get();
+      snapshot.forEach((doc) => {
+        this.conversation_id = doc.id;
+      });
+
+      // Get all messages from Database and display on screen
+      db.collection("Conversations")
+        .doc(this.conversation_id)
+        .collection("Messages")
+        .orderBy("time", "asc")
+        .onSnapshot((querySnapshot) => {
+          let allMessages = [];
+          querySnapshot.forEach((doc) => {
+            let curr_data = doc.data();
+            curr_data.time = this.convertTime(new Date().getTime());
+            allMessages.push(curr_data);
+            this.messages = allMessages;
+          });
+          // Auto Scroll to bottom
+          setTimeout(() => {
+            this.scrollToButtom();
+          }, 200);
+        });
+    },
+    // Convert Time for displaying on screen
+    convertTime(event_date) {
+      let d = new Date(event_date);
+      // let timeCorrection = d.getTimezoneOffset() - event_timezone_offset;
+      // d.setMinutes(d.getMinutes() + timeCorrection);
+      return (
+        `${d.getMonth()}-${d.getDate()}-${d.getFullYear()} ` +
+        `${d.getHours()}:${(d.getMinutes() < 10 ? "0" : "") + d.getMinutes()}`
+      );
+    },
+    convertToDate(event_date) {
+      const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      let d = new Date(event_date);
+
+      // let timeCorrection = d.getTimezoneOffset() - event_timezone_offset;
+      // d.setMinutes(d.getMinutes() + timeCorrection);
+      return `${monthNames[d.getMonth()]} ${d.getDate()}`;
+    },
+    async fetchRecentMessages() {
+      if (this.$store.state.user.username === "") {
+        this.$store.state.user = await Auth.currentAuthenticatedUser();
+      }
+      // Get latest conversation ID
+      const snapshot = await db
+        .collection("Users")
+        .doc(this.$store.state.user.username)
+        .collection("Conversations")
+        .orderBy("created", "desc")
+        .limit(5)
+        .get();
+      const recentConversations = [];
+      snapshot.forEach((doc) => {
+        recentConversations.push(doc.id);
+      });
+
+      const usermessagecombo = [];
+      recentConversations.forEach(async (convo) => {
+        const snapshot2 = await db
+          .collection("Conversations")
+          .doc(convo)
+          .collection("Messages")
+          .orderBy("time", "asc")
+          .limit(1)
+          .get();
+
+        snapshot2.forEach((doc) => {
+          let time = this.convertToDate(doc.data().time);
+          let temp = {
+            author: doc.data().author,
+            message: doc.data().message,
+            date: time,
+          };
+          this.recentMessage.name = doc.data().author;
+          this.recentMessage.message = doc.data().message;
+          this.popupUsers.push(temp);
+        });
+      });
+    },
   },
 };
 </script>
@@ -1031,22 +1212,34 @@ export default {
   width: 350px;
 }
 
-b-form-input::placeholder{
-  color:#F78626
+b-form-input::placeholder {
+  color: #f78626;
 }
 .TopIcon {
   color: white;
-  
 } /*TODO: Get variables from assets/custom/_variables.scss instead*/
 .TopIcon:hover {
-  color: #F78626;
+  color: #f78626;
 }
 
-img{ max-width:100%;}
+img {
+  max-width: 100%;
+}
 
-.chat_ib h5{ font-size:15px; color:#464646; margin:0 0 8px 0;}
-.chat_ib h5 span{ font-size:13px; float:right;}
-.chat_ib p{ font-size:14px; color:#989898; margin:auto}
+.chat_ib h5 {
+  font-size: 15px;
+  color: #464646;
+  margin: 0 0 8px 0;
+}
+.chat_ib h5 span {
+  font-size: 13px;
+  float: right;
+}
+.chat_ib p {
+  font-size: 14px;
+  color: #989898;
+  margin: auto;
+}
 .chat_img {
   float: left;
   width: 11%;
@@ -1058,9 +1251,12 @@ img{ max-width:100%;}
   width: 88%;
 }
 
-.chat_people{ overflow:hidden; clear:both;}
+.chat_people {
+  overflow: hidden;
+  clear: both;
+}
 
-.iconColor{
-  color: #F78626;
+.iconColor {
+  color: #f78626;
 }
 </style>
