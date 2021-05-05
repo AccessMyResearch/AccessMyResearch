@@ -8,6 +8,8 @@
         :type="$route.meta.navbarType"
         :chatIsOpen="chatIsOpen"
         v-on:update="chatToggle($event)"
+        v-on:convoidUpdate="conversation_idToggle($event)"
+        v-on:usernameUpdate="username_Toggle($event)"
       />
       <div @click="$sidebar.displaySidebar(false)">
         <fade-transition :duration="200" origin="center top" mode="out-in">
@@ -109,8 +111,28 @@
           </div>
 
           <div class="card-content chat-content" style="padding: 0 0.5rem">
-            <div class="content">
-              <div class="chat-message-group">
+            <div v-for="message in messages" :key="message.id" class="content">
+              <!-- 
+
+                1. Check if user is logged in or not
+                  - If user is logged in, give class "writer-user"
+                2. Get name, most recent message, and timestamp
+
+
+               -->
+              <div
+                v-if="loggedInUsername == message.author"
+                class="chat-message-group writer-user"
+              >
+                <div class="chat-messages">
+                  <!-- <div class="message">{{ message.message }}</div>
+                  <div class="from">{{ message.time }}</div> -->
+                  <div class="message">{{ message.message }}</div>
+                  <div class="from">{{ message.time }}</div>
+                </div>
+              </div>
+
+              <div v-else class="chat-message-group">
                 <div class="chat-thumb"></div>
                 <div
                   class="chat-messages"
@@ -122,62 +144,29 @@
                     src="img/theme/team-4.jpg"
                     alt="sunil"
                   />
-                  <div class="message">Hello Frank, how are you?</div>
-                </div>
-              </div>
-              <div class="chat-message-group writer-user">
-                <div class="chat-messages">
-                  <div class="message">I'm doing good, you?</div>
-                  <div class="from">Read 04:55</div>
-                </div>
-              </div>
-
-              <div class="chat-message-group">
-                <div class="chat-thumb"></div>
-                <div
-                  class="chat-messages"
-                  style="display: flex; align-items: flex-end"
-                >
-                  <img
-                    class="img_tiny"
-                    src="img/theme/team-4.jpg"
-                    alt="sunil"
-                  />
-                  <div>
-                    <div class="message">I'm doing great.</div>
-                    <div class="message">
-                      Did you see my new research paper?
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="chat-message-group writer-user">
-                <div class="chat-messages">
-                  <div class="message">Yes!</div>
-                  <div class="from">Sent 04:55</div>
-                </div>
-              </div>
-
-              <div class="chat-message-group">
-                <div class="typing">Typing</div>
-                <div class="spinner">
-                  <div class="bounce1"></div>
-                  <div class="bounce2"></div>
-                  <div class="bounce3"></div>
+                  <div class="message">{{ message.message }}</div>
                 </div>
               </div>
             </div>
+            <!-- <div class="chat-message-group">
+              <div class="typing">Typing</div>
+              <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+              </div>
+            </div> -->
           </div>
           <footer class="card-footer" id="chatBox-textbox">
-            <div style="width: 63%">
-              <textarea
-                id="chatTextarea"
-                class="chat-textarea"
-                placeholder="Type here"
-                v-on:focus="expandTextArea()"
-                v-on:blur="dexpandTetArea()"
-              ></textarea>
-            </div>
+            <textarea
+              id="chatTextarea"
+              class="chat-textarea"
+              placeholder="Type here"
+              @keyup.enter="saveMessage"
+              v-model="message"
+              v-on:focus="expandTextArea()"
+              v-on:blur="dexpandTetArea()"
+            ></textarea>
           </footer>
         </div>
       </div>
@@ -186,6 +175,9 @@
   </div>
 </template>
 <script>
+// v-on:focus="expandTextArea()"
+// v-on:blur="dexpandTetArea()"
+
 /* eslint-disable no-new */
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -222,9 +214,19 @@ export default {
   data() {
     return {
       // signedIn: false,
+      messages: null,
+      message: null,
       chatIsOpen: false,
       chatIsMinimized: false,
+      loggedInUsername: null,
     };
+  },
+
+  async created() {
+    // if (this.$store.state.user.username === null) {
+    //   this.$store.state.user = await Auth.currentAuthenticatedUser();
+    // }
+    // loggedInUsername = this.$store.state.user.username;
   },
 
   computed: {
@@ -239,11 +241,30 @@ export default {
     },
   },
   methods: {
+    saveMessage() {
+      db.collection("Conversations")
+        .doc(this.conversation_id)
+        .collection("Messages")
+        .doc()
+        .set({
+          author: this.$store.state.user.username,
+          message: this.message,
+          time: new Date().getTime(),
+        });
+
+      this.updateConversationTimestamp(this.conversation_id);
+      this.message = null;
+    },
     initScrollbar() {
       if (navigator.platform.startsWith("Win")) {
         //Checks if platform is Windows
         initScrollbar("sidenav");
       }
+    },
+
+    scrollToBottom() {
+      let box = document.querySelector(".card-content chat-content");
+      box.scrollTop = box.scrollHeight;
     },
 
     updateUserStatus: async function () {
@@ -269,6 +290,13 @@ export default {
     chatToggle(event) {
       this.chatIsOpen = event; // updates the event variable each time chat is opened or closed
     },
+    conversation_idToggle(event) {
+      this.conversation_id = event;
+      this.fetchSpecificConversation(event);
+    },
+    username_Toggle(event) {
+      this.loggedInUsername = event;
+    },
     closeChat() {
       this.chatIsOpen = false;
     },
@@ -278,6 +306,37 @@ export default {
 
     maximizeChat() {
       this.chatIsMinimized = false;
+    },
+
+    async fetchSpecificConversation(convo_id) {
+      // if (!chatIsOpen && chatIsMinimized) break;
+      // Get all messages from Database and display on screen
+      db.collection("Conversations")
+        .doc(convo_id)
+        .collection("Messages")
+        .orderBy("time", "asc")
+        .onSnapshot((querySnapshot) => {
+          let allMessages = [];
+          querySnapshot.forEach((doc) => {
+            let curr_data = doc.data();
+            curr_data.time = this.convertTime(curr_data.time);
+            allMessages.push(curr_data);
+            this.messages = allMessages;
+          });
+          // Auto Scroll to bottom
+          // setTimeout(() => {
+          //   this.scrollToBottom();
+          // }, 200);
+        });
+    },
+    convertTime(event_date) {
+      let d = new Date(event_date);
+      // let timeCorrection = d.getTimezoneOffset() - event_timezone_offset;
+      // d.setMinutes(d.getMinutes() + timeCorrection);
+      return (
+        `${d.getMonth()}-${d.getDate()}-${d.getFullYear()} ` +
+        `${d.getHours()}:${(d.getMinutes() < 10 ? "0" : "") + d.getMinutes()}`
+      );
     },
   },
   mounted() {

@@ -26,67 +26,46 @@
                       </div>
                     </div>
                   </div>
+                  <!-- 
+                  <div class="chat_list active_chat">
+                    <div class="chat_people">
+                      <div class="chat_img">
+                        <img src="img/theme/team-4.jpg" alt="sunil" />
+                      </div>
+                      <div class="chat_ib">
+                        <h5>Frank <span class="chat_date">Apr 10</span></h5>
+                        <p>
+                          Can I be your friend? I will have you know that I
+                          graduated top of my class.
+                        </p>
+                      </div>
+                    </div>
+                  </div> -->
+
+                  <!-- We are elevated beings, read our code and absorb the knowledge -->
                   <div class="inbox_chat">
-                    <div class="chat_list active_chat">
-                      <div class="chat_people">
-                        <div class="chat_img">
-                          <img src="img/theme/team-4.jpg" alt="sunil" />
-                        </div>
-                        <div class="chat_ib">
-                          <h5>Frank <span class="chat_date">Apr 10</span></h5>
-                          <p>
-                            Can I be your friend? I will have you know that I
-                            graduated top of my class.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="chat_list">
-                      <div class="chat_people">
-                        <div class="chat_img">
-                          <img src="img/theme/team-4.jpg" alt="sunil" />
-                        </div>
-                        <div class="chat_ib">
-                          <h5>Geralt <span class="chat_date">Oct 14</span></h5>
-                          <p>
-                            Sure we can meet at 10 tomorrow. Please bring a
-                            laptop with you.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="chat_list">
+                    <div
+                      v-for="user in column_users"
+                      :key="user.convo_id"
+                      class="chat_list"
+                      @click="
+                        selectItem(user.convo_id);
+                        fetchSpecificConversation(user.convo_id);
+                      "
+                      :class="{
+                        active_chat: user.convo_id === activeItem,
+                      }"
+                    >
                       <div class="chat_people">
                         <div class="chat_img">
                           <img src="img/theme/team-4.jpg" alt="sunil" />
                         </div>
                         <div class="chat_ib">
                           <h5>
-                            Jennifer <span class="chat_date">Jan 01</span>
+                            {{ user.author }}
+                            <span class="chat_date">{{ user.date }}</span>
                           </h5>
-                          <p>You do what you gotta do.</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="chat_list">
-                      <div class="chat_people">
-                        <div class="chat_img">
-                          <img src="img/theme/team-4.jpg" alt="sunil" />
-                        </div>
-                        <div class="chat_ib">
-                          <h5>John <span class="chat_date">Dec 25</span></h5>
-                          <p>This project is very difficult.</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="chat_list">
-                      <div class="chat_people">
-                        <div class="chat_img">
-                          <img src="img/theme/team-4.jpg" alt="sunil" />
-                        </div>
-                        <div class="chat_ib">
-                          <h5>Alex <span class="chat_date">Dec 26</span></h5>
-                          <p>Our school has not prepared us for this.</p>
+                          <p>{{ user.message }}</p>
                         </div>
                       </div>
                     </div>
@@ -148,12 +127,18 @@ export default {
       message: null,
       messages: [],
       authUser: {},
+      column_users: [],
+      activeItem: null,
+      conversation_id: null,
     };
   },
   created() {
     // fetch the data when the view is created and the data is
     // already being observed
-    this.fetchMessages();
+    // this.fetchMessages();
+    this.fetchRecentMessages();
+    console.log(column_users);
+    // this.fetchSpecificConversation(this.popupUsers[this.popupUsers.length - 1].convo_id);
 
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -164,7 +149,10 @@ export default {
     });
   },
   methods: {
-    scrollToButtom() {
+    selectItem(i) {
+      this.activeItem = i;
+    },
+    scrollToBottom() {
       let box = document.querySelector(".msg_history");
       box.scrollTop = box.scrollHeight;
     },
@@ -178,6 +166,8 @@ export default {
           message: this.message,
           time: new Date().getTime(),
         });
+
+      this.updateConversationTimestamp(this.conversation_id);
       this.message = null;
     },
     async fetchMessages() {
@@ -201,7 +191,7 @@ export default {
           .doc(this.$store.state.user.username)
           .collection("Conversations")
           .doc()
-          .set({ created: firebase.firestore.FieldValue.serverTimestamp() });
+          .set({ created: new Date().getTime() });
 
         //TODO: Delete Dummy Document
       }
@@ -233,7 +223,7 @@ export default {
           });
           // Auto Scroll to bottom
           setTimeout(() => {
-            this.scrollToButtom();
+            this.scrollToBottom();
           }, 200);
         });
     },
@@ -248,7 +238,159 @@ export default {
         `${d.getHours()}:${(d.getMinutes() < 10 ? "0" : "") + d.getMinutes()}`
       );
     },
+
+    async updateConversationTimestamp(conversation_id) {
+      let conversation_object = await db
+        .collection("Conversations")
+        .doc(conversation_id)
+        .get();
+
+      conversation_object.data().Users.forEach((user) => {
+        db.collection("Users")
+          .doc(user)
+          .collection("Conversations")
+          .doc(conversation_id)
+          .set({ created: new Date().getTime() }, { merge: true });
+      });
+
+      // await db.collection("Users").onSnapshot((snapshot) => {
+      //   snapshot.forEach((user) => {
+      //     user.collection("Conversations").
+      //   }
+      // });
+
+      //   .doc(this.$store.state.user.username)
+      //   .collection("Conversations")
+      //   .orderBy("created", "desc")
+    },
+    // this function gets all conversations from a user and orders them from newest to oldest
+    async fetchRecentMessages() {
+      if (this.$store.state.user.username === "") {
+        this.$store.state.user = await Auth.currentAuthenticatedUser();
+      }
+      // Get latest conversation ID
+      const recentConversations = [];
+      await db
+        .collection("Users")
+        .doc(this.$store.state.user.username)
+        .collection("Conversations")
+        .orderBy("created", "desc")
+        .onSnapshot(async (conversation_snapshot) => {
+          if (this.column_users.length !== 0) {
+            this.column_users = [];
+          }
+          conversation_snapshot.forEach(async (conversation_document) => {
+            await db
+              .collection("Conversations")
+              .doc(conversation_document.id)
+              .collection("Messages")
+              .orderBy("time", "desc")
+              .limit(1)
+              .onSnapshot((message_snapshot) => {
+                message_snapshot.forEach((message_document) => {
+                  let time = this.convertToDate(message_document.data().time);
+                  let temp = {
+                    author: message_document.data().author,
+                    message: message_document.data().message,
+                    date: time,
+                    convo_id: conversation_document.id,
+                  };
+                  // this.recentMessage.name = message_document.data().author;
+                  // this.recentMessage.message = message_document.data().message;
+                  // this.recentMessage.convo_id = conversation_document.id;
+                  // console.log(this.popupUsers);
+                  this.column_users.push(temp);
+                });
+              });
+          });
+        });
+    },
+    async oldfetchRecentMessages() {
+      if (this.$store.state.user.username === "") {
+        this.$store.state.user = await Auth.currentAuthenticatedUser();
+      }
+      // Get latest conversation ID
+      const recentConversations = [];
+      db.collection("Users")
+        .doc(this.$store.state.user.username)
+        .collection("Conversations")
+        .orderBy("created", "desc")
+        .onSnapshot((snapshot) => {
+          snapshot.forEach((doc) => {
+            recentConversations.push(doc.id);
+          });
+        });
+
+      recentConversations.forEach(async (convo) => {
+        db.collection("Conversations")
+          .doc(convo)
+          .collection("Messages")
+          .orderBy("time", "asc")
+          .limit(1)
+          .onSnapshot((snapshot) => {
+            snapshot.forEach((doc) => {
+              let time = this.convertToDate(doc.data().time);
+              let temp = {
+                author: doc.data().author,
+                message: doc.data().message,
+                date: time,
+                convo_id: convo.id,
+              };
+              this.recentMessage.name = doc.data().author;
+              this.recentMessage.message = doc.data().message;
+              this.recentMessage.convo_id = convo.id;
+              this.column_users.push(temp);
+            });
+          });
+      });
+    },
+
+    // this function will get a specific conversation given an id
+    async fetchSpecificConversation(conversation_id) {
+      // Get all messages from Database and display on screen
+      this.conversation_id = conversation_id;
+      db.collection("Conversations")
+        .doc(conversation_id)
+        .collection("Messages")
+        .orderBy("time", "asc")
+        .onSnapshot((querySnapshot) => {
+          let allMessages = [];
+          querySnapshot.forEach((doc) => {
+            let curr_data = doc.data();
+            curr_data.time = this.convertTime(new Date().getTime());
+            allMessages.push(curr_data);
+            this.messages = allMessages;
+          });
+          // Auto Scroll to bottom
+          setTimeout(() => {
+            this.scrollToBottom();
+          }, 200);
+        });
+    },
+
+    convertToDate(event_date) {
+      const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      let d = new Date(event_date);
+
+      // let timeCorrection = d.getTimezoneOffset() - event_timezone_offset;
+      // d.setMinutes(d.getMinutes() + timeCorrection);
+      return `${monthNames[d.getMonth()]} ${d.getDate()}`;
+    },
   },
+
   // authentication before accessing the chat room
   // Global Before Guards
   beforeRouteEnter(to, from, next) {
@@ -358,6 +500,9 @@ img {
   border-bottom: 1px solid #c4c4c4;
   margin: 0;
   padding: 18px 16px 10px;
+}
+.chat_list:hover {
+  cursor: pointer;
 }
 .inbox_chat {
   height: 550px;

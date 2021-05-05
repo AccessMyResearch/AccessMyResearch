@@ -482,7 +482,10 @@
         <!-- Div for the dropdown menu, sets the vertical scroll and height -->
         <div style="overflow-y: scroll; height: 20rem">
           <div v-for="popupUser in popupUsers" v-bind:key="popupUser.name">
-            <div class="chat_people dropdown-item" @click="togglePopupChat">
+            <div
+              class="chat_people dropdown-item"
+              @click="togglePopupChat(popupUser.convo_id)"
+            >
               <!--sets the click for the popup chat -->
 
               <!-- copied over the images and text from the main messages page and resized -->
@@ -536,7 +539,9 @@
 
         <template>
           <b-dropdown-header class="noti-title" v-if="signedIn">
-            <h6 class="text-overflow m-0">Hi, Mehmet!</h6>
+            <h6 class="text-overflow m-0">
+              Hi, {{ this.$store.state.user.firstname }}
+            </h6>
           </b-dropdown-header>
           <b-dropdown-item to="/profile" v-if="signedIn">
             <i class="fas fa-user" />
@@ -599,6 +604,9 @@ export default {
       type: Boolean,
       default: false,
       description: "Whether the popup chatboxes are open or closed",
+    },
+    conversation_id: {
+      type: String,
     },
   },
   computed: {
@@ -669,6 +677,7 @@ export default {
         name: null,
         message: null,
         date: null,
+        convo_id: null,
       },
       sortBy: [
         {
@@ -881,8 +890,9 @@ export default {
       this.setActiveIcon = "notifications";
       console.log(this.setActiveIcon);
     },
-    togglePopupChat() {
-      console.log(this.chatIsOpen);
+    togglePopupChat(conversation_id) {
+      this.$emit("convoidUpdate", conversation_id);
+      this.$emit("usernameUpdate", this.$store.state.user.username);
       this.$emit("update", !this.chatIsOpen); // $emit notifies the parent component that a variable's value changed
     },
     closeDropDown() {
@@ -1093,12 +1103,11 @@ export default {
           .doc(this.$store.state.user.username)
           .collection("Conversations")
           .doc()
-          .set({ created: firebase.firestore.FieldValue.serverTimestamp() });
-
-        //TODO: Delete Dummy Document
+          .set({ created: new Date().getTime() });
       }
 
       // Get latest conversation ID
+      let converation_id = null;
       const snapshot = await db
         .collection("Users")
         .doc(this.$store.state.user.username)
@@ -1107,12 +1116,12 @@ export default {
         .limit(1)
         .get();
       snapshot.forEach((doc) => {
-        this.conversation_id = doc.id;
+        conversation_id = doc.id;
       });
 
       // Get all messages from Database and display on screen
       db.collection("Conversations")
-        .doc(this.conversation_id)
+        .doc(conversation_id)
         .collection("Messages")
         .orderBy("time", "asc")
         .onSnapshot((querySnapshot) => {
@@ -1160,45 +1169,69 @@ export default {
       // d.setMinutes(d.getMinutes() + timeCorrection);
       return `${monthNames[d.getMonth()]} ${d.getDate()}`;
     },
+
     async fetchRecentMessages() {
       if (this.$store.state.user.username === "") {
         this.$store.state.user = await Auth.currentAuthenticatedUser();
       }
       // Get latest conversation ID
-      const snapshot = await db
+      const recentConversations = [];
+      await db
         .collection("Users")
         .doc(this.$store.state.user.username)
         .collection("Conversations")
         .orderBy("created", "desc")
-        .limit(5)
-        .get();
-      const recentConversations = [];
-      snapshot.forEach((doc) => {
-        recentConversations.push(doc.id);
-      });
-
-      const usermessagecombo = [];
-      recentConversations.forEach(async (convo) => {
-        const snapshot2 = await db
-          .collection("Conversations")
-          .doc(convo)
-          .collection("Messages")
-          .orderBy("time", "asc")
-          .limit(1)
-          .get();
-
-        snapshot2.forEach((doc) => {
-          let time = this.convertToDate(doc.data().time);
-          let temp = {
-            author: doc.data().author,
-            message: doc.data().message,
-            date: time,
-          };
-          this.recentMessage.name = doc.data().author;
-          this.recentMessage.message = doc.data().message;
-          this.popupUsers.push(temp);
+        .onSnapshot(async (conversation_snapshot) => {
+          if (this.popupUsers.length !== 0) {
+            this.popupUsers = [];
+          }
+          conversation_snapshot.forEach(async (conversation_document) => {
+            await db
+              .collection("Conversations")
+              .doc(conversation_document.id)
+              .collection("Messages")
+              .orderBy("time", "desc")
+              .limit(1)
+              .onSnapshot((message_snapshot) => {
+                message_snapshot.forEach((message_document) => {
+                  let time = this.convertToDate(message_document.data().time);
+                  let temp = {
+                    author: message_document.data().author,
+                    message: message_document.data().message,
+                    date: time,
+                    convo_id: conversation_document.id,
+                  };
+                  // this.recentMessage.name = message_document.data().author;
+                  // this.recentMessage.message = message_document.data().message;
+                  // this.recentMessage.convo_id = conversation_document.id;
+                  // console.log(this.popupUsers);
+                  this.popupUsers.push(temp);
+                });
+              });
+          });
         });
-      });
+    },
+
+    // this function will get a specific conversation given an id
+    async fetchSpecificConversation(conversation_id) {
+      // Get all messages from Database and display on screen
+      db.collection("Conversations")
+        .doc(conversation_id)
+        .collection("Messages")
+        .orderBy("time", "asc")
+        .onSnapshot((querySnapshot) => {
+          let allMessages = [];
+          querySnapshot.forEach((doc) => {
+            let curr_data = doc.data();
+            curr_data.time = this.convertTime(curr_data.time);
+            allMessages.push(curr_data);
+            this.messages = allMessages;
+          });
+          // Auto Scroll to bottom
+          setTimeout(() => {
+            this.scrollToButtom();
+          }, 200);
+        });
     },
   },
 };
