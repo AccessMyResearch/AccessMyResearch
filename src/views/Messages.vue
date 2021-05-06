@@ -137,7 +137,6 @@ export default {
     // already being observed
     // this.fetchMessages();
     this.fetchRecentMessages();
-    console.log(column_users);
     // this.fetchSpecificConversation(this.popupUsers[this.popupUsers.length - 1].convo_id);
 
     firebase.auth().onAuthStateChanged((user) => {
@@ -268,6 +267,7 @@ export default {
       if (this.$store.state.user.username === "") {
         this.$store.state.user = await Auth.currentAuthenticatedUser();
       }
+
       // Get latest conversation ID
       const recentConversations = [];
       await db
@@ -276,73 +276,81 @@ export default {
         .collection("Conversations")
         .orderBy("created", "desc")
         .onSnapshot(async (conversation_snapshot) => {
-          if (this.column_users.length !== 0) {
-            this.column_users = [];
-          }
-          conversation_snapshot.forEach(async (conversation_document) => {
-            await db
-              .collection("Conversations")
-              .doc(conversation_document.id)
-              .collection("Messages")
-              .orderBy("time", "desc")
-              .limit(1)
-              .onSnapshot((message_snapshot) => {
-                message_snapshot.forEach((message_document) => {
-                  let time = this.convertToDate(message_document.data().time);
-                  let temp = {
-                    author: message_document.data().author,
-                    message: message_document.data().message,
-                    date: time,
-                    convo_id: conversation_document.id,
-                  };
-                  // this.recentMessage.name = message_document.data().author;
-                  // this.recentMessage.message = message_document.data().message;
-                  // this.recentMessage.convo_id = conversation_document.id;
-                  // console.log(this.popupUsers);
-                  this.column_users.push(temp);
-                });
-              });
-          });
-        });
-    },
-    async oldfetchRecentMessages() {
-      if (this.$store.state.user.username === "") {
-        this.$store.state.user = await Auth.currentAuthenticatedUser();
-      }
-      // Get latest conversation ID
-      const recentConversations = [];
-      db.collection("Users")
-        .doc(this.$store.state.user.username)
-        .collection("Conversations")
-        .orderBy("created", "desc")
-        .onSnapshot((snapshot) => {
-          snapshot.forEach((doc) => {
-            recentConversations.push(doc.id);
-          });
-        });
+          if (this.column_users.length != 0) {
+            conversation_snapshot.forEach(async (conversation_document) => {
+              await db
+                .collection("Conversations")
+                .doc(conversation_document.id)
+                .collection("Messages")
+                .orderBy("time", "desc")
+                .limit(1)
+                .onSnapshot((message_snapshot) => {
+                  message_snapshot.forEach((message_document) => {
+                    let time = this.convertToDate(message_document.data().time);
+                    let temp = {
+                      author: message_document.data().author,
+                      message: message_document.data().message,
+                      date: time,
+                      convo_id: conversation_document.id,
+                    };
+                    // this.recentMessage.name = message_document.data().author;
+                    // this.recentMessage.message = message_document.data().message;
+                    // this.recentMessage.convo_id = conversation_document.id;
+                    // console.log(this.popupUsers);
 
-      recentConversations.forEach(async (convo) => {
-        db.collection("Conversations")
-          .doc(convo)
-          .collection("Messages")
-          .orderBy("time", "asc")
-          .limit(1)
-          .onSnapshot((snapshot) => {
-            snapshot.forEach((doc) => {
-              let time = this.convertToDate(doc.data().time);
-              let temp = {
-                author: doc.data().author,
-                message: doc.data().message,
-                date: time,
-                convo_id: convo.id,
-              };
-              this.recentMessage.name = doc.data().author;
-              this.recentMessage.message = doc.data().message;
-              this.recentMessage.convo_id = convo.id;
-              this.column_users.push(temp);
+                    // returns -1 if not in index -> either edited record or completely new
+
+                    let index = this.column_users.indexOf(temp);
+                    console.log(temp);
+                    console.log(index);
+                    if (index == -1) {
+                      this.column_users.forEach((user) => {
+                        console.log(user);
+                        console.log(temp);
+                        if (user.convo_id === temp.convo_id) {
+                          this.column_users.splice(
+                            this.column_users.indexOf(user),
+                            1,
+                            temp
+                          );
+                        }
+                      });
+                      // this.column_users[index] = temp;
+                    }
+                  });
+                });
             });
-          });
-      });
+          } else {
+            conversation_snapshot.forEach(async (conversation_document) => {
+              await db
+                .collection("Conversations")
+                .doc(conversation_document.id)
+                .collection("Messages")
+                .orderBy("time", "desc")
+                .limit(1)
+                .get()
+                .then((message_snapshot) => {
+                  message_snapshot.forEach((message_document) => {
+                    let time = this.convertToDate(message_document.data().time);
+                    let temp = {
+                      author: message_document.data().author,
+                      message: message_document.data().message,
+                      date: time,
+                      convo_id: conversation_document.id,
+                    };
+                    // this.recentMessage.name = message_document.data().author;
+                    // this.recentMessage.message = message_document.data().message;
+                    // this.recentMessage.convo_id = conversation_document.id;
+                    // console.log(this.popupUsers);
+                    this.column_users.push(temp);
+                  });
+                });
+            });
+          }
+
+          // empty list = populate whole list
+          // non-empty list = update/add changed entries
+        });
     },
 
     // this function will get a specific conversation given an id
