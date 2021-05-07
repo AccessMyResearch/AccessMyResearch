@@ -5,9 +5,9 @@
         <!-- <base-header class="pb-5 pt-md-3 bg-gradient-primary"></base-header> -->
         <!-- <b-container fluid class="mt-4"> -->
             
-            <div class="card text-black">
+            <div class="card text-black" >
                 
-                <div class="col-lg mx-auto form p-0" style="border-radius: 4px; -webkit-box-shadow: 0 0 15px #9b9d9e;">
+                <div class="col-lg mx-auto form p-0" style="border-radius: 4px; -webkit-box-shadow: 0 0 15px #9b9d9e; height: 1200px">
                     <b-icon-x icon = "type-bold" style="float:right; cursor: pointer; height:1.5rem; width:1.5rem; " @click="toggleResearchWindow"> </b-icon-x>
                     <div id="mainUpload">
                         <div class="h2" style="text-align: center"> Add Research Material </div>
@@ -19,7 +19,12 @@
 
                         <div class="form-group">
                             <label class="h2" for="Abstract">Abstract (Optional) </label>
-                            <textarea type="text" class="form-control" placeholder="Add Abstract" rows="1" v-model="abstract" style="background-color: #fafafa"></textarea>
+                            <textarea type="text" class="form-control" placeholder="Add Abstract" rows="2" v-model="abstract" style="background-color: #fafafa"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="h2" for="doi">URL to Research (Optional)</label>
+                            <input type="text" class="form-control" placeholder="URL" v-model="researchurl" style="background-color: #fafafa">
                         </div>
 
                         <div class="form-group" v-if="doiVisible">
@@ -265,7 +270,7 @@ export default {
 }
 .research-modal {
     width:800px;
-    height:600px;
+    height:700px;
     overflow-y: hidden;
 }
  @media screen and (min-width: 600px) and (max-width: 800px) {
