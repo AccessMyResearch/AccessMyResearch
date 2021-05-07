@@ -24,19 +24,18 @@
             <b-button block v-b-toggle.bioAccordion squared variant="outline-primary"
              class = "dropdownButton toggleBg" 
              @click="step=0"
-            > 
+            >
             <div>Biography</div>
             </b-button>
         </b-card-header>
-        <!-- <b-collapse 
+        <!-- <b-collapse
             id="bioAccordion"
             accordion="my-accordion"
             role="tabpanel"
         >
-        <b-card-body style="max-width:235px">
+            <b-card-body style="max-width:235px">
             </b-card-body>
         </b-collapse> -->
- 
         </b-card>
     
 
@@ -48,7 +47,7 @@
             squared variant="outline-primary"
             class = "dropdownButton toggleBg"
             @click="step=1"
-            > 
+            >
             <div>Research<span><i class="fas fa-chevron-down downArrow"></i></span></div>
             </b-button>
         </b-card-header>
@@ -80,7 +79,7 @@
             v-b-toggle.collectionsAccordion
             squared variant="outline-primary"
             class = "dropdownButton toggleBg"
-            disabled 
+            disabled
             ><div>Collections<span><i class="fas fa-chevron-down downArrow"></i></span></div>
             </b-button>
         </b-card-header>
@@ -101,9 +100,8 @@
             v-b-toggle.projectsAccordion
             squared variant="outline-primary"
             class = "dropdownButton toggleBg"
-            disabled 
+            disabled
             ><div>Projects<span><i class="fas fa-chevron-down downArrow"></i></span></div>
- 
             </b-button>
         </b-card-header>
         <b-collapse
@@ -122,9 +120,8 @@
             block 
             v-b-toggle.grantsAccordion squared variant="outline-primary"
             class = "dropdownButton toggleBg"
-            disabled> 
+            disabled>
             <div>Grants<span><i class="fas fa-chevron-down downArrow"></i></span></div>
- 
             </b-button>
         </b-card-header>
         <b-collapse
@@ -146,9 +143,8 @@
             squared variant="outline-primary"
             class = "dropdownButton toggleBg"
             disabled
-            > 
+            >
             <div>Showcase<span><i class="fas fa-chevron-down downArrow"></i></span></div>
- 
             </b-button
             >
         </b-card-header>
@@ -169,9 +165,8 @@
             v-b-toggle.coursesAccordion
             squared variant="outline-primary"
             class = "dropdownButton"
-            disabled 
+            disabled
             ><div>Courses<span><i class="fas fa-chevron-down downArrow"></i></span></div></b-button
- 
             >
         </b-card-header>
         <b-collapse
@@ -191,9 +186,8 @@
             v-b-toggle.blogAccordion
             squared variant="outline-primary"
             class = "dropdownButton"
-            disabled 
+            disabled
             ><div>Blog<span><i class="fas fa-chevron-down downArrow"></i></span></div></b-button
- 
             >
         </b-card-header>
         <b-collapse
@@ -213,11 +207,10 @@
           <!-- <b-card-header class="border-1" style = "height: 52px;"> 
             <br>
           </b-card-header> -->
-          <div style=lightTable-card> 
+          <div style=lightTable-card>
             <div id="Biography" style="overflow-y: scroll; height: 83vh" v-if="step==0"> 
               <div id="About">
                 <p style="color: rgb(69, 119, 184); font-size: 24px; padding-left: 10px"><b>About</b>
- 
                 <a
                   href="#"
                   role="button"
@@ -225,7 +218,7 @@
                   data-value="edit"
                   id="editIcon"
                 ><i id="icon" class="fas fa-pencil-alt" style="float: right; margin: 0.75%"></i></a></p>
-                <div id="content"> 
+                <div id="content">
                 <p style="padding-left: 10px; padding-right: 10px"> {{infoText.about}} </p>
                 </div>
               </div><hr style="margin:15px">
@@ -249,31 +242,11 @@
               <div id="Area of Expertise">
                 <p style="color: rgb(69, 119, 184); font-size: 24px; padding-left: 10px"><b>Area of Expertise</b><i class="fas fa-pencil-alt" style="float: right; margin: 0.75%"></i></p>
                 <p style="padding-left: 10px; padding-right: 10px"> {{infoText.expertise}} </p>
- 
               </div>
             </div> 
 
             <div id="Research"  style="overflow-y: scroll;" v-if="step==1">  
- 
-                
-                <!-- research -->
-                <!-- FIX: AUTHOR ISSUE -->
-                <div v-for="item in this.infoText.works" :key="item[0]">
-                  <div id="PublishedWorks">
-                    <!--<p style="color: rgb(69, 119, 184); font-size: 24px; padding-left: 10px">{{infoText.title}}</p>
-                    <div id="content">
-                    <p style="padding-left: 10px; padding-right: 10px"> {{infoText.abstract}} </p>
-                    </div> -->
-                    <p id=info_title; style="color: rgb(69, 119, 184); font-size: 24px; padding-left: 10px">{{item[0]}}</p>
-                    <div id="info_abstract">
-                    <p style="padding-left: 10px; padding-right: 10px">{{item[1]}}</p>
-                    </div> 
-                  </div>
-                  <hr style="margin:15px">
-                </div>
-
-                <!-- end research test -->
- 
+                <p style="color: rgb(69, 119, 184); font-size: 24px; padding-left: 10px"><b>TEST CONTENT</b></p>
                 <el-table class="table-responsive table-light"
                   :data="articles"
                   :row-style="tableRowStyle"
@@ -346,9 +319,7 @@
 import { Auth, AuthHelperRoles } from "@/util/auth-helper.js";
 import EditProfileForm from "./UserProfile/EditProfileForm.vue";
 import UserCard from "./UserProfile/UserCard.vue";
-import articles from './../Tables/articles'  
-import axios from "axios";
- 
+import articles from './../Tables/articles' 
 
 export default {
   name: 'filter-panel',
@@ -427,11 +398,7 @@ export default {
         research: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
         education: "PhD \t University of Texas at Dallas, Behavioral and Brain Sciences\t Nov 2020 \n\t Focus: Cognition and Neuroscience",
         professional: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
- 
-        expertise: "Brain Imaging",
-        title:"",
-        abstract: "",
-        works:[] 
+        expertise: "Brain Imaging"
       }
     };
   },
@@ -467,45 +434,6 @@ export default {
 
       this.user.roles = AuthHelperRoles.getUserRoles(user);
     },
- 
-    //JPB170330
-    //S3 CONNECTION
-    getPublishedWorks: function() {
-      const getData = () => {
-        return new Promise((resolve, reject) => {
-        axios
-        .get(`http://localhost:3000/files`)
-        .then(data => {
-            resolve(data);
-        })
-        .catch(err => {
-            reject(err);
-        });
-        });
-      }
-      
-      const putData = async () => {
-        const { data } = await getData()
-        console.log(JSON.stringify(data.data.work[0][0]));
-        console.log(JSON.stringify(data.data.work[0][1]));
-        //this.infoText.title = data.data.work[0][0];
-        //this.infoText.abstract = data.data.work[0][1];
-        this.infoText.works = data.data.work;
-      }
-      
-      putData()
-    },
-
-    showWorks() {
-      var publishedworks = this.infoText.works;
-      var eachwork = {"title": this.infoText.works[0][0]};
-      t = document.getElementById("info_title");
-      //t.displayObject("info_title",eachwork);
-
-      var node = document.createTextNode("This is new.");
-      t.appendChild(node);
-      
-    }, 
     // openResearch(){
         
     //     document.getElementById('Research');
@@ -608,8 +536,6 @@ img{max-width:100%; max-height: 100%;}
   font-size: 24px;
   font-weight: bold;
 }
- 
- 
 .addItem{
     float: right; 
     padding: 2px 0px 0px 2px;
