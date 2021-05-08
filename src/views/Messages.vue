@@ -135,9 +135,7 @@ export default {
   created() {
     // fetch the data when the view is created and the data is
     // already being observed
-    // this.fetchMessages();
     this.fetchRecentMessages();
-    // this.fetchSpecificConversation(this.popupUsers[this.popupUsers.length - 1].convo_id);
 
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -169,64 +167,6 @@ export default {
       this.updateConversationTimestamp(this.conversation_id);
       this.message = null;
     },
-    async fetchMessages() {
-      //Get User
-      let document = await db
-        .collection("Users")
-        .doc(this.$store.state.user.username)
-        .get();
-
-      // If User doesn't exist, create new user and its conversations
-      if (!document || !document.exists) {
-        // Create User
-        await db
-          .collection("Users")
-          .doc(this.$store.state.user.username)
-          .set({ UserID: this.$store.state.username }, { merge: true });
-
-        // Create conversations collection
-        await db
-          .collection("Users")
-          .doc(this.$store.state.user.username)
-          .collection("Conversations")
-          .doc()
-          .set({ created: new Date().getTime() });
-
-        //TODO: Delete Dummy Document
-      }
-
-      // Get latest conversation ID
-      const snapshot = await db
-        .collection("Users")
-        .doc(this.$store.state.user.username)
-        .collection("Conversations")
-        .orderBy("created", "desc")
-        .limit(1)
-        .get();
-      snapshot.forEach((doc) => {
-        this.conversation_id = doc.id;
-      });
-
-      // Get all messages from Database and display on screen
-      db.collection("Conversations")
-        .doc(this.conversation_id)
-        .collection("Messages")
-        .orderBy("time", "asc")
-        .onSnapshot((querySnapshot) => {
-          let allMessages = [];
-          querySnapshot.forEach((doc) => {
-            let curr_data = doc.data();
-            curr_data.time = this.convertTime(new Date().getTime());
-            allMessages.push(curr_data);
-            this.messages = allMessages;
-          });
-          // Auto Scroll to bottom
-          setTimeout(() => {
-            this.scrollToBottom();
-          }, 200);
-        });
-    },
-
     // Convert Time for displaying on screen
     convertTime(event_date) {
       let d = new Date(event_date);
@@ -285,10 +225,14 @@ export default {
                 .orderBy("time", "desc")
                 .limit(1)
                 .onSnapshot((message_snapshot) => {
-                  message_snapshot.forEach((message_document) => {
+                  message_snapshot.forEach(async (message_document) => {
                     let time = this.convertToDate(message_document.data().time);
+                    let user_list = await db
+                      .collection("Conversations")
+                      .doc(conversation_document.id)
+                      .get();
                     let temp = {
-                      author: message_document.data().author,
+                      author: this.get_user_list(user_list.data().Users),
                       message: message_document.data().message,
                       date: time,
                       convo_id: conversation_document.id,
@@ -330,14 +274,20 @@ export default {
                 .limit(1)
                 .get()
                 .then((message_snapshot) => {
-                  message_snapshot.forEach((message_document) => {
+                  message_snapshot.forEach(async (message_document) => {
                     let time = this.convertToDate(message_document.data().time);
+                    let user_list = await db
+                      .collection("Conversations")
+                      .doc(conversation_document.id)
+                      .get();
+
                     let temp = {
-                      author: message_document.data().author,
+                      author: this.get_user_list(user_list.data().Users),
                       message: message_document.data().message,
                       date: time,
                       convo_id: conversation_document.id,
                     };
+
                     // this.recentMessage.name = message_document.data().author;
                     // this.recentMessage.message = message_document.data().message;
                     // this.recentMessage.convo_id = conversation_document.id;
@@ -351,6 +301,21 @@ export default {
           // empty list = populate whole list
           // non-empty list = update/add changed entries
         });
+    },
+
+    get_user_list(users) {
+      console.log(users);
+      let return_string = "";
+      users.forEach((user) => {
+        if (user !== this.$store.state.user.username) {
+          if (return_string !== "") {
+            return_string += ", ";
+          }
+          return_string += user;
+        }
+      });
+      console.log(return_string);
+      return return_string;
     },
 
     // this function will get a specific conversation given an id
