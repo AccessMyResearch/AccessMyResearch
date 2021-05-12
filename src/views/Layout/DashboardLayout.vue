@@ -56,7 +56,7 @@
                 margin: auto;
               "
             >
-              Geralt
+              Horaldo
               <!-- TODO: pass in chat person's name variable here -->
             </p>
             <b-icon-x
@@ -99,7 +99,7 @@
                 margin: auto;
               "
             >
-              Geralt
+              KD
               <!-- TODO: pass in chat person's name variable here -->
             </p>
             <b-icon-x
@@ -308,25 +308,26 @@ export default {
       this.chatIsMinimized = false;
     },
 
-    async fetchSpecificConversation(convo_id) {
-      // if (!chatIsOpen && chatIsMinimized) break;
+    // this function will get a specific conversation given an id
+    async fetchSpecificConversation(conversation_id) {
       // Get all messages from Database and display on screen
+      this.conversation_id = conversation_id;
       db.collection("Conversations")
-        .doc(convo_id)
+        .doc(conversation_id)
         .collection("Messages")
         .orderBy("time", "asc")
         .onSnapshot((querySnapshot) => {
           let allMessages = [];
           querySnapshot.forEach((doc) => {
             let curr_data = doc.data();
-            curr_data.time = this.convertTime(curr_data.time);
+            curr_data.time = this.convertTime(new Date().getTime());
             allMessages.push(curr_data);
             this.messages = allMessages;
           });
           // Auto Scroll to bottom
-          // setTimeout(() => {
-          //   this.scrollToBottom();
-          // }, 200);
+          setTimeout(() => {
+            this.scrollToBottom();
+          }, 200);
         });
     },
     convertTime(event_date) {

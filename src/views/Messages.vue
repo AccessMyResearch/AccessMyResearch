@@ -154,6 +154,8 @@ export default {
       box.scrollTop = box.scrollHeight;
     },
     saveMessage() {
+      // save a message in the database with the current message and username and time
+      // then, update the conversation timestamp for all users that belong to this conversation
       db.collection("Conversations")
         .doc(this.conversation_id)
         .collection("Messages")
@@ -170,20 +172,21 @@ export default {
     // Convert Time for displaying on screen
     convertTime(event_date) {
       let d = new Date(event_date);
-      // let timeCorrection = d.getTimezoneOffset() - event_timezone_offset;
-      // d.setMinutes(d.getMinutes() + timeCorrection);
       return (
         `${d.getMonth()}-${d.getDate()}-${d.getFullYear()} ` +
         `${d.getHours()}:${(d.getMinutes() < 10 ? "0" : "") + d.getMinutes()}`
       );
     },
 
+    // this function will update the conversation timestamp for every user in a given conversation
     async updateConversationTimestamp(conversation_id) {
+      // get the conversation object given a certain conversation ID
       let conversation_object = await db
         .collection("Conversations")
         .doc(conversation_id)
         .get();
 
+      // loop through the Users array stored in the conversation object and update the time of the given conversation
       conversation_object.data().Users.forEach((user) => {
         db.collection("Users")
           .doc(user)
@@ -191,16 +194,6 @@ export default {
           .doc(conversation_id)
           .set({ created: new Date().getTime() }, { merge: true });
       });
-
-      // await db.collection("Users").onSnapshot((snapshot) => {
-      //   snapshot.forEach((user) => {
-      //     user.collection("Conversations").
-      //   }
-      // });
-
-      //   .doc(this.$store.state.user.username)
-      //   .collection("Conversations")
-      //   .orderBy("created", "desc")
     },
     // this function gets all conversations from a user and orders them from newest to oldest
     async fetchRecentMessages() {
@@ -210,101 +203,100 @@ export default {
 
       // Get latest conversation ID
       const recentConversations = [];
+
       await db
-        .collection("Users")
-        .doc(this.$store.state.user.username)
+        .collection("Users") // enter User collection
+        .doc(this.$store.state.user.username) // at current logged in user's conversations
         .collection("Conversations")
-        .orderBy("created", "desc")
+        .orderBy("created", "desc") // sort earliest to latest conversation ID
         .onSnapshot(async (conversation_snapshot) => {
+          // this if statement checks for whether or not the list already is populated
+          // if so, only check to update the list
+          // else populate the entire list
           if (this.column_users.length != 0) {
             conversation_snapshot.forEach(async (conversation_document) => {
+              // loop through sorted conversations
               await db
-                .collection("Conversations")
-                .doc(conversation_document.id)
+                .collection("Conversations") // enter Conversation collection
+                .doc(conversation_document.id) // pull specific conversation's messages
                 .collection("Messages")
-                .orderBy("time", "desc")
-                .limit(1)
+                .orderBy("time", "desc") // sort earliest to latest message
+                .limit(1) // limit only the first message since we are populating the preview message tab
                 .onSnapshot((message_snapshot) => {
                   message_snapshot.forEach(async (message_document) => {
+                    // formatting data correctly
                     let time = this.convertToDate(message_document.data().time);
                     let user_list = await db
                       .collection("Conversations")
                       .doc(conversation_document.id)
                       .get();
+                    // storing data in custom object
                     let temp = {
                       author: this.get_user_list(user_list.data().Users),
                       message: message_document.data().message,
                       date: time,
                       convo_id: conversation_document.id,
                     };
-                    // this.recentMessage.name = message_document.data().author;
-                    // this.recentMessage.message = message_document.data().message;
-                    // this.recentMessage.convo_id = conversation_document.id;
-                    // console.log(this.popupUsers);
 
-                    // returns -1 if not in index -> either edited record or completely new
+                    // default index to -1, look for matching convo_id with changed message (ie updated entry)
+                    // store that index if there
+                    let index = -1;
+                    this.column_users.forEach((user) => {
+                      if (
+                        temp.convo_id === user.convo_id &&
+                        temp.message !== user.message
+                      ) {
+                        index = this.column_users.indexOf(user);
+                      }
+                    });
 
-                    let index = this.column_users.indexOf(temp);
-                    console.log(temp);
-                    console.log(index);
-                    if (index == -1) {
-                      this.column_users.forEach((user) => {
-                        console.log(user);
-                        console.log(temp);
-                        if (user.convo_id === temp.convo_id) {
-                          this.column_users.splice(
-                            this.column_users.indexOf(user),
-                            1,
-                            temp
-                          );
-                        }
-                      });
-                      // this.column_users[index] = temp;
+                    // if index >= 0 meaning that there is an updated entry at postition index
+                    if (index >= 0) {
+                      // remove the out of date entry from the array
+                      this.column_users.splice(index, 1);
+
+                      // Insert the updated entry to the front of the array
+                      this.column_users.unshift(temp);
                     }
                   });
                 });
             });
           } else {
             conversation_snapshot.forEach(async (conversation_document) => {
+              // loop through sorted conversations
               await db
-                .collection("Conversations")
-                .doc(conversation_document.id)
+                .collection("Conversations") // enter Conversation collection
+                .doc(conversation_document.id) // pull specific conversation's messages
                 .collection("Messages")
-                .orderBy("time", "desc")
-                .limit(1)
+                .orderBy("time", "desc") // sort earliest to latest message
+                .limit(1) // limit only the first message since we are populating the preview message tab
                 .get()
                 .then((message_snapshot) => {
+                  // loop through the single message
                   message_snapshot.forEach(async (message_document) => {
+                    // format data and input into custom object
                     let time = this.convertToDate(message_document.data().time);
                     let user_list = await db
                       .collection("Conversations")
                       .doc(conversation_document.id)
                       .get();
-
                     let temp = {
                       author: this.get_user_list(user_list.data().Users),
                       message: message_document.data().message,
                       date: time,
                       convo_id: conversation_document.id,
                     };
-
-                    // this.recentMessage.name = message_document.data().author;
-                    // this.recentMessage.message = message_document.data().message;
-                    // this.recentMessage.convo_id = conversation_document.id;
-                    // console.log(this.popupUsers);
+                    // store data into array
                     this.column_users.push(temp);
                   });
                 });
             });
           }
-
-          // empty list = populate whole list
-          // non-empty list = update/add changed entries
         });
     },
 
+    // formats a user array found in the conversation object into a string of the users concatenated with commas
     get_user_list(users) {
-      console.log(users);
       let return_string = "";
       users.forEach((user) => {
         if (user !== this.$store.state.user.username) {
@@ -314,7 +306,6 @@ export default {
           return_string += user;
         }
       });
-      console.log(return_string);
       return return_string;
     },
 
@@ -341,6 +332,7 @@ export default {
         });
     },
 
+    // convert a date to Month Day format (ie April 10)
     convertToDate(event_date) {
       const monthNames = [
         "January",
