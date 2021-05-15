@@ -3,11 +3,13 @@
     <notifications/> <!--TODO: Add some code back here for mobile navigation -->
     <!--<side-bar/>-->
     <div class="main-content">
-      <dashboard-navbar :type="$route.meta.navbarType" :chatIsOpen="chatIsOpen" v-on:update="chatToggle($event)"/>
+      <dashboard-navbar :type="$route.meta.navbarType" :chatIsOpen="chatIsOpen" v-on:update="chatToggle($event)" />
+      <img class="logoSmall" :src="logoSmall" style="width:50px; max-width:none; position:absolute; papdding:15px; left:20px; z-index:999;" alt="AccessMyResearch">
+
       <div @click="$sidebar.displaySidebar(false)">
         <fade-transition :duration="200" origin="center top" mode="out-in" >
           <!-- your content here -->
-          <router-view />
+          <router-view :chatIsOpen="chatIsOpen" v-on:update="chatToggle($event)"/>
           <!-- style="height:90vh; overflow-y:scroll;" -->
         </fade-transition>
 
@@ -126,7 +128,13 @@ export default {
     // DashboardContent,
     FadeTransition
   },
-
+  props: {
+    logoSmall: {
+      type: String,
+      default: '/img/brand/favicon.png',
+      description: 'AccessMyResearch Small Logo'
+    }
+  },
    data() {
     return {
       // signedIn: false,
@@ -177,6 +185,7 @@ export default {
 
     chatToggle(event){
         this.chatIsOpen = event;    // updates the event variable each time chat is opened or closed
+        console.log(this.chatIsOpen);
       },
       closeChat(){
         this.chatIsOpen = false;
@@ -308,8 +317,8 @@ export default {
     box-shadow: none;
     resize: none;
   }
-  .chat-message-group{
-  }
+  // .chat-message-group{
+  // }
   
   .chat-message-group .chat-thumb{
     float: left;
@@ -414,7 +423,16 @@ export default {
       transform: scale(1.0);
     }
   }
-  
+  /* EmojiBox */
+  .emojiBox{
+    width: 150px;
+    margin: 30px;
+  }
+  .emojiBox .box{
+    height: 100px;
+    padding: 4px;
+  }
+  /* */
   .card-header-title img{
     border-radius: 40px;
   }
@@ -423,5 +441,11 @@ export default {
   float: left;
   width: 11%;
   }
-</style>
 
+   @media screen and (min-width: 768px) {
+   .logoSmall{
+      display:none;
+   }
+
+ }
+</style>

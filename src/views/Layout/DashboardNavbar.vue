@@ -5,8 +5,11 @@
     :class="{ 'navbar-dark': type === 'default' }"
     
   >
-    <router-link class="navbar-brand" to="/">
-      <img :src="logo" width="70%" class="navbar-brand-img" alt="AccessMyResearch">
+    <router-link to="/">
+
+      <img class="logo" :src="logo" style="width:200px; max-width:none;" alt="AccessMyResearch">
+      <img class="logoSmall" :src="logoSmall" style="width:50px; max-width:none; position:absolute; top:150px; right:300px; z-index:999;" alt="AccessMyResearch">
+      
     </router-link>
     <!-- Navbar links -->
     <b-form
@@ -20,7 +23,7 @@
       
     >
       
-        <b-input-group class="input-group-alternative input-group-merge border-0 rounded-0 w-75" style="height:40px; position: relative; left: -62px; min-width: 15px">
+        <b-input-group class="input-group-alternative input-group-merge border-0 rounded-0 w-75" style="height:40px; position: relative; min-width: 15px;">
           
           <b-form-input
             id="search"
@@ -37,11 +40,12 @@
             
           >
           </b-form-input>
-          <b-input-group-append style="height:40px">
+          <!-- <b-input-group-append style="height:40px"> -->
             
-              <button class="bg-orange border-0" type="submit" style="border-radius:4px"><i class="fas fa-search text-white lrgIcon p-1 " /></button>
+              <button class="bg-orange border-0" type="submit" style="border-radius:4px; position:relative;"><i class="fas fa-search text-white lrgIcon p-1 " /></button>
             
-          </b-input-group-append>
+          <!-- </b-input-group-append> -->
+          
           <!-- autocomplete start -->
           <div
             v-if="filteredRecentSearches && modal"
@@ -60,6 +64,269 @@
           <!-- autocomplete start -->
           <!-- start here  -->
           <div class="SearchDropDown">
+            <!-- <b-dropdown variant="transparent" style="width:0%" right text="">
+              <div class="accordion" role="tablist">
+                <b-card no-body class="mb-1">
+                  <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button
+                      block
+                      v-b-toggle.SortByAccordion
+                      variant="primary"
+                      >Sort By</b-button
+                    >
+                  </b-card-header>
+                  <b-collapse
+                    id="SortByAccordion"
+                    accordion="my-accordion"
+                    role="tabpanel"
+                  >
+                    <b-card-body>
+                      <b-dropdown-group class="small">
+                        <b-form-select
+                          id="sortByFilter"
+                          @input="sort"
+                          v-model="selectedSortBy"
+                          :options="sortBy"
+                        ></b-form-select>
+                      </b-dropdown-group>
+                    </b-card-body>
+                  </b-collapse>
+                </b-card>
+              </div>
+
+              <div class="accordion" role="tablist">
+                <b-card no-body class="mb-1">
+                  <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button block v-b-toggle.areaAccordion variant="primary">Area</b-button>
+                  </b-card-header>
+                  <b-collapse
+                    id="areaAccordion"
+                    accordion="my-accordion"
+                    role="tabpanel"
+                  >
+                    <b-card-body>
+                      <b-dropdown-group class="small">
+                        <b-form-checkbox-group
+                          id="areaFilter"
+                          v-model="selectedFilters"
+                          @input="sort"
+                          :options="areas"
+                          name="area"
+                        ></b-form-checkbox-group>
+                      </b-dropdown-group>
+                    </b-card-body>
+                  </b-collapse>
+                </b-card>
+              </div>
+
+              <div class="accordion" role="tablist">
+                <b-card no-body class="mb-1">
+                  <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button
+                      block
+                      v-b-toggle.expertiseAccordion
+                      variant="primary"
+                      >Expertise</b-button
+                    >
+                  </b-card-header>
+                  <b-collapse
+                    id="expertiseAccordion"
+                    accordion="my-accordion"
+                    role="tabpanel"
+                  >
+                    <b-card-body>
+                      <b-dropdown-group class="small">
+                        <b-form-checkbox-group
+                          id="expertiseFilter"
+                          v-model="selectedFilters"
+                          :options="expertise"
+                          name="expertise"
+                        ></b-form-checkbox-group>
+                      </b-dropdown-group>
+                    </b-card-body>
+                  </b-collapse>
+                </b-card>
+              </div>
+
+              <div class="accordion" role="tablist">
+                <b-card no-body class="mb-1">
+                  <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button
+                      block
+                      v-b-toggle.accessibilityAccordion
+                      variant="primary"
+                      >Accessibility</b-button
+                    >
+                  </b-card-header>
+                  <b-collapse
+                    id="accessibilityAccordion"
+                    accordion="my-accordion"
+                    role="tabpanel"
+                  >
+                    <b-card-body>
+                      <b-dropdown-group class="small">
+                        <b-form-group>
+                        <b-form-checkbox-group 
+                          style="column-count: 2;"
+                          id="accessibilityFilter"
+                          v-model="selectedFilters"
+                          :options="accessibilityOptions"
+                          name="acccessibility"
+                        ></b-form-checkbox-group>
+                        </b-form-group>
+                      </b-dropdown-group>
+                    </b-card-body>
+                  </b-collapse>
+                </b-card>
+              </div>
+
+              <div class="accordion" role="tablist">
+                <b-card no-body class="mb-1">
+                  <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button block v-b-toggle.yearAccordion variant="primary">Year</b-button>
+                  </b-card-header>
+                  <b-collapse
+                    id="yearAccordion"
+                    accordion="my-accordion"
+                    role="tabpanel"
+                  >
+                    <b-card-body>
+                      <b-dropdown-group class="small">
+                        <br/>
+                        <vue-slider
+                          v-model="yearRange"
+                          :min="1950"
+                          :max="2020"
+                          :enable-cross="false"
+                          :tooltip="'always'"
+                        ></vue-slider>
+                        <br/>
+                        <div>Years Selected: {{ yearRange }}</div>
+                      </b-dropdown-group>
+                    </b-card-body>
+                  </b-collapse>
+                </b-card>
+              </div>
+
+              <div class="accordion" role="tablist">
+                <b-card no-body class="mb-1">
+                  <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button block v-b-toggle.typeAccordion variant="primary">Type</b-button>
+                  </b-card-header>
+                  <b-collapse
+                    id="typeAccordion"
+                    accordion="my-accordion"
+                    role="tabpanel"
+                  >
+                    <b-card-body>
+                      <b-dropdown-group class="small">
+                        <b-form-checkbox-group
+                          style="column-count: 2;"
+                          id="typeFilter"
+                          v-model="selectedFilters"
+                          :options="types"
+                          name="type"
+                        ></b-form-checkbox-group>
+                      </b-dropdown-group>
+                    </b-card-body>
+                  </b-collapse>
+                </b-card>
+              </div>
+
+              <div class="accordion" role="tablist">
+                <b-card no-body class="mb-1">
+                  <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button
+                      block
+                      v-b-toggle.databaseAccordion
+                      variant="primary"
+                      >Database</b-button
+                    >
+                  </b-card-header>
+                  <b-collapse
+                    id="databaseAccordion"
+                    accordion="my-accordion"
+                    role="tabpanel"
+                  >
+                    <b-card-body>
+                      <b-dropdown-group class="small">
+                        <b-form-checkbox-group
+                          style="column-count: 2;"
+                          id="databaseFilter"
+                          v-model="selectedFilters"
+                          :options="databases"
+                          name="database"
+                        ></b-form-checkbox-group>
+                      </b-dropdown-group>
+                    </b-card-body>
+                  </b-collapse>
+                </b-card>
+              </div>
+
+              <div class="accordion" role="tablist">
+
+                <b-card no-body class="mb-1">
+                  <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button
+                      block
+                      v-b-toggle.journalAccordion
+                      variant="primary"
+                      >Journals</b-button
+                    >
+                  </b-card-header>
+                  <b-collapse
+                    id="journalAccordion"
+                    accordion="my-accordion"
+                    role="tabpanel"
+                  >
+                    <b-card-body>
+                      <b-dropdown-group class="small">
+                        <b-form-checkbox-group
+                          id="journalFilter"
+                          v-model="selectedFilters"
+                          @input="sort"
+                          :options="journals"
+                          name="journals"
+                        ></b-form-checkbox-group>
+                      </b-dropdown-group>
+                    </b-card-body>
+                  </b-collapse>
+                </b-card>
+              </div>
+
+                <div class="accordion" role="tablist">
+                <b-card no-body class="mb-1">
+                  <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button
+                      block
+                      v-b-toggle.defaultAccordion
+                      variant="primary"
+                      >Default</b-button
+                    >
+                  </b-card-header>
+                  <b-collapse
+                    id="defaultAccordion"
+                    accordion="my-accordion"
+                    role="tabpanel"
+                  >
+                    <b-card-body v-if="defaultFilterCheckbox">
+                      <b-dropdown-group class="small">
+                        <div>{{ selectedFilters }}</div>
+                      </b-dropdown-group>
+                    </b-card-body>
+                  </b-collapse>
+                </b-card>
+              </div>
+
+              TODO: figure out why click isn't working first 3 times 
+              <input
+                type="checkbox"
+                v-model="defaultFilterCheckbox"
+                @click="defaultFilterCheckboxChecked()"
+              />
+              Save current filters as default
+              <b-button class="btn float-right" variant="primary">Search</b-button>
+            </b-dropdown> -->
           </div>
         </b-input-group>
       
@@ -79,21 +346,22 @@
         <!-- v-bind binds a style element based on a condition, so here we use the iconColor styling only if the website reroutes to the Uploads page -->
           <i v-bind:class="{iconColor: researchWindowIsOpen == true}" class="fas fa-plus fa-lg TopIcon"/>     
       </a>
+
+      <!-- Sets the outer overlay as gray and places the Upload page div on top of the overlay -->
       <div id="outer-overlay" class="overlay" @click="overlay" v-if="researchWindowIsOpen" >
           <Upload :researchWindowIsOpen="researchWindowIsOpen" v-on:update="researchWindowToggle($event)" class="research-window"/>
       </div>
       <a
           slot="title-container"
           class="nav-link nav-link-icon nav-item"
-          href="#"
+          href="https://www.paypal.com/donate/?hosted_button_id=A2S4AUZ8RTDYS"
           role="button"
-          @click="toDonate"
+          target="_blank"
           aria-expanded="false"
           v-if="signedIn"
         >
-          <i  v-bind:class="{iconColor: this.$route.path == '/donate' }" class="fas fa-donate fa-lg TopIcon"/>
+          <i  v-bind:class="{iconColor: this.$route.path == '/donate'}" class="fas fa-donate fa-lg TopIcon"/>
       </a>
-
       <a
           slot="title-container"
           class="nav-link nav-link-icon nav-item"
@@ -143,6 +411,7 @@
           <!-- <i v-bind:class="{iconColor: (this.$route.path == '/notifications') || (@click="toggleNotificationDropDown") }" class="fas fa-bell fa-lg TopIcon"/> -->
           <i v-bind:class="{iconColor: (this.$route.path == '/notifications')}" class="fas fa-bell fa-lg TopIcon"/>
         </a>
+        
         <div v-for="user in users" :key="user.id">
           <a class="dropdown-item" @click="reroute(user)" v-if="signedIn">
             <i class="fas fa-user-friends"></i>
@@ -166,7 +435,7 @@
           <i class="fas fa-clock"/>
           <span>All Notifications </span>
         </router-link>
-        <b-alert show variant="light" class="text-dark" v-if="!signedIn">
+        <b-alert show variant="default" class="text-dark" v-if="!signedIn">
           <i class="fas fa-exclamation-circle"/>
           In order to access this feature, you must login. You can login
           <router-link class="font-weight-bolder text-dark" to="/login">here.</router-link>
@@ -183,7 +452,7 @@
           role="button"
           aria-haspopup="true"
           aria-expanded="false"
-          @click="toggleMessageDropDown"
+          @click="redirect"
         >
           <i v-bind:class="{iconColor: (this.$route.path == '/messages')}" class="fas fa-comment-dots fa-lg TopIcon"/>
         </a>
@@ -219,11 +488,13 @@
         </div>       
 
         <div class="dropdown-divider"/>
+        
         <router-link to="/messages" class="dropdown-item" v-if="signedIn">
           <i class="fas fa-clock"/>
           <span>All Messages </span>
         </router-link>
-        <b-alert show variant="light" class="text-dark" v-if="!signedIn">
+
+        <b-alert show variant="default" class="text-dark" v-if="!signedIn">
           <i class="fas fa-exclamation-circle fa-lg"/>
           In order to access this feature, you must login. You can login
           <router-link class="font-weight-bolder text-black" to="/login">here.</router-link>
@@ -260,13 +531,12 @@
         v-if="signedIn"
       >
         <a href="#" class="nav-link pr-0" @click.prevent slot="title-container">
-          <b-media no-body class="align-items-center">
+          <b-media no-body class="align-items-center" v-bind:class="{profileBorder: (this.$route.path == '/profile')}">
             <span class="avatar avatar-sm rounded-circle">
               <img alt="Image placeholder" src="/img/theme/team-4.jpg" />
               <!--TODO: Show profile pic-->
             </span>
           </b-media>
-          <!-- </b-media> -->
         </a>
 
         <template>
@@ -311,7 +581,7 @@ import axios from "axios";
 import { API, graphqlOperation } from 'aws-amplify';
 import * as queries from '../../graphql/queries.js';
 import { listFollows, listRequestss } from '../../graphql/queries.js';
-import Upload from "./../Upload.vue";
+import Upload from "./../Upload.vue";  // imports the Upload.vue page into the current file
 
 import Login from "./../Pages/Login.vue"
 import About from "./../About.vue"
@@ -330,9 +600,16 @@ export default {
   props: {
     logo: {
       type: String,
-      default: '/img/brand/orangeandwhite.png',
+      default: '/img/brand/orange.png',
       description: 'AccessMyResearch Logo'
     },
+
+    logoSmall: {
+      type: String,
+      default: '/img/brand/favicon.png',
+      description: 'AccessMyResearch Small Logo'
+    },
+
     type: {
       type: String,
       default: "default", // default|light
@@ -629,11 +906,12 @@ export default {
 
 
      togglePopupChat() {
-      //  console.log(this.chatIsOpen);
       this.$emit('update', !this.chatIsOpen); // $emit notifies the parent component that a variable's value changed
     },
+
     toggleResearchWindow(){
-      this.researchWindowIsOpen = !this.researchWindowIsOpen;
+      // Dashboard Navbar  is the parent class in which the researchWindow variable is flipped
+      this.researchWindowIsOpen = !this.researchWindowIsOpen; 
     },
 
     toggleloginWindow(){
@@ -654,7 +932,7 @@ export default {
 
     overlay: function(event) {
     	if(event.target == event.currentTarget)
-        this.toggleResearchWindow();
+        this.toggleResearchWindow(); // toggles the research window when clicked anywhere on the overlay 
     },    
   
     researchWindowToggle(event){
@@ -677,11 +955,6 @@ export default {
     closeDropDown() {
       this.activeNotifications = false;
     },
-
-    closeMessageDropDown(){
-      this.activeMessages = false;
-    },
-
     signOut() {
       /*If the user is signed in, the Auth.signOut 
       function will sign the user out of the account and redirect to the login page. 
@@ -812,37 +1085,50 @@ export default {
       toLogin(){
         this.$router('login');
 
-      },
-      toDonate() {
-        this.$router.push('donate');
-        // this.setActiveIcon('donate'); 
-      },
-      toProject() {
-        this.$router.push('project');
-      },
-      toCollections() {
-        this.$router.push('collections');
-        
-      },
-      toNetwork() {
-        this.$router.push('network-list');
-      },
-      toMessages() {
-        this.$router.push('messages');
-      },
-      reroute(user) {
-        //on click of follow notification, redirects to follows page
-        if(user.message == "followed you!")
-        {
-          this.$router.push('follows');
-        }
-        else
-        {
-          //on click of wants to add you as a connection notification, redirects to requests page
-            this.$router.push('requests');
-        }
+      if (localStorage.defaultFilterCheckbox == "true") {
+        localStorage.clear();
+        return;
       }
-    }
+    },
+    getReminders() {
+      this.reminders = JSON.parse(localStorage.reminders);
+    },
+    // setActiveIcon(string){
+    //   this.activeIcon = string;
+    //   console.log(this.activeIcon);
+    // },
+    toUpload() {
+      this.$router.push('upload');
+      // this.setActiveIcon('upload');
+    },
+    toDonate() {
+      this.$router.push('donate');
+    },
+    toProject() {
+      this.$router.push('project');
+    },
+    toCollections() {
+      this.$router.push('collections');
+      
+    },
+    toNetwork() {
+      this.$router.push('network-list');
+    },
+    toMessages() {
+      this.$router.push('messages');
+    },
+    reroute(user) {
+      //on click of follow notification, redirects to follows page
+      if(user.message == "followed you!")
+      {
+        this.$router.push('follows');
+      }
+      else
+      {
+        //on click of wants to add you as a connection notification, redirects to requests page
+          this.$router.push('requests');
+      }
+    }}
   }
 }
 </script>
@@ -874,9 +1160,11 @@ img{ max-width:100%;}
 .chat_ib h5{ font-size:15px; color:#464646; margin:0 0 8px 0;}
 .chat_ib h5 span{ font-size:13px; float:right;}
 .chat_ib p{ font-size:14px; color:#989898; margin:auto}
+
 .chat_img {
   float: left;
   width: 11%;
+  
 }
 
 .chat_ib {
@@ -910,26 +1198,25 @@ img{ max-width:100%;}
     z-index:999; */
   }
 
-.login-window {
-    margin:auto;
-    /* position: absolute;
-    z-index:999; */
-  }
-  .overlay2 {
-  position:fixed;
-  top:0;
-  bottom:0;
-  right:0;
-  left:0;
-  display:flex;
-  align-items: center;
-  /* height:100vh; */
-  /* width:100%; */
-  background-color:rgba(128, 128, 128, 0.5);
-}
+ @media screen and (max-width: 768px) {
+   .logo{
+      display:none;
+   }
 
+ }
+
+ @media screen and (min-width: 768px) {
+   .logoSmall{
+      display:none;
+   }
+
+ }
   
 .iconColor{
   color: #f78626;
 }
+.profileBorder {
+  border: 4px solid #f78626;
+  border-radius: 50%;
+} 
 </style>
