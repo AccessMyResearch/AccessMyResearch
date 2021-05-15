@@ -54,6 +54,18 @@ const routes = [
         name: 'Upload Research Window',
         component: () => import('../views/Upload.vue')
       },
+
+      {
+        path: 'notifications',
+        name: 'notifications',
+        component: () => import('../views/Notifications.vue')
+      },
+
+      {
+        path: 'messages',
+        name: 'messages',
+        component: () => import('../views/Messages.vue')
+      },
     ]
   },
 
@@ -159,7 +171,7 @@ const routes = [
       {
         path: '/notifications',
         name: 'notifications',
-        component: () => import('../views/Updates.vue')
+        component: () => import('../views/Notifications.vue')
       },
       {
         path: '/requests',
@@ -186,6 +198,11 @@ const routes = [
         name: 'Upload',
         component: () => import('../views/Upload.vue')
       },
+      {
+        path: '/messages',
+        name: 'Messages',
+        component: () => import('../views/Messages.vue')
+      }
     ]
   },
 
