@@ -15,7 +15,7 @@
         </div>
       </div> -->
    
-
+    <!-- Setting up the notifications filter panel section -->
     <div class="NotificationsFilterPanel">
     <div class="accordion" role="tablist">
         <b-card no-body class="filterPanelCard" style="max-height:70px;">
@@ -63,6 +63,7 @@
     </div>
 
     <!-- network body -->
+    <!-- Base templates for the page -->
         <b-card no-body class="lightTable-card" style="margin-right:0; height: 83vh; overflow-y: hidden;">
 
           <!-- <b-card no-body class="messageCard" id="ConnectionsContent" v-if="step==0" style="height: 80px; margin-top: 1%; outline: 0; border-width: 0 0 1px; border-radius: 0"> -->
@@ -235,5 +236,3 @@ img{max-width:100%; max-height: 100%;}
   color:#4577B8; 
   margin-top: -10px;
 }
-
-</style>
