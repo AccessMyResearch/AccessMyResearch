@@ -120,13 +120,13 @@
                         </span> -->
                     </b-media>
                     <span class="button-options border-0" style="padding-left: 10px; position: relative; top:-5px; margin-bottom: -20px;">
-                        <button title="View" :disabled="!downloadAvailable(row)" :class="{selectedButton: row === currSelectedArticle && showPDFViewer}"></button>
-                        <button title="Download" :disabled="true" class="fas fa-file-download fa-lg button-options"></button>
-                        <button title="Links" class="fas fa-external-link-alt fa-lg button-options"></button>
-                        <button @click="onGetEmail(row)" title="E-Mail" class="fas fa-envelope fa-lg button-options"/>
-                        <button title="Collections" v-b-modal.modal class="fas fa-layer-group fa-lg button-options"></button>
-                        <button title="Cite" class="fas fa-quote-left fa-lg button-options"></button>
-<!--                                :class="[!downloadAvailable(row) ? 'disabled-button': 'enabled-button']"-->
+                       <button @click="onPdfViewClick(row);" title="View" :disabled="!downloadAvailable(row)" :class="{selectedButton: row === currSelectedArticle && showPDFViewer}"></button>
+                       <button title="Download" :disabled="true" class="fas fa-file-download fa-lg button-options"></button>
+                       <button title="Links" class="fas fa-external-link-alt fa-lg button-options"></button>
+                       <button @click="onGetEmail(row);" title="E-Mail" class="fas fa-envelope fa-lg button-options"/>
+                       <button title="Collections" v-b-modal.modal class="fas fa-layer-group fa-lg button-options"></button>
+                       <button title="Cite" class="fas fa-quote-left fa-lg button-options"></button>
+<!--                   :class="[!downloadAvailable(row) ? 'disabled-button': 'enabled-button']"-->
                      </span>
               </template>
             </el-table-column>
