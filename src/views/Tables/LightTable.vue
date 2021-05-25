@@ -154,6 +154,7 @@ import pdf from "vue-pdf";
 import VClamp from 'vue-clamp';
 import * as esRequestor from "@/util/elasticsearch-requestor";
 import axios from "axios";
+import { messaging } from 'firebase';
 
 export default {
   name: "light-table",
@@ -314,15 +315,11 @@ export default {
         if (selectedArticle.doi === undefined) {
           alert("Could not find a doi for the article")
         }
-
-
         this.searchStatus = 'Getting email from publisher...'
         axios.get(this.$endpoints.aspnet + 'doi/' + selectedArticle.doi)
             .then(function (response) {
               if (response) {
                 if(response.status === 200){
-                  console.log("response: ");
-                  console.log(response);
                   window.open("mailto:" + response.data);
                 }
                 else {
