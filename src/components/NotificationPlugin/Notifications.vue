@@ -117,9 +117,9 @@
 
 
 <script>
-import Messages from  './Messages.vue';
-import Updates from  './Updates.vue';
-import Requests from  './Requests.vue';
+import Messages from  '../../views/Messages.vue'
+import Updates from  '../../views/Updates.vue';
+import Requests from  '../../views/Requests.vue';
 
 export default {
   components:{

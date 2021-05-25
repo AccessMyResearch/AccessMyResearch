@@ -16,9 +16,9 @@
   </div>
 </template>
 <script>
-import Messages from  './Messages.vue';
-import Updates from  './Updates.vue';
-import Requests from  './Requests.vue';
+import Messages from './Messages'
+import Updates from './Updates.vue';
+import Requests from './Requests.vue';
 
 export default {
   components:{
