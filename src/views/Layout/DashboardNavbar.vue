@@ -863,7 +863,7 @@ b-form-input::placeholder{
 } /*TODO: Get variables from assets/custom/_variables.scss instead*/
 .TopIcon:hover {
   color: #F78626;
-}<<<<<<< Sprint7
+}
 img{ max-width:100%;}
 
 
