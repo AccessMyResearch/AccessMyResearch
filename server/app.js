@@ -76,10 +76,11 @@ const s3 = new AWS.S3({
   //secretAccessKey: "<aws_secret_access_key>", // aws secret access key here
   useAccelerateEndpoint: true
 });
+//const all_works = [];
 
 // api endpoint to get signed url
 app.get("/get-signed-url", async (req, res) => {
-  const { scope, type, count, title} = req.query
+  const { scope, type, count, title, abstract} = req.query
 
   if (!scope) {
     res.status(400).json({
@@ -102,6 +103,14 @@ app.get("/get-signed-url", async (req, res) => {
     return
   }
 
+  if(!abstract) {
+    res.status(400).json({
+      message: "Abstract of work required"
+    })
+    return
+  }
+
+
   const parsedCount = isNumeric(count) ? parseInt(count) : 1
 
   const parsedType = decodeURIComponent(`${type}`)
@@ -112,7 +121,7 @@ app.get("/get-signed-url", async (req, res) => {
   const md = `${title}`
 
   const params = {
-    Bucket: process.env.AWS_S3_BUCKET || "amrtestdocs",
+    Bucket: "amruserdocs",
     // expiry time
     Expires: 60*60, // 60 minutes
     ACL: "public-read",
@@ -124,11 +133,16 @@ app.get("/get-signed-url", async (req, res) => {
     for (let i = 0; i < parsedCount; i++) {
       const key = `${scope}/${uuidv4()}.${extension}`
       const md = `${title}`
+      //ISSUE: ABSTRACT CANNOT BE LONGER THAN 192 CHARACTERS OR 28 WORDS
+      const ab = `${abstract}`
+      //const auth = `${authors}`
       const finalParams = {
         ...params,
         Key: key,
         Metadata: {
           "Title": md,
+          "Abstract": ab
+          //"Authors": auth,
         }
       }
       const signedUrl = await s3.getSignedUrlPromise("putObject", finalParams)
@@ -167,6 +181,89 @@ app.get("/get-signed-url", async (req, res) => {
   //   }
   // });
 });
+
+//gets all the objects and puts it in an array
+app.get("/files", async(req,res) => {
+
+  const params = {
+    Bucket: "amruserdocs",
+    Delimiter: '/',
+    Prefix: 'krishnab/'
+  };
+  try{
+    const data = await s3.listObjects(params).promise();
+    let all_works = []
+    let work = []
+    
+    if(data) {
+      for (let index = 1; index < data['Contents'].length; index++) {
+        all_works.push(data['Contents'][index]['Key'])
+        //console.log(data['Contents'][index]['Key'])        
+      }
+    }
+
+    for (i = 0; i < all_works.length; i++) {
+      //console.log(i + ". " + all_works[i]);
+      var keyval = all_works[i].toString()
+      //console.log(keyval);
+      var params2 = {
+        Bucket: "amruserdocs",
+        Key: keyval,
+      }
+
+      var file = await s3.getObject(params2).promise();
+      //console.log(file.Metadata['title'])
+      //console.log(file.Metadata['abstract'])
+
+      var title = file.Metadata['title'];
+      var abstract = file.Metadata['abstract'];
+
+      work.push([title,abstract]);
+    }
+    console.log("title: " + work[0][0]);
+    console.log("abstract: " + work[0][1]);
+    res.json({data: {work}})
+    return work
+  } catch(e) {
+    console.log(e)
+    return
+  }
+});
+
+app.get("/data", async(req,res) => {
+
+  //FIX: THE KEY HAS TO GO THROUGH ALL THE OBJECTS IN all_works
+  //console.log(all_works)
+
+  const params = {
+    Bucket: "amruserdocs",
+    Key: "krishnab/e571d8fc-d9ec-4681-8d08-b9712ad57d9a.pdf",
+  };
+
+  try{
+    let works = []
+    const file = await s3
+      .getObject(params)
+      .promise();
+    //console.log(file.Body.toString('utf-8'));
+    if(file) {
+      works.push(file.Metadata['title']);
+      works.push(file.Metadata['abstract']);
+    }
+    console.log(works);
+    res.json({ data: { works } })
+    return works
+  }
+  catch(e) {
+    //res.status(400).json({message: `Bad request: ${e}`})
+    console.log(e)
+    return
+  }
+
+});
+
+
+
 
 
 app.listen(port, () => console.log(`Server listening on port ${port}!`));
