@@ -117,9 +117,15 @@
 
 
 <script>
+<<<<<<< HEAD
 import Messages from  '../../views/Messages.vue'
 import Updates from  '../../views/Updates.vue';
 import Requests from  '../../views/Requests.vue';
+=======
+import Messages from  './Messages.vue';
+import Updates from  './Updates.vue';
+import Requests from  './Requests.vue';
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
 
 export default {
   components:{

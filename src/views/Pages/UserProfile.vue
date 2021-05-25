@@ -434,6 +434,10 @@ export default {
 
       this.user.roles = AuthHelperRoles.getUserRoles(user);
     },
+<<<<<<< HEAD
+=======
+
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
     // openResearch(){
         
     //     document.getElementById('Research');
@@ -536,6 +540,10 @@ img{max-width:100%; max-height: 100%;}
   font-size: 24px;
   font-weight: bold;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
 .addItem{
     float: right; 
     padding: 2px 0px 0px 2px;

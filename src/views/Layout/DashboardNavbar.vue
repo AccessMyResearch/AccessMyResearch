@@ -351,6 +351,10 @@
       <div id="outer-overlay" class="overlay" @click="overlay" v-if="researchWindowIsOpen" >
           <Upload :researchWindowIsOpen="researchWindowIsOpen" v-on:update="researchWindowToggle($event)" class="research-window"/>
       </div>
+<<<<<<< HEAD
+=======
+     
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
       <a
           slot="title-container"
           class="nav-link nav-link-icon nav-item"
@@ -582,18 +586,25 @@ import { API, graphqlOperation } from 'aws-amplify';
 import * as queries from '../../graphql/queries.js';
 import { listFollows, listRequestss } from '../../graphql/queries.js';
 import Upload from "./../Upload.vue";  // imports the Upload.vue page into the current file
+<<<<<<< HEAD
 
 import Login from "./../Pages/Login.vue"
 import About from "./../About.vue"
+=======
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
 
 export default {
   components: {
     //CollapseTransition,
     BaseNav,
+<<<<<<< HEAD
     Upload,
     Login,
     About,
     Upload,
+=======
+    Upload
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
     //Modal,
     //VueSlider
   },
@@ -623,6 +634,7 @@ export default {
       description:
         "Whether the popup chatboxes are open or closed",
     }, 
+<<<<<<< HEAD
     
   computed: {
 
@@ -633,6 +645,14 @@ export default {
     //      }
     //      return "#800080"; // the dark color of your choice.
     //   }, 
+=======
+
+   
+  },
+  computed: {
+
+   
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
 
     routeName() {
       const { name } = this.$route;
@@ -681,9 +701,12 @@ export default {
       /*results_data_actual: [],
       results_data: [],*/
       researchWindowIsOpen: false,
+<<<<<<< HEAD
 
       loginWindowIsOpen: false,
 
+=======
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
       // chatIsMinimized: false
       yearRange: [1950, 2020],
       selectedFilters: [],
@@ -880,6 +903,9 @@ export default {
     showModal: function(){
       this.show = true;
     },
+    showModal: function(){
+      this.show = true;
+    },
     async getSearchHistory() {
       let history = await axios.get("http://localhost:3001/search");
       this.recentSearches = Object.entries(history.data).reverse().slice(0, 5);
@@ -891,6 +917,7 @@ export default {
       toggleNotificationDropDown(){
       //console.log('Reaches toggle method');
       this.activeNotifications = !this.activeNotifications;
+<<<<<<< HEAD
       },
 
 
@@ -898,13 +925,19 @@ export default {
       toggleMessageDropDown(){
         this.activeMessages = !this.activeMessages;
       },
+=======
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
       
       // this.setActiveIcon('notifications');
       //this.setActiveIcon = 'notifications';
       //console.log(this.setActiveIcon);
+<<<<<<< HEAD
 
 
 
+=======
+    },
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
      togglePopupChat() {
       this.$emit('update', !this.chatIsOpen); // $emit notifies the parent component that a variable's value changed
     },
@@ -913,6 +946,7 @@ export default {
       // Dashboard Navbar  is the parent class in which the researchWindow variable is flipped
       this.researchWindowIsOpen = !this.researchWindowIsOpen; 
     },
+<<<<<<< HEAD
 
     toggleloginWindow(){
       this.loginWindowIsOpen = !this.loginWindowIsOpen;
@@ -930,6 +964,8 @@ export default {
       }
     },
 
+=======
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
     overlay: function(event) {
     	if(event.target == event.currentTarget)
         this.toggleResearchWindow(); // toggles the research window when clicked anywhere on the overlay 
@@ -939,6 +975,7 @@ export default {
       console.log("Navbar" + event);
         this.researchWindowIsOpen = event;    // updates the event variable each time chat is opened or closed
       },
+<<<<<<< HEAD
 
      loginWindowToggle(event){
       console.log("Navbar" + event);
@@ -952,6 +989,9 @@ export default {
       this.activeMessages = false;
     },
      
+=======
+      
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
     closeDropDown() {
       this.activeNotifications = false;
     },
@@ -989,7 +1029,12 @@ export default {
       }
       this.users = this.$store.state.requests; //setting the current users array to the store's requests array
       const followList = await API.graphql(graphqlOperation(listFollows)); //returns a JSON of all the rows in the Follows table of DynamoDB
+<<<<<<< HEAD
       for(const [key, value] of Object.entries(followList.data.listFollows.items)) //for all items in the rows
+=======
+
+      for(const [key, value] of Object.entries(followList.data.lfouteristFollows.items)) //for all items in the rows
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
       {
         if(value.user != null && value.friend != null && value.friend.id == this.$store.state.user.username) //if the user id equals the current user
         {
@@ -1175,10 +1220,13 @@ img{ max-width:100%;}
 
 .chat_people{ overflow:hidden; clear:both;}
 
+<<<<<<< HEAD
 
 .chat_people{ overflow:hidden; clear:both;}
 
 
+=======
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
 .overlay {
   position:fixed;
   top:0;
@@ -1214,9 +1262,20 @@ img{ max-width:100%;}
   
 .iconColor{
   color: #f78626;
+<<<<<<< HEAD
 }
 .profileBorder {
   border: 4px solid #f78626;
   border-radius: 50%;
 } 
+=======
+}
+.profileBorder {
+  border: 4px solid #f78626;
+  border-radius: 50%;
+}
+/* router-link img[data-v-0001a5f9]{
+    max-width: none;
+} */
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
 </style>

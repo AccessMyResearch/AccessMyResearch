@@ -1,5 +1,11 @@
 <template>
+<<<<<<< HEAD
   <div class="SearchDropDown">
+=======
+<!-- <div style="overflow-y:scroll; height: 60rem;"> -->
+<div class="SearchDropDown">
+ 
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
     <div class="accordion" role="tablist">
         <!-- <div style="overflow-y:auto; height: 20rem;"> -->
         <b-card no-body class="filterPanelCard" style="max-height:70px;">
@@ -23,6 +29,7 @@
             <b-card-body style="max-width:220px">
             <b-form-group class="small slider">
                 <br/>
+<<<<<<< HEAD
                  <HistogramSlider
                   :min="Math.min.apply(Math, articleYears)"
                   :max="Math.max.apply(Math, articleYears)"
@@ -46,6 +53,18 @@
                   @change="onSliderChange"
                   ></HistogramSlider>
                 <button v-if="resetAvailable"  title="Reset" class="fas fa-redo fa-lg button-options border-0" @click="resetTimeFilter"/>
+=======
+                <div style="position: relative; z-index: 0;"> <!-- forces slider to gray out when any modal opens (upload research modal) -->
+                    <vue-range-slider 
+                    :bg-style="bgStyle" 
+                    :tooltip-style="tooltipStyle" 
+                    :process-style="processStyle" 
+                    v-model="yearRange"
+                    :min="1950"
+                    :max="2021"
+                    ></vue-range-slider>
+                 </div>
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
             </b-form-group>
             </b-card-body>
         </b-card>
@@ -275,11 +294,21 @@
           <b-card-body style="max-width:220px">
           </b-card-body>
         </b-collapse>
+<<<<<<< HEAD
       </b-card>
 
 
     </div>
   </div>
+=======
+        </b-card>
+    
+    <!-- </div>     -->
+    </div>
+<!-- </div> -->
+</div>
+
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
 </template>
 <script>
 import 'vue-range-component/dist/vue-range-slider.css'
@@ -578,8 +607,22 @@ export default {
     padding: 3px 0px 0px 4px;
 }
 
+<<<<<<< HEAD
 .collapseAccordion {
   column-count: 1;
+}
+
+.firstFilter{
+    background-color: #F78626;
+=======
+.accordion{
+    overflow-y: auto;
+    max-height: 50rem;
+}
+
+.collapseAccordion{
+    column-count: 1;
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
 }
 
 .firstFilter{
@@ -592,6 +635,7 @@ export default {
     box-shadow: 0 2px 3px #9b9d9e;
 }
 
+<<<<<<< HEAD
 
 .histSlider{
     left: 18px;
@@ -607,6 +651,8 @@ export default {
   padding: 10px 45px 10px 0px;
   color: #4577b8;
 }
+=======
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
 
 .button-options :hover {
   color: #f78626;

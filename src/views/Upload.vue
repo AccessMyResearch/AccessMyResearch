@@ -1,5 +1,8 @@
 <template>
+<<<<<<< HEAD
  
+=======
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
 
     <div class="research-modal" > 
         
@@ -8,6 +11,7 @@
             
             <div class="card text-black" >
                 
+<<<<<<< HEAD
                 <div class="col-lg mx-auto form p-0" style="border-radius: 4px; -webkit-box-shadow: 0 0 15px #9b9d9e;"> 
                     <b-icon-x icon = "type-bold" style="float:right; cursor: pointer; height:1.5rem; width:1.5rem; " @click="toggleResearchWindow"> </b-icon-x>
                     <div id="mainUpload">
@@ -16,6 +20,12 @@
                     <b-icon-x icon = "type-bold" style="float:right; cursor: pointer; height:1.5rem; width:1.5rem; " @click="toggleResearchWindow"> </b-icon-x>
                     <div id="mainUpload">
                         <div class="h1"> Add Research Material </div> 
+=======
+                <div class="col-lg mx-auto form p-0" style="border-radius: 4px; -webkit-box-shadow: 0 0 15px #9b9d9e; height: 1200px">
+                    <b-icon-x icon = "type-bold" style="float:right; cursor: pointer; height:1.5rem; width:1.5rem; " @click="toggleResearchWindow"> </b-icon-x>
+                    <div id="mainUpload">
+                        <div class="h2" style="text-align: center"> Add Research Material </div>
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
                         
                         <div class="form-group">
                             <label class="h2" for="title_of_publication">Title</label>
@@ -112,12 +122,15 @@
 import Multiselect from 'vue-multiselect';
 import upload from '@/util/upload';
 import calendar from '@/util/calendar';
+<<<<<<< HEAD
 
 //ADDED
 import axios from "axios";
 import { Auth } from 'aws-amplify';
 const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
 
+=======
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
 export default {
     components: { Multiselect },
 
@@ -185,7 +198,10 @@ export default {
     mounted: function(){
         var uploadElement = document.getElementById('drop-area');
         upload.init(uploadElement, this.files);
+<<<<<<< HEAD
         this.getUserData();
+=======
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
     },
     methods:{
         handleFiles: function(event){
@@ -227,6 +243,7 @@ export default {
                 this.files,
                 document.getElementById('progress-bar')
             );
+<<<<<<< HEAD
             */
 
            //ADDED BY:JPB170330
@@ -318,10 +335,15 @@ export default {
              }
         },
 
+=======
+        },
+
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
         toggleResearchWindow(){
             // this.researchWindowIsOpen = !this.researchWindowIsOpen;
             this.$emit('update', !this.researchWindowIsOpen);
              console.log(this.researchWindowIsOpen);
+<<<<<<< HEAD
         },
 
         getUserData() {
@@ -361,12 +383,15 @@ export default {
                 }
 
             });
+=======
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
         }
     },
 }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
+<<<<<<< HEAD
  
 .h1{
     text-align: center;
@@ -405,6 +430,12 @@ export default {
   background-size: 20px 20px;
 }
 
+=======
+.h1{
+    text-align: center;
+    color:#0b599b;
+}
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
 .h2{
     color: #0b599b;
     font-size: 100%;
@@ -416,6 +447,7 @@ export default {
 #drop-area {
     border: 1px solid #e8e8e8;
     width: 100%;
+<<<<<<< HEAD
     margin: auto;
     margin-top: 1%;
     margin-bottom: 1%;
@@ -424,6 +456,16 @@ export default {
 #inner-drop-area{
     width: 95%;
     margin: auto;
+=======
+    margin: auto;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    padding: 10px;
+}
+#inner-drop-area{
+    width: 95%;
+    margin: auto;
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
     padding: inherit;
     background:
     linear-gradient(to right,#7f7f7f 4px, transparent 4px) 0 0,
@@ -446,10 +488,17 @@ export default {
 .my-form {
     margin-bottom: 10px;
     /* width:300px; */
+<<<<<<< HEAD
 }
 .container-fluid{
     padding:0 !important;
 }
+=======
+}
+.container-fluid{
+    padding:0 !important;
+}
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
 .research-modal {
     width:800px;
     height:700px;
@@ -478,9 +527,20 @@ export default {
     width: 49%;
     margin-right: 2%;
 }
+<<<<<<< HEAD
 .publication-access {
     display: inline-block;
     width: 49%;
+=======
+.publication-type {
+    display: inline-block;
+    width: 49%;
+    margin-right: 2%;
+}
+.publication-access {
+    display: inline-block;
+    width: 49%;
+>>>>>>> 26fb7d00555c191a4354dd2a66068991994624a1
 }
 
 .form-group{
