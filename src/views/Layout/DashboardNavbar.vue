@@ -349,15 +349,7 @@ export default {
     }, 
     
   computed: {
-
-
-    // iconColor() {
-    //      if (this.activeIcon === "donate") { // if it is a dark route
-    //         return "#11bbfd"; // basically any light color you want
-    //      }
-    //      return "#800080"; // the dark color of your choice.
-    //   }, 
-
+ 
     routeName() {
       const { name } = this.$route;
       return this.capitalizeFirstLetter(name);
