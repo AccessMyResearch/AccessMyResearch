@@ -1,63 +1,79 @@
 <template>
-  <div>
-    <!-- Header -->
-    <div class="header bg-gradient-primary py-7 py-lg-8 pt-lg-9">
-      <b-container>
-        <div class="header-body text-center mb-7">
-          <b-row class="justify-content-center">
-            <b-col xl="5" lg="6" md="8" class="px-5">
-              <h1 class="text-white">Welcome!</h1>
-              <p class="text-lead text-white">Sign in with your username &amp; password or use your Google or LinkedIn account</p>
-            </b-col>
-          </b-row>
-        </div>
-      </b-container>
-      <div class="separator separator-bottom separator-skew zindex-100">
-        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-             xmlns="http://www.w3.org/2000/svg">
-          <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-        </svg>
-      </div>
-    </div>
-    <!-- Page content -->
-    <b-container class="mt--8 pb-5">
-      <b-row class="justify-content-center">
-        <b-col lg="5" md="7">
-          <b-card no-body class="bg-secondary border-0 mb-0">
-            <b-card-header class="bg-transparent pb-5"  >
-              <div class="text-muted text-center mt-2 mb-3"><small>Sign in with</small></div>
-              <div class="btn-wrapper text-center">
-                <a href="#" class="btn btn-neutral btn-icon" @click="linkedInSignIn">
-                  <span class="btn-inner--icon"><img src="img/SSO/linkedin.svg"></span>
-                  <span class="btn-inner--text">LinkedIn</span>
-                </a>
-                <a href="#" class="btn btn-neutral btn-icon" @click="googleSignIn">
-                  <span class="btn-inner--icon"><img src="img/SSO/google.svg"></span>
-                  <span class="btn-inner--text">Google</span>
-                </a>
-                <a href="#" class="btn btn-neutral btn-icon" @click="facebookSignIn">
-                  <span class="btn-inner--icon"><img src="img/SSO/facebook.svg"></span>
-                  <span class="btn-inner--text">Facebook</span>
-                </a>
-                <a href="#" class="btn btn-neutral btn-icon">
-                  <span class="btn-inner--icon"><img src="img/SSO/orcid.svg"></span>
-                  <span class="btn-inner--text">ORCID</span>
-                </a>
+  <div class="login-modal" > 
+        
+         <!-- <base-header class="pb-5 pt-md-3 bg-gradient-primary"></base-header> 
+        <b-container fluid class="mt-4"> </b-container> -->
+  
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 min-vh-100 d-flex flex-column justify-content-center">
+           
+            <div class="row">
+                <div class="col-lg-5.5 col-md-0 mx-auto">
+
+                    <!-- form card login -->
+                    <div class="card rounded shadow shadow-sm">
+                        <div class="card-header" >
+                          <b-icon-x icon = "type-bold" style="float:right; cursor: pointer; height:1.5rem; width:1.5rem; " @click="toggleResearchWindow"> </b-icon-x>
+                            <form class="form" role="form" autocomplete="off" id="formLogin" novalidate="" method="POST">
+                                <div class="form-group">
+                                  <div class="text-center text-muted mb-1 md-0">
+                                  <small v-if="step==0">Sign in with</small>
+                                  </div>
+                                   <div class="text-center text-muted mb-1 md-0">
+                                  <small v-if="step==1">Sign in with</small>
+                                  </div>
+
+                                            <div class="btn-wrapper text-center mb--4" >
+                                                <a href="#" class="btn btn-neutral btn-icon" @click="linkedInSignIn">
+                                                <span class="btn-inner--icon"><img src="img/SSO/linkedin.svg"></span>
+                                                <span class="btn-inner--text">LinkedIn</span>
+                                                </a>
+                                                <a href="#" class="btn btn-neutral btn-icon" @click="googleSignIn">
+                                                <span class="btn-inner--icon"><img src="img/SSO/google.svg"></span>
+                                                <span class="btn-inner--text">Google</span>
+                                                </a>
+                                                <div class="form-group">
+                                                <a href="#" class="btn btn-neutral btn-icon" @click="facebookSignIn">
+                                                <span class="btn-inner--icon"><img src="img/SSO/facebook.svg"></span>
+                                                <span class="btn-inner--text">Facebook</span>
+                                                </a>
+                                                <a href="#" class="btn btn-neutral btn-icon">
+                                                <span class="btn-inner--icon"><img src="img/SSO/orcid.svg"></span>
+                                                <span class="btn-inner--text">ORCID</span>
+                                                </a>
+                                                </div>
+                                            </div>
+                                </div>
+
+<div class="card-body">
+                    <div class="form-group">
+              <b-card-body class="px-lg-5 py-lg-2">
+              <div class="text-center text-muted mb-1 md-0">
+                <small v-if="step==0">Or sign in with us</small>
+                <small v-if="step==1">Or sign up with us</small>
               </div>
-            </b-card-header>
-            <b-card-body class="px-lg-5 py-lg-5">
-              <div class="text-center text-muted mb-4">
-                <small>Or sign in with us</small>
-              </div>
+              </b-card-body>
+              
+              <b-card-body class="px-lg-0 py-lg-2">
                 <validation-observer v-slot="{handleSubmit}" ref="formValidator">
                   <b-form role="form" @submit.prevent="handleSubmit(onSubmit)">
                     <base-input alternative
                             class="mb-3"
+                            style="width: 150px"
                             name="Username"
                             :rules="{required: true}"
                             prepend-icon="fas fa-user"
                             placeholder="Username"
                             v-model="username">
+                    </base-input>
+                   <base-input v-if="step==1" alternative
+                              class="mb-3"
+                              prepend-icon="fas fa-envelope"
+                              placeholder="Email"
+                              name="Email"
+                              :rules="{required: true, email: true}"
+                              v-model="email">
                     </base-input>
 
                     <base-input alternative
@@ -69,39 +85,90 @@
                                 placeholder="Password"
                                 v-model="password">
                     </base-input>
-
-                    <b-form-checkbox v-model="rememberMe">Remember me</b-form-checkbox>
-                    <div class="text-center">
+                  
+                      <div class = "mb--2" v-if="step==0"> 
+                    <b-form-checkbox v-model="rememberMe">Remember me</b-form-checkbox> </div>
+                      <div class = "mb-1" v-if="step==1"> 
+                    <b-form-checkbox v-model="rememberMe">Remember me</b-form-checkbox> </div>
+                     <div class = "custom-control custom-checkbox checkbox-lg mb--2" v-if="step==1">
+                <input type="checkbox" class="custom-control-input" id="checkbox-2" v-model="subscription" checked="">
+                <label class="custom-control-label" for="checkbox-2">Would you like to subscribe to AMR Newsletter?</label>
+               </div>
+                    <div class="text-center mb--6" v-if="step==0">
                       <base-button type="primary" native-type="submit" class="my-4">Sign in</base-button>
                     </div>
+
+                     <div class="text-center mb--6" v-if="step==1">
+                      <base-button type="primary" native-type="submit" class="my-4">Sign up</base-button>
+                    </div>
+
+                     <div class="mb--6">
+                     </div>
                   </b-form>
+
+                  
                 </validation-observer>
+              
+              
             </b-card-body>
-          </b-card>
-          <b-row class="mt-3">
-            <b-col cols="6">
-              <router-link to="/forgotpassword" class="text-light"><small>Forgot password?</small></router-link>
-            </b-col><!--TODO: Make forgot password-->
-            <b-col cols="6" class="text-right">
-              <router-link to="/register" class="text-light"><small>Create new account</small></router-link>
+                    </div>
+</div>
+   </form>
+
+
+ <b-row class="mt-3 mb--4">
+            <b-col cols="6" class="text-left text">
+            <p style="cursor:pointer" @click="changestep2"><small>Forgot Password?</small></p>
             </b-col>
-          </b-row>
-        </b-col>
-      </b-row>
-    </b-container>
-  </div>
+
+
+
+            <b-col cols="6" class="text-right text">
+            <p style="cursor:pointer" @click="changestep"><small>Create new account</small></p>
+            </b-col>
+ </b-row>
+   </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+   </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+              
+
+
+
+<!--/container-->
 </template>
 <script>
-  import { Auth } from 'aws-amplify';
-  import { AmplifyEventBus } from 'aws-amplify-vue';
+import { defineComponent } from '@vue/composition-api'
+import { Auth } from 'aws-amplify';
+import { AmplifyEventBus } from 'aws-amplify-vue';
 
-  export default {
-    name: 'login',
+export default {
+      name: 'login',
     data() {
       return {
         username: '',
         password: '',
-        rememberMe: false
+        rememberMe: false,
+        step:0
       }
     },
     created() {
@@ -150,6 +217,20 @@
         //redirects to the LinkedIn sign in to login to the webpage thru LinkedIn
         Auth.federatedSignIn({ provider: 'LinkedIn' });
       },
+
+      changestep(){
+        this.step=1;
+        console.log(this.step);
+      },
+      changestep2(){
+        this.step=2;
+        console.log(this.step)
+      },
+       toggleResearchWindow(){
+            // this.researchWindowIsOpen = !this.researchWindowIsOpen;
+            this.$emit('update', this.researchWindowIsOpen);
+             console.log(this.researchWindowIsOpen);
+        },
       async findUser() 
       {
         try {
@@ -165,4 +246,7 @@
       }
     }
   };
+  
+     
 </script>
+

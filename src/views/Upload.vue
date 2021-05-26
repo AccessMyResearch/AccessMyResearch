@@ -235,7 +235,7 @@ export default {
                const getSignedURLS = () => {
                    return new Promise((resolve, reject) => {
                        axios
-                       .get(`http://localhost:3000/get-signed-url?scope=${encodeURIComponent(this.user.username)}&type=pdf&count=${this.files.length}&title=${this.title}`)
+                       .get(`http://localhost:3000/get-signed-url?scope=${encodeURIComponent(this.user.username)}&type=pdf&count=${this.files.length}&title=${this.title}&abstract=${this.abstract}`)
                        //.get(`http://localhost:3000/get-signed-url?scope=${encodeURIComponent(this.user.username)}&type=pdf&count=${this.files.length}`)
                        .then(data => {
                            resolve(data);

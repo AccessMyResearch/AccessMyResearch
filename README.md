@@ -18,6 +18,9 @@ AccessMyResearch aims to increase the accessibility of research to all people by
 # Useful Commands
 1. `npm install` - Installs all dependencies
 1. `npm ci` - Removes all dependencies and installs them all cleanly
+1. `npm npm install --save google-spreadsheet` - installs google spreadsheet API
+1. `npm install --save http2`- installs google spreadsheet API
+1. `npm install googleapis@39  --save` - installs google spreasheet API
 1. `npm run build` - Builds the code
 1. `npm run dev` - Automatically builds all changes & runs the code locally/on network
 1. `npm test` - Runs the code test suites (with Jest)

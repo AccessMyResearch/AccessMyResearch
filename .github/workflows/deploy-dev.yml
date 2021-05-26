@@ -20,6 +20,8 @@ jobs:
 
     - name: Install dependencies
       run: npm install
+    - name: Save some dependencies
+      run: npm install --save vue @vue/composition-api nouislider perfect-scrollbar splitpanes
     - name: Build Project
       run: npm run build
       env:

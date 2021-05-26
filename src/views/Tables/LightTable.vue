@@ -120,15 +120,13 @@
                         </span> -->
                     </b-media>
                     <span class="button-options border-0" style="padding-left: 10px; position: relative; top:-5px; margin-bottom: -20px;">
-                        <button @click="onPdfViewClick(row)" title="View" :disabled="!downloadAvailable(row)"
-                                :class="{selectedButton: row === currSelectedArticle && showPDFViewer}"
-                                class="far fa-eye fa-lg button-options"></button>
-                        <button title="Download" :disabled="true" class="fas fa-file-download fa-lg button-options"></button>
-                        <button title="Links" class="fas fa-external-link-alt fa-lg button-options"></button>
-                        <button @click="onGetEmail(row)" title="E-Mail" class="fas fa-envelope fa-lg button-options"/>
-                        <button title="Collections" v-b-modal.modal class="fas fa-layer-group fa-lg button-options"></button>
-                        <button title="Cite" class="fas fa-quote-left fa-lg button-options"></button>
-<!--                                :class="[!downloadAvailable(row) ? 'disabled-button': 'enabled-button']"-->
+                       <button @click="onPdfViewClick(row);" title="View" :disabled="!downloadAvailable(row)" :class="{selectedButton: row === currSelectedArticle && showPDFViewer}"></button>
+                       <button title="Download" :disabled="true" class="fas fa-file-download fa-lg button-options"></button>
+                       <button title="Links" class="fas fa-external-link-alt fa-lg button-options"></button>
+                       <button @click="onGetEmail(row);" title="E-Mail" class="fas fa-envelope fa-lg button-options"/>
+                       <button title="Collections" v-b-modal.modal class="fas fa-layer-group fa-lg button-options"></button>
+                       <button title="Cite" class="fas fa-quote-left fa-lg button-options"></button>
+<!--                   :class="[!downloadAvailable(row) ? 'disabled-button': 'enabled-button']"-->
                      </span>
               </template>
             </el-table-column>
@@ -154,6 +152,7 @@ import pdf from "vue-pdf";
 import VClamp from 'vue-clamp';
 import * as esRequestor from "@/util/elasticsearch-requestor";
 import axios from "axios";
+import { messaging } from 'firebase';
 
 export default {
   name: "light-table",
@@ -314,15 +313,11 @@ export default {
         if (selectedArticle.doi === undefined) {
           alert("Could not find a doi for the article")
         }
-
-
         this.searchStatus = 'Getting email from publisher...'
         axios.get(this.$endpoints.aspnet + 'doi/' + selectedArticle.doi)
             .then(function (response) {
               if (response) {
                 if(response.status === 200){
-                  console.log("response: ");
-                  console.log(response);
                   window.open("mailto:" + response.data);
                 }
                 else {
