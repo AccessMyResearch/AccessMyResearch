@@ -82,7 +82,7 @@
       <div id="outer-overlay" class="overlay" @click="overlay" v-if="researchWindowIsOpen" >
           <Upload :researchWindowIsOpen="researchWindowIsOpen" v-on:update="researchWindowToggle($event)" class="research-window"/>
       </div>
-     
+
       <a
           slot="title-container"
           class="nav-link nav-link-icon nav-item"
@@ -174,6 +174,8 @@
         </b-alert>
       </base-dropdown>
 
+      
+
       <base-dropdown class="nav-item" menu-on-right tag="li" title-tag="a">
         <a
           slot="title-container"
@@ -229,12 +231,34 @@
         </b-alert>
       </base-dropdown>
 
+      <b-navbar-nav class="align-items-center ml-auto" >
+      <a
+          slot="title-container"
+          class="nav-link nav-link-icon nav-item"
+          href="#"
+          role="button"
+          @click="toggleloginWindow"
+          aria-expanded="false"
+          v-if="!signedIn"
+          id = "loginButton"
+        >
+        <!-- v-bind binds a style element based on a condition, so here we use the iconColor styling only if the website reroutes to the Uploads page -->
+          <i v-bind:class="{iconColor: loginWindowIsOpen == true}" class="fas fa-user fa-lg TopIcon"/>     
+      </a>
+      <div id="outer-overlay" class="overlay2" @click="overlay2" v-if="loginWindowIsOpen" >
+          <Login :loginWindowIsOpen="loginWindowIsOpen" v-on:update="loginWindowToggle($event)" class="login-window"/>  
+      </div>
+
+         </b-navbar-nav>
+        
+
       <base-dropdown
         menu-on-right
         class="nav-item"
         tag="li"
         title-tag="a"
         title-classes="nav-link pr-0"
+        v-if="signedIn"
       >
         <a href="#" class="nav-link pr-0" @click.prevent slot="title-container">
           <b-media no-body class="align-items-center">
@@ -254,6 +278,10 @@
             <i class="fas fa-user"/>
             <span>My profile</span>
           </b-dropdown-item>
+            <b-dropdown-item to="/About" v-if="signedIn">
+            <i class="fas fa-user"/>
+            <span>About AMR</span>
+            </b-dropdown-item>
           <b-dropdown-item to="/search-history">
             <i class="fas fa-history"/>
             <span>Search History</span>
@@ -263,10 +291,7 @@
             <i class="fas fa-cog"/>
             <span>Settings</span>
           </b-dropdown-item>
-          <b-dropdown-item to="/login" v-if="!signedIn">
-            <i class="fas fa-sign-in-alt"/>
-            <span>Login</span>
-          </b-dropdown-item>
+          
           <b-dropdown-item @click="signOut" v-if="signedIn">
             <i class="fas fa-sign-out-alt"/>
             <span>Logout</span>
@@ -289,11 +314,17 @@ import * as queries from '../../graphql/queries.js';
 import { listFollows, listRequestss } from '../../graphql/queries.js';
 import Upload from "./../Upload.vue";
 
+import Login from "./../Pages/Login.vue"
+import About from "./../About.vue"
+
 export default {
   components: {
     //CollapseTransition,
     BaseNav,
-    Upload
+    Upload,
+    Login,
+    About,
+    Upload,
     //Modal,
     //VueSlider
   },
@@ -316,12 +347,9 @@ export default {
       description:
         "Whether the popup chatboxes are open or closed",
     }, 
-
-   
-  },
+    
   computed: {
-
-
+ 
     routeName() {
       const { name } = this.$route;
       return this.capitalizeFirstLetter(name);
@@ -334,15 +362,12 @@ export default {
     if (localStorage.selectedFilters) {
       this.selectedFilters = localStorage.selectedFilters.split(",");
     }
-
     if (localStorage.yearRange) {
       this.yearRange = localStorage.yearRange.split(",");
     }
-
     if (localStorage.defaultFilterCheckbox) {
       this.defaultFilterCheckbox = localStorage.defaultFilterCheckbox;
     }
-
     this.hover_flag = false;
     var inside = this;
     this.getSearchHistory();
@@ -372,6 +397,9 @@ export default {
       /*results_data_actual: [],
       results_data: [],*/
       researchWindowIsOpen: false,
+
+      loginWindowIsOpen: false,
+
       // chatIsMinimized: false
       yearRange: [1950, 2020],
       selectedFilters: [],
@@ -578,6 +606,8 @@ export default {
       this.activeNotifications = !this.activeNotifications;
       },
 
+
+
       toggleMessageDropDown(){
         this.activeMessages = !this.activeMessages;
       },
@@ -586,12 +616,30 @@ export default {
       //this.setActiveIcon = 'notifications';
       //console.log(this.setActiveIcon);
 
+
+
      togglePopupChat() {
       //  console.log(this.chatIsOpen);
       this.$emit('update', !this.chatIsOpen); // $emit notifies the parent component that a variable's value changed
     },
     toggleResearchWindow(){
       this.researchWindowIsOpen = !this.researchWindowIsOpen;
+    },
+
+    toggleloginWindow(){
+      this.loginWindowIsOpen = !this.loginWindowIsOpen;
+      console.log(this.loginWindowIsOpen);
+    },
+    overlay: function(event) {
+    	if(event.target == event.currentTarget){
+        this.toggleResearchWindow();
+      }
+      
+    },    
+    overlay2: function(event) {
+      if(event.target == event.currentTarget){
+        this.toggleloginWindow();
+      }
     },
 
     overlay: function(event) {
@@ -603,7 +651,19 @@ export default {
       console.log("Navbar" + event);
         this.researchWindowIsOpen = event;    // updates the event variable each time chat is opened or closed
       },
-      
+
+     loginWindowToggle(event){
+      console.log("Navbar" + event);
+        this.loginWindowIsOpen = event;    // updates the event variable each time chat is opened or closed
+      },
+  
+    closeDropDown() {
+      this.activeNotifications = false;
+    },
+    closeMessageDropDown(){
+      this.activeMessages = false;
+    },
+     
     closeDropDown() {
       this.activeNotifications = false;
     },
@@ -611,6 +671,7 @@ export default {
     closeMessageDropDown(){
       this.activeMessages = false;
     },
+
 
     signOut() {
       /*If the user is signed in, the Auth.signOut 
@@ -631,7 +692,6 @@ export default {
     async listUsers() 
     {
       const listRequests = await API.graphql(graphqlOperation(listRequestss)); //returns a JSON of all the rows in the Requests table of DynamoDB
-
       for(const [key, value] of Object.entries(listRequests.data.listRequestss.items)) //for all items in the rows
       {
         if(value.user != null && value.friend != null && value.user.id == this.$store.state.user.username) //if the user id equals the current user
@@ -645,11 +705,8 @@ export default {
             });
         }
       }
-
       this.users = this.$store.state.requests; //setting the current users array to the store's requests array
-
       const followList = await API.graphql(graphqlOperation(listFollows)); //returns a JSON of all the rows in the Follows table of DynamoDB
-
       for(const [key, value] of Object.entries(followList.data.listFollows.items)) //for all items in the rows
       {
         if(value.user != null && value.friend != null && value.friend.id == this.$store.state.user.username) //if the user id equals the current user
@@ -661,7 +718,6 @@ export default {
               created: value.createdAt,
               message: "followed you!"
             });
-
           //push the current row to the user array (to show in notifications)
           this.users.push({
               id: value.user.id,
@@ -675,7 +731,6 @@ export default {
       if (this.search.text) {
         this.onSubmit();
       }
-
       /*make a if-statement for the Sort By filter.
       console.log(this.search.filter);
       this.search.filter == "b"
@@ -703,7 +758,6 @@ export default {
     //autocomplete start
     filterRecentSearches() {
       this.getSearchHistory();
-
       this.filteredRecentSearches = this.recentSearches.filter(
         (s) => {
           return this.search.text && JSON.parse(s[1]).query
@@ -712,72 +766,76 @@ export default {
         }
       );
       this.filteredRecentSearches = this.filteredRecentSearches.map(item => JSON.parse(item[1]).query).filter((val, index, self) => self.indexOf(val) == index)
-},
-    setSearch (recentSearch) {
-      this.search.text = recentSearch;
-      this.modal = false;
-    },
-    openAutoComplete() {
-      this.modal = true;
-    },
-    closeModal(){
-      this.modal = false;
-    },
-    //autocomplete end
+  },
+      setSearch (recentSearch) {
+        this.search.text = recentSearch;
+        this.modal = false;
+      },
+      openAutoComplete() {
+        this.modal = true;
+      },
+      closeModal(){
+        this.modal = false;
+      },
+      //autocomplete end
+      //default filter start
+      defaultFilterCheckboxChecked() {
+        localStorage.selectedFilters = this.selectedFilters;
+        localStorage.yearRange = this.yearRange;
+        localStorage.defaultFilterCheckbox = this.defaultFilterCheckbox;
+        if (localStorage.defaultFilterCheckbox == "true") {
+          localStorage.clear();
+          return;
+        }
+      },
+      getReminders() {
+        this.reminders = JSON.parse(localStorage.reminders);
+      },
+      // setActiveIcon(string){
+      //   this.activeIcon = string;
+      //   console.log(this.activeIcon);
+      // },
+      toUpload() {
+        this.$router.push('upload');
+        // this.setActiveIcon('upload');
 
-    //default filter start
-    defaultFilterCheckboxChecked() {
-      localStorage.selectedFilters = this.selectedFilters;
-      localStorage.yearRange = this.yearRange;
-      localStorage.defaultFilterCheckbox = this.defaultFilterCheckbox;
+      },
+      toLogin(){
+        this.$router('login');
 
-      if (localStorage.defaultFilterCheckbox == "true") {
-        localStorage.clear();
-        return;
-      }
-    },
-    getReminders() {
-      this.reminders = JSON.parse(localStorage.reminders);
-    },
-    // setActiveIcon(string){
-    //   this.activeIcon = string;
-    //   console.log(this.activeIcon);
-    // },
-    toUpload() {
-      this.$router.push('upload');
-      // this.setActiveIcon('upload');
-    },
-    toDonate() {
-      this.$router.push('donate');
-      // this.setActiveIcon('donate'); 
-    },
-    toProject() {
-      this.$router.push('project');
-    },
-    toCollections() {
-      this.$router.push('collections');
-      
-    },
-    toNetwork() {
-      this.$router.push('network-list');
-    },
-    toMessages() {
-      this.$router.push('messages');
-    },
-    reroute(user) {
-      //on click of follow notification, redirects to follows page
-      if(user.message == "followed you!")
-      {
-        this.$router.push('follows');
-      }
-      else
-      {
-        //on click of wants to add you as a connection notification, redirects to requests page
-          this.$router.push('requests');
+      },
+      toDonate() {
+        this.$router.push('donate');
+        // this.setActiveIcon('donate'); 
+      },
+      toProject() {
+        this.$router.push('project');
+      },
+      toCollections() {
+        this.$router.push('collections');
+        
+      },
+      toNetwork() {
+        this.$router.push('network-list');
+      },
+      toMessages() {
+        this.$router.push('messages');
+      },
+      reroute(user) {
+        //on click of follow notification, redirects to follows page
+        if(user.message == "followed you!")
+        {
+          this.$router.push('follows');
+        }
+        else
+        {
+          //on click of wants to add you as a connection notification, redirects to requests page
+            this.$router.push('requests');
+        }
       }
     }
-  },
-};
+  }
+}
 </script>
 <style scoped>
 .AutoCompleteDropDown {
@@ -798,8 +856,11 @@ b-form-input::placeholder{
 .TopIcon:hover {
   color: #F78626;
 }
+img{ max-width:100%;}
+
 
 img{ max-width:100%;}
+
 
 .chat_ib h5{ font-size:15px; color:#464646; margin:0 0 8px 0;}
 .chat_ib h5 span{ font-size:13px; float:right;}
@@ -816,6 +877,10 @@ img{ max-width:100%;}
 }
 
 .chat_people{ overflow:hidden; clear:both;}
+
+
+.chat_people{ overflow:hidden; clear:both;}
+
 
 .overlay {
   position:fixed;
@@ -835,6 +900,25 @@ img{ max-width:100%;}
     /* position: absolute;
     z-index:999; */
   }
+
+.login-window {
+    margin:auto;
+    /* position: absolute;
+    z-index:999; */
+  }
+  .overlay2 {
+  position:fixed;
+  top:0;
+  bottom:0;
+  right:0;
+  left:0;
+  display:flex;
+  align-items: center;
+  /* height:100vh; */
+  /* width:100%; */
+  background-color:rgba(128, 128, 128, 0.5);
+}
+
   
 .iconColor{
   color: #f78626;
