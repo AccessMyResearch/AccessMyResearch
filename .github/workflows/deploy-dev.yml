@@ -1,7 +1,7 @@
 name: production-deployment
 on:
   push:
-    branches: [ dev ]
+    branches: [ es-wildcard-search ]
 
 jobs:
   build:
