@@ -93,10 +93,7 @@
     </div>
   </div>
 </template>
-<script>
-/* eslint-disable no-new */
-import PerfectScrollbar from 'perfect-scrollbar';
-import 'perfect-scrollbar/css/perfect-scrollbar.css';
+<script> 
 
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
