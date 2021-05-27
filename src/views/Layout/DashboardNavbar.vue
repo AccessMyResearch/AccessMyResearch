@@ -288,6 +288,7 @@ import { API, graphqlOperation } from 'aws-amplify';
 import * as queries from '../../graphql/queries.js';
 import { listFollows, listRequestss } from '../../graphql/queries.js';
 import Upload from "./../Upload.vue";
+import * as esRequestor from '../../util/elasticsearch-requestor'
 
 export default {
   components: {
